@@ -1,0 +1,10 @@
+# Netlify detects Next.js and applies its Next.js runtime automatically.
+# Production deploys from `main`; every pull request gets a deploy preview.
+
+[build]
+  command = "pnpm build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
+  NEXT_TELEMETRY_DISABLED = "1"
