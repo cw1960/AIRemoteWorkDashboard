@@ -26,7 +26,8 @@ get alerts.
   in `.env.example`. No secrets in client code or in git.
 - **Open decisions stay as placeholders** in one config file (`src/config/site.ts`):
   `APP_NAME`, `yourdomain.com`, sender domain `mail.yourdomain.com`, inbound
-  domain `in.yourdomain.com`, locales. Never hard-code these elsewhere.
+  domain `in.yourdomain.com`. Locales live in `src/i18n/routing.ts`. Never
+  hard-code these elsewhere.
 - **Small, reviewable commits** with clear messages. Never rewrite pushed
   history.
 - Current phase: **Phase 1 — Setup** (see PLAN.md → Build plan).
@@ -87,22 +88,23 @@ Public read: `platforms`, `playbooks`, `jobs`. Admin only: `ingest_runs`.
 Owner-only (RLS `user_id = auth.uid()`): everything user-owned.
 `outbound_clicks`: insert via function, admin read.
 
-| Table | Key columns |
-| --- | --- |
-| platforms | slug, name, site_url, email_domains, referral_url_template, countries_blocked, onboarding_notes |
-| playbooks | platform_id, stage, next_step, checklist (json) |
-| jobs | platform_id, external_id (unique with platform), title, domain, pay_min, pay_max, pay_unit, languages, countries, url, posted_at, last_seen_at, status |
-| ingest_runs | platform_id, started_at, found, inserted, updated, closed, error |
-| profiles | user_id, display_name, country, languages, domains, skills, target_rate, hours_per_week, locale, onboarded_at |
-| platform_memberships | user_id, platform_id, status, applied_at, reapply_after, notes |
-| tracker_cards | user_id, kind (job/platform/manual), job_id, platform_id, title, stage, position, applied_at, next_action_at, notes |
-| card_events | card_id, from_stage, to_stage, source (user/email), at |
-| saved_searches | user_id, filters (json), frequency (daily/weekly), last_sent_at |
-| email_prefs | user_id, alerts_on, reminders_on, recap_on, inbound_token, unsubscribe_token |
-| inbound_emails | user_id, from_domain, subject, matched_platform_id, matched_stage, card_id, status (applied/needs_review/ignored) |
-| outbound_clicks | job_id, user_id (nullable), referrer_used, at |
+| Table                | Key columns                                                                                                                                            |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| platforms            | slug, name, site_url, email_domains, referral_url_template, countries_blocked, onboarding_notes                                                        |
+| playbooks            | platform_id, stage, next_step, checklist (json)                                                                                                        |
+| jobs                 | platform_id, external_id (unique with platform), title, domain, pay_min, pay_max, pay_unit, languages, countries, url, posted_at, last_seen_at, status |
+| ingest_runs          | platform_id, started_at, found, inserted, updated, closed, error                                                                                       |
+| profiles             | user_id, display_name, country, languages, domains, skills, target_rate, hours_per_week, locale, onboarded_at                                          |
+| platform_memberships | user_id, platform_id, status, applied_at, reapply_after, notes                                                                                         |
+| tracker_cards        | user_id, kind (job/platform/manual), job_id, platform_id, title, stage, position, applied_at, next_action_at, notes                                    |
+| card_events          | card_id, from_stage, to_stage, source (user/email), at                                                                                                 |
+| saved_searches       | user_id, filters (json), frequency (daily/weekly), last_sent_at                                                                                        |
+| email_prefs          | user_id, alerts_on, reminders_on, recap_on, inbound_token, unsubscribe_token                                                                           |
+| inbound_emails       | user_id, from_domain, subject, matched_platform_id, matched_stage, card_id, status (applied/needs_review/ignored)                                      |
+| outbound_clicks      | job_id, user_id (nullable), referrer_used, at                                                                                                          |
 
 Key rules:
+
 - Ingestion: pg_cron every 6h → one Edge Function per platform → upsert on
   `(platform_id, external_id)`, set `last_seen_at` → jobs unseen for 2 runs are
   marked `closed` (never deleted) → write an `ingest_runs` row.
@@ -115,6 +117,45 @@ Key rules:
   sender domain + keywords → confident match creates/moves a card, otherwise
   "Needs review".
 
+## Codebase map
+
+- `src/app/[locale]/` — all pages (the locale segment is the root layout).
+- `src/config/site.ts` — brand/domain/email placeholders.
+- `src/i18n/` — next-intl routing, request config, locale-aware `Link`.
+  Strings live in `messages/<locale>.json`; the default locale has no URL
+  prefix. Read the locale with `next/root-params`, not `setRequestLocale`.
+- `src/proxy.ts` — Next.js 16 proxy (formerly middleware): locale routing.
+- `src/styles/tokens.css` — design tokens; `src/app/globals.css` maps them
+  into Tailwind. `src/lib/utils.ts` has `cn()`; shadcn/ui components go in
+  `src/components/ui` (`components.json`).
+- `src/lib/env.ts` — Zod-validated env access. `src/lib/supabase/` — server
+  and browser clients plus generated `database.types.ts`.
+- `supabase/` — `config.toml`, `migrations/`, `functions/`, `tests/database/`
+  (pgTAP; includes a guard that every public table has RLS on).
+- `e2e/` — Playwright (mobile + desktop, axe checks). `tests/` and
+  `src/**/*.test.ts` — Vitest.
+
+This is Next.js 16: APIs differ from older versions. Check
+`node_modules/next/dist/docs/` before using an unfamiliar API (see AGENTS.md).
+
 ## Commands
 
-_Filled in during Phase 1 (dev, build, lint, typecheck, test, e2e, db)._
+Package manager: **pnpm** (Node 22, see `.nvmrc`).
+
+| Command                             | What it does                                                     |
+| ----------------------------------- | ---------------------------------------------------------------- |
+| `pnpm dev`                          | Dev server on http://localhost:3000                              |
+| `pnpm build` / `pnpm start`         | Production build / serve it                                      |
+| `pnpm lint`                         | ESLint (type-checked strict + jsx-a11y strict), zero warnings    |
+| `pnpm format` / `pnpm format:check` | Prettier write / check                                           |
+| `pnpm typecheck`                    | Generate route types, then `tsc --noEmit`                        |
+| `pnpm test`                         | Vitest unit tests                                                |
+| `pnpm test:e2e`                     | Playwright against the production build (run `pnpm build` first) |
+| `pnpm check`                        | lint + format:check + typecheck + unit tests                     |
+| `pnpm db:start` / `pnpm db:stop`    | Local Supabase stack (needs Docker)                              |
+| `pnpm db:reset`                     | Re-apply all migrations locally                                  |
+| `pnpm db:test`                      | pgTAP tests in `supabase/tests`                                  |
+| `pnpm db:types`                     | Regenerate `src/lib/supabase/database.types.ts`                  |
+
+CI (`.github/workflows/ci.yml`) runs all of the above on every PR and push to
+`main`. Run `pnpm check` before every commit.
