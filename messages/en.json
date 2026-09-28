@@ -1,0 +1,19 @@
+{
+  "Metadata": {
+    "title": "{appName} — Track your AI training job applications",
+    "description": "Find remote AI training jobs from Mercor, micro1, Alignerr, Outlier and more, and track every application in one free dashboard."
+  },
+  "Layout": {
+    "skipToContent": "Skip to main content"
+  },
+  "HomePage": {
+    "eyebrow": "Coming soon",
+    "title": "Find AI training work. Track every application.",
+    "lead": "One free dashboard for remote AI training jobs, from first application to paid project."
+  },
+  "NotFound": {
+    "title": "Page not found",
+    "body": "The page you're looking for doesn't exist or has moved.",
+    "home": "Go to the home page"
+  }
+}
