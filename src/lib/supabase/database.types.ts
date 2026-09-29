@@ -171,6 +171,7 @@ export type Database = {
           id: number;
           inserted: number;
           platform_id: string;
+          skipped: number;
           started_at: string;
           updated: number;
         };
@@ -182,6 +183,7 @@ export type Database = {
           id?: never;
           inserted?: number;
           platform_id: string;
+          skipped?: number;
           started_at?: string;
           updated?: number;
         };
@@ -193,6 +195,7 @@ export type Database = {
           id?: never;
           inserted?: number;
           platform_id?: string;
+          skipped?: number;
           started_at?: string;
           updated?: number;
         };
@@ -210,6 +213,7 @@ export type Database = {
         Row: {
           closed_at: string | null;
           countries: string[];
+          countries_blocked: string[];
           created_at: string;
           domain: string | null;
           external_id: string;
@@ -232,6 +236,7 @@ export type Database = {
         Insert: {
           closed_at?: string | null;
           countries?: string[];
+          countries_blocked?: string[];
           created_at?: string;
           domain?: string | null;
           external_id: string;
@@ -254,6 +259,7 @@ export type Database = {
         Update: {
           closed_at?: string | null;
           countries?: string[];
+          countries_blocked?: string[];
           created_at?: string;
           domain?: string | null;
           external_id?: string;
@@ -579,6 +585,16 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      ingest_jobs: {
+        Args: {
+          p_error?: string;
+          p_jobs: Json;
+          p_platform: string;
+          p_skipped?: number;
+          p_started_at: string;
+        };
+        Returns: Json;
+      };
       log_outbound_click: { Args: { p_job_id: string }; Returns: boolean };
     };
     Enums: {
