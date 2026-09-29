@@ -2,14 +2,21 @@
  * POST /functions/v1/ingest  {"platform": "mercor" | "micro1"}
  *
  * Fetches one platform's listings and stores them through ingest_jobs(),
- * which logs the run and applies the closing rule. Called by pg_cron with
- * the service role key; anyone else gets 401.
+ * which logs the run and applies the closing rule. A failed run emails
+ * ALERT_EMAIL.
+ *
+ * Callers: pg_cron (header `x-ingest-token`, checked against Vault with
+ * verify_ingest_token) or an admin with the service role key. Anyone else
+ * gets 401.
  *
  * Env: SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY (provided by Supabase),
- * INGEST_USER_AGENT (bot name, site URL and contact email; see .env.example).
+ * INGEST_USER_AGENT (bot name, site URL and contact email), RESEND_API_KEY
+ * and ALERT_EMAIL (optional; without them failures are only logged),
+ * ALERT_FROM (optional sender). See .env.example.
  */
 import { z } from "zod";
 
+import { DEFAULT_ALERT_FROM, sendAlert } from "../_shared/ingest/alert.ts";
 import {
   SOURCE_SLUGS,
   SOURCES,
@@ -59,44 +66,70 @@ function describe(error: unknown): string {
   return text.slice(0, 500);
 }
 
+/** Calls a database function through PostgREST with the service role. */
+async function rpc(
+  name: string,
+  args: Record<string, unknown>,
+): Promise<unknown> {
+  const serviceKey = requireEnv("SUPABASE_SERVICE_ROLE_KEY");
+  const response = await fetch(
+    `${requireEnv("SUPABASE_URL")}/rest/v1/rpc/${name}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        apikey: serviceKey,
+        Authorization: `Bearer ${serviceKey}`,
+      },
+      body: JSON.stringify(args),
+    },
+  );
+  if (!response.ok) {
+    throw new Error(
+      `${name} failed: HTTP ${response.status} ${await response.text()}`,
+    );
+  }
+  return response.json();
+}
+
 async function storeRun(args: {
   platform: string;
   startedAt: string;
   result: SourceResult | null;
   error: string | null;
 }): Promise<RunSummary> {
-  const response = await fetch(
-    `${requireEnv("SUPABASE_URL")}/rest/v1/rpc/ingest_jobs`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        apikey: requireEnv("SUPABASE_SERVICE_ROLE_KEY"),
-        Authorization: `Bearer ${requireEnv("SUPABASE_SERVICE_ROLE_KEY")}`,
-      },
-      body: JSON.stringify({
-        p_platform: args.platform,
-        p_started_at: args.startedAt,
-        p_jobs: args.result?.jobs ?? [],
-        p_skipped: args.result?.skipped ?? 0,
-        p_error: args.error,
-      }),
-    },
+  return runSummarySchema.parse(
+    await rpc("ingest_jobs", {
+      p_platform: args.platform,
+      p_started_at: args.startedAt,
+      p_jobs: args.result?.jobs ?? [],
+      p_skipped: args.result?.skipped ?? 0,
+      p_error: args.error,
+    }),
   );
-  if (!response.ok) {
-    throw new Error(
-      `ingest_jobs failed: HTTP ${response.status} ${await response.text()}`,
-    );
+}
+
+async function isAuthorized(req: Request): Promise<boolean> {
+  const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+  const auth = req.headers.get("Authorization") ?? "";
+  if (serviceKey !== "" && safeEqual(auth, `Bearer ${serviceKey}`)) return true;
+
+  const token = req.headers.get("x-ingest-token");
+  if (!token || token.length > 200) return false;
+  try {
+    return z
+      .boolean()
+      .parse(await rpc("verify_ingest_token", { p_token: token }));
+  } catch (caught) {
+    console.error("token check failed", describe(caught));
+    return false;
   }
-  return runSummarySchema.parse(await response.json());
 }
 
 Deno.serve(async (req) => {
   if (req.method !== "POST") return json({ error: "Method not allowed" }, 405);
 
-  const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
-  const auth = req.headers.get("Authorization") ?? "";
-  if (serviceKey === "" || !safeEqual(auth, `Bearer ${serviceKey}`)) {
+  if (!(await isAuthorized(req))) {
     return json({ error: "Unauthorized" }, 401);
   }
 
@@ -139,6 +172,18 @@ Deno.serve(async (req) => {
   }
 
   const report = { platform, requests: result?.requests ?? 0, ...summary };
-  if (summary.error) console.error("ingest failed", report);
+  if (summary.error) {
+    console.error("ingest failed", report);
+    const apiKey = Deno.env.get("RESEND_API_KEY");
+    const to = Deno.env.get("ALERT_EMAIL");
+    if (apiKey && to) {
+      const from = Deno.env.get("ALERT_FROM") ?? DEFAULT_ALERT_FROM;
+      await sendAlert(fetch, { apiKey, to, from }, report).catch((caught) =>
+        console.error("alert email failed", describe(caught)),
+      );
+    } else {
+      console.warn("RESEND_API_KEY or ALERT_EMAIL not set; no alert sent");
+    }
+  }
   return json(report, summary.error ? 502 : 200);
 });
