@@ -596,6 +596,8 @@ export type Database = {
         Returns: Json;
       };
       log_outbound_click: { Args: { p_job_id: string }; Returns: boolean };
+      set_ingest_url: { Args: { p_url: string }; Returns: undefined };
+      verify_ingest_token: { Args: { p_token: string }; Returns: boolean };
     };
     Enums: {
       card_event_source: "user" | "email";

@@ -1,0 +1,113 @@
+name: Deploy to production
+
+# Manual only: GitHub → Actions → "Deploy to production" → Run workflow.
+# Run it after the PR is merged and CI is green on main. With "Dry run" ticked
+# (the default) it only lists the migrations it would apply.
+#
+# Repository secrets:  SUPABASE_ACCESS_TOKEN, SUPABASE_DB_PASSWORD (required);
+#                      RESEND_API_KEY, ALERT_EMAIL (optional, failure alerts).
+# Repository variable: INGEST_CONTACT_EMAIL (needed while the support email in
+#                      src/config/site.ts is still a placeholder).
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run: only show the migrations that would be applied"
+        type: boolean
+        default: true
+      run_ingest:
+        description: "Run ingestion once for every platform after deploying"
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+env:
+  SUPABASE_PROJECT_REF: asbpesvfvhkbvicubnfm
+  SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+  SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+
+jobs:
+  deploy:
+    name: Migrations and Edge Functions
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      - name: Check required secrets
+        run: |
+          missing=0
+          for name in SUPABASE_ACCESS_TOKEN SUPABASE_DB_PASSWORD; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Repository secret $name is not set (Settings → Secrets and variables → Actions)."
+              missing=1
+            fi
+          done
+          exit $missing
+
+      - name: Build the ingestion User-Agent
+        id: ua
+        env:
+          INGEST_CONTACT_EMAIL: ${{ vars.INGEST_CONTACT_EMAIL }}
+        run: echo "value=$(node scripts/ingest-user-agent.mjs)" >> "$GITHUB_OUTPUT"
+
+      - name: Link the Supabase project
+        run: pnpm exec supabase link --project-ref "$SUPABASE_PROJECT_REF"
+
+      - name: Migrations that would be applied
+        run: pnpm exec supabase db push --dry-run
+
+      - name: Apply migrations
+        if: ${{ !inputs.dry_run }}
+        run: pnpm exec supabase db push
+
+      - name: Deploy the ingest function
+        if: ${{ !inputs.dry_run }}
+        run: pnpm exec supabase functions deploy ingest --project-ref "$SUPABASE_PROJECT_REF"
+
+      - name: Set function secrets
+        if: ${{ !inputs.dry_run }}
+        env:
+          INGEST_USER_AGENT: ${{ steps.ua.outputs.value }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
+        run: |
+          args=("INGEST_USER_AGENT=$INGEST_USER_AGENT")
+          if [ -n "$RESEND_API_KEY" ] && [ -n "$ALERT_EMAIL" ]; then
+            args+=("RESEND_API_KEY=$RESEND_API_KEY" "ALERT_EMAIL=$ALERT_EMAIL")
+          else
+            echo "::warning::RESEND_API_KEY or ALERT_EMAIL not set: failed runs will not send an alert email."
+          fi
+          pnpm exec supabase secrets set --project-ref "$SUPABASE_PROJECT_REF" "${args[@]}"
+
+      - name: Point the schedule at this project
+        if: ${{ !inputs.dry_run }}
+        run: >
+          pnpm exec supabase db query --linked
+          "select public.set_ingest_url('https://${SUPABASE_PROJECT_REF}.supabase.co')"
+
+      - name: Run ingestion once
+        if: ${{ !inputs.dry_run && inputs.run_ingest }}
+        run: |
+          pnpm exec supabase db query --linked \
+            "select private.invoke_ingest('mercor'), private.invoke_ingest('micro1')"
+          echo "Waiting for the runs to finish…"
+          sleep 60
+          pnpm exec supabase db query --linked \
+            "select p.slug, r.started_at, r.found, r.inserted, r.updated, r.closed, r.skipped, r.error
+             from public.ingest_runs r join public.platforms p on p.id = r.platform_id
+             order by r.started_at desc limit 4"
