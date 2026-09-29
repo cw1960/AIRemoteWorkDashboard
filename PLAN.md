@@ -187,12 +187,12 @@ Seven phases, each ending at a gate. Don't start a phase until the previous gate
 
 **Phase 1 — Setup**
 
-- [ ] Create the GitHub repo with `supabase/migrations` and `supabase/functions` folders
-- [ ] Connect Netlify to the repo with deploy previews on pull requests
-- [ ] Create Supabase dev and prod projects
+- [x] Create the GitHub repo with `supabase/migrations` and `supabase/functions` folders
+- [x] Connect Netlify to the repo with deploy previews on pull requests
+- [x] Create Supabase dev and prod projects (changed: prod only; local stack for dev)
 - [ ] Verify the Resend sending domain (SPF, DKIM, DMARC)
 - [ ] Set up the Resend receiving domain (`in.yourdomain.com`) and `email.received` webhook
-- [ ] Write `CLAUDE.md` with the schema, stack rules and "no Pro features in V1"
+- [x] Write `CLAUDE.md` with the schema, stack rules and "no Pro features in V1"
 
 Gate: an empty Next.js page deploys from `main`.
 
