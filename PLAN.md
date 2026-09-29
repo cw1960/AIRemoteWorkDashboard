@@ -202,8 +202,8 @@ Gate: an empty Next.js page deploys from `main`.
 - [ ] Sync the Lovable project to its own GitHub repo as the design reference
 - [x] Migrations for all twelve tables
 - [x] RLS policies: public read on platforms, jobs, playbooks; owner-only on user tables
-- [ ] Mercor adapter
-- [ ] micro1 adapter (trace the opportunities page's data call first)
+- [x] Mercor adapter
+- [x] micro1 adapter (trace the opportunities page's data call first)
 - [ ] pg\_cron schedule, ingest\_runs logging, zero-jobs alert email
 
 Gate: real jobs land in the database on schedule.

@@ -30,7 +30,7 @@ get alerts.
   hard-code these elsewhere.
 - **Small, reviewable commits** with clear messages. Never rewrite pushed
   history.
-- Current phase: **Phase 1 — Setup** (see PLAN.md → Build plan).
+- Current phase: **Phase 2 — Design + data** (see PLAN.md → Build plan).
 
 ## Stack (fixed — do not substitute)
 
@@ -142,6 +142,10 @@ Key rules:
   and browser clients plus generated `database.types.ts`.
 - `supabase/` — `config.toml`, `migrations/`, `functions/`, `tests/database/`
   (pgTAP; includes a guard that every public table has RLS on).
+- `supabase/functions/ingest/` — the ingestion Edge Function (Deno).
+  `supabase/functions/_shared/ingest/` — pure adapters (one per platform),
+  shared by Deno and Vitest, tested against recorded fixtures. Storing and
+  the closing rule live in SQL: `ingest_jobs()`.
 - `e2e/` — Playwright (mobile + desktop, axe checks). `tests/` and
   `src/**/*.test.ts` — Vitest.
 
@@ -162,6 +166,7 @@ Package manager: **pnpm** (Node 22, see `.nvmrc`).
 | `pnpm test`                         | Vitest unit tests                                                |
 | `pnpm test:e2e`                     | Playwright against the production build (run `pnpm build` first) |
 | `pnpm check`                        | lint + format:check + typecheck + unit tests                     |
+| `pnpm functions:check`              | `deno check` + `deno lint` for Edge Functions (needs Deno 2)     |
 | `pnpm db:start` / `pnpm db:stop`    | Local Supabase stack (needs Docker)                              |
 | `pnpm db:reset`                     | Re-apply all migrations locally                                  |
 | `pnpm db:test`                      | pgTAP tests in `supabase/tests`                                  |
