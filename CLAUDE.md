@@ -37,8 +37,16 @@ get alerts.
 - **Next.js (App Router) + TypeScript + Tailwind + shadcn/ui**, hosted on
   **Netlify**. Pushes to `main` deploy production; PRs get deploy previews.
 - **Supabase**: Postgres, Auth (magic link), RLS, Edge Functions (Deno),
-  pg_cron. Separate dev and prod projects. Migrations in
-  `supabase/migrations`, functions in `supabase/functions`.
+  pg_cron. Migrations in `supabase/migrations`, functions in
+  `supabase/functions`.
+  - **One hosted project only: production** (ref `asbpesvfvhkbvicubnfm`).
+    There is no hosted dev project (overrides PLAN.md). Develop and test
+    against the local Supabase stack (`pnpm db:start`) and CI; never
+    experiment on the hosted project.
+  - Migrations reach production only deliberately, after CI passes and with
+    the user's go-ahead. They must be additive and safe on live data.
+  - Deploy previews share the production database, so preview-only features
+    must not write test data to it.
 - **Resend** for all email: Auth SMTP, alerts, reminders, weekly recap
   (React Email templates), and inbound receiving for email auto-capture.
 - **GitHub** for source and CI (GitHub Actions must pass before merge).
