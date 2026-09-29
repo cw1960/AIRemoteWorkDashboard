@@ -83,7 +83,10 @@ get alerts.
   AlignList, labelingjobs.net) or **OpenTrain AI** (platform card only).
 - Scraping etiquette: official feeds (Greenhouse/Lever/Ashby) first, JSON
   endpoints second, HTML last. Respect robots.txt and terms. One request per
-  source per run. Clear User-Agent with a contact email. Back off on errors.
+  source per run (exception, approved: an endpoint that caps page size may be
+  read page by page, 3 s apart, capped per run — micro1). Clear User-Agent
+  with a contact email. Back off on errors (after 3 failed runs in a row, a
+  platform is retried once a day).
   Store title, pay, tags, dates and a short summary — not full descriptions.
 - An adapter returning zero jobs triggers an alert email; it must **not** close
   every job.
@@ -145,7 +148,12 @@ Key rules:
 - `supabase/functions/ingest/` — the ingestion Edge Function (Deno).
   `supabase/functions/_shared/ingest/` — pure adapters (one per platform),
   shared by Deno and Vitest, tested against recorded fixtures. Storing and
-  the closing rule live in SQL: `ingest_jobs()`.
+  the closing rule live in SQL: `ingest_jobs()`. pg_cron calls the function
+  every 6 h via `private.invoke_ingest()` with a token kept in Vault.
+- `.github/workflows/deploy.yml` — the only way to production: manual
+  "Run workflow" (dry run by default) pushes migrations, deploys functions,
+  sets function secrets. `scripts/ingest-user-agent.mjs` builds the bot
+  User-Agent from `siteConfig`.
 - `e2e/` — Playwright (mobile + desktop, axe checks). `tests/` and
   `src/**/*.test.ts` — Vitest.
 

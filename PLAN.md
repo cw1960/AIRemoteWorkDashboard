@@ -204,7 +204,7 @@ Gate: an empty Next.js page deploys from `main`.
 - [x] RLS policies: public read on platforms, jobs, playbooks; owner-only on user tables
 - [x] Mercor adapter
 - [x] micro1 adapter (trace the opportunities page's data call first)
-- [ ] pg\_cron schedule, ingest\_runs logging, zero-jobs alert email
+- [x] pg\_cron schedule, ingest\_runs logging, zero-jobs alert email
 
 Gate: real jobs land in the database on schedule.
 
