@@ -3,7 +3,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 
-select plan(1);
+select plan(3);
 
 select is_empty(
   $$
@@ -15,6 +15,34 @@ select is_empty(
       and not c.relrowsecurity
   $$,
   'every public table has row-level security enabled'
+);
+
+-- New tables get Supabase's default grants (including TRUNCATE, which RLS
+-- does not cover). Each migration must revoke them and grant precisely.
+select is_empty(
+  $$
+    select table_name || ' ' || grantee || ' ' || privilege_type
+    from information_schema.role_table_grants
+    where table_schema = 'public'
+      and grantee in ('anon', 'authenticated')
+      and privilege_type in ('TRUNCATE', 'TRIGGER', 'REFERENCES')
+  $$,
+  'API roles have no TRUNCATE, TRIGGER or REFERENCES on public tables'
+);
+
+-- Tables without policies are admin-only by design; any other table without
+-- a policy is a mistake.
+select is_empty(
+  $$
+    select c.relname
+    from pg_class c
+    join pg_namespace n on n.oid = c.relnamespace
+    where n.nspname = 'public'
+      and c.relkind in ('r', 'p')
+      and c.relname not in ('ingest_runs', 'outbound_clicks')
+      and not exists (select 1 from pg_policy p where p.polrelid = c.oid)
+  $$,
+  'every non-admin public table has at least one policy'
 );
 
 select * from finish();

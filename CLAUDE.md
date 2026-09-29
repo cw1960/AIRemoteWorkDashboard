@@ -66,7 +66,9 @@ get alerts.
   empty, error, success.
 - Security: RLS on **every** table; no secrets client-side; **Zod validation
   on every server boundary** (route handlers, server actions, Edge Functions,
-  webhooks).
+  webhooks). New tables get Supabase's default grants (incl. TRUNCATE, which
+  RLS ignores): revoke them from `anon`/`authenticated` and grant only the
+  columns needed (see the RLS migration; a pgTAP guard enforces it).
 - Tests: Vitest for logic, Playwright for key flows, pgTAP/SQL tests for RLS
   policies.
 - i18n-ready from day one: every user-facing string goes through the
