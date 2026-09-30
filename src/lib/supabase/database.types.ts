@@ -585,6 +585,7 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      feed_facets: { Args: Record<PropertyKey, never>; Returns: Json };
       ingest_jobs: {
         Args: {
           p_error?: string;
