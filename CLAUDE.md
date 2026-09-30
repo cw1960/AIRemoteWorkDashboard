@@ -92,7 +92,9 @@ get alerts.
   every job.
 - **Every outbound "Apply" click goes through `/go/<job-id>`** (logs the click,
   appends referral code where allowed) with a visible affiliate disclosure.
-  Outlier: plain link, no referral.
+  Outlier: referral link like other platforms, same disclosure (owner's
+  decision, 2026-09-30: links are only shown to people who choose a job, so
+  this is not spamming). Confirmed link formats: PLAN.md → Monetization.
 - Out of V1: headless-browser scraping, community, reviews, native apps.
 
 ## Data model (12 tables)
