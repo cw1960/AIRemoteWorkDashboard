@@ -1,6 +1,10 @@
 import { Clock3 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
+import {
+  ApplyButton,
+  ReferralDisclosure,
+} from "@/components/jobs/apply-button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "@/i18n/navigation";
@@ -71,6 +75,10 @@ export function JobCard({ job }: { job: JobCardData }) {
           {job.summary}
         </p>
       )}
+      <div className="mt-4 flex flex-col gap-2 sm:flex-row-reverse sm:items-center sm:justify-between">
+        <ApplyButton jobId={job.id} platform={job.platform.name} />
+        <ReferralDisclosure />
+      </div>
     </article>
   );
 }

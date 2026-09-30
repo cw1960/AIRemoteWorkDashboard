@@ -184,3 +184,27 @@ export const getPlatform = cache(
 export const getPlatformJobs = cache(async (slug: string) =>
   searchJobs(parseFeedFilters({ platform: slug })),
 );
+
+/** What /go/<job> needs to send a click on; null when unknown. */
+export async function getOutboundJob(id: string) {
+  if (!z.guid().safeParse(id).success) return null;
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase
+    .from("jobs")
+    .select(
+      "id, url, external_id, status, platform:platforms!inner(referral_url_template)",
+    )
+    .eq("id", id)
+    .maybeSingle();
+  if (error) throw new Error(error.message);
+  return data;
+}
+
+/** Records an outbound click (signed-in users with their id). */
+export async function logOutboundClick(jobId: string): Promise<void> {
+  const supabase = await createSupabaseServerClient();
+  const { error } = await supabase.rpc("log_outbound_click", {
+    p_job_id: jobId,
+  });
+  if (error) throw new Error(error.message);
+}

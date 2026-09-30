@@ -12,6 +12,10 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import { Breadcrumbs, Fact, PlatformMark } from "@/components/jobs/detail";
+import {
+  ApplyButton,
+  ReferralDisclosure,
+} from "@/components/jobs/apply-button";
 import { JobCard, JobCardSkeleton } from "@/components/jobs/job-card";
 import { SiteHeader } from "@/components/site-header";
 import { Badge } from "@/components/ui/badge";
@@ -27,6 +31,7 @@ import {
 } from "@/lib/jobs/format";
 import { getJob, getSimilarJobs, type JobDetail } from "@/lib/jobs/queries";
 import { jobPostingJsonLd, serializeJsonLd } from "@/lib/jobs/structured-data";
+import { cn } from "@/lib/utils";
 
 export async function generateMetadata({
   params,
@@ -94,7 +99,11 @@ export default async function JobPage({
       <SiteHeader />
       <main
         id="main"
-        className="mx-auto w-full max-w-[1100px] px-4 pt-6 pb-16 sm:px-6"
+        className={cn(
+          "mx-auto w-full max-w-[1100px] px-4 pt-6 pb-16 sm:px-6",
+          // Room for the fixed Apply bar on phones.
+          !closed && "pb-36 md:pb-16",
+        )}
       >
         {jsonLd && (
           <script
@@ -205,6 +214,21 @@ export default async function JobPage({
             {job.summary && (
               <p className="mt-5 text-base leading-relaxed">{job.summary}</p>
             )}
+            {!closed && (
+              <>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  {t("fullDetails", { platform: job.platform.name })}
+                </p>
+                <div className="mt-5 hidden gap-2 md:grid md:justify-items-start">
+                  <ApplyButton
+                    jobId={job.id}
+                    platform={job.platform.name}
+                    long
+                  />
+                  <ReferralDisclosure />
+                </div>
+              </>
+            )}
           </header>
 
           <section
@@ -250,6 +274,18 @@ export default async function JobPage({
           />
         </Suspense>
       </main>
+
+      {!closed && (
+        <div className="fixed inset-x-0 bottom-0 z-30 grid gap-1 border-t border-border bg-background/90 p-3 backdrop-blur-xl md:hidden">
+          <ApplyButton
+            jobId={job.id}
+            platform={job.platform.name}
+            long
+            className="w-full"
+          />
+          <ReferralDisclosure className="text-center" />
+        </div>
+      )}
     </>
   );
 }

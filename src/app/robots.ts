@@ -9,7 +9,8 @@ export default function robots(): MetadataRoute.Robots {
 
   return {
     rules: isProduction
-      ? { userAgent: "*", allow: "/" }
+      ? // /go/ logs "Apply" clicks, so crawlers must not follow it.
+        { userAgent: "*", allow: "/", disallow: "/go/" }
       : { userAgent: "*", disallow: "/" },
   };
 }
