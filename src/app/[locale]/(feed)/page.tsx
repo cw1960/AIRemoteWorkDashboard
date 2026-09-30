@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, Search } from "lucide-react";
+import { ChevronLeft, ChevronRight, Search, X } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { FeedForm } from "@/components/jobs/feed-form";
@@ -9,9 +9,11 @@ import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import {
   activeFilterCount,
+  type FeedFilters,
   PAGE_SIZE,
   parseFeedFilters,
   toSearchParams,
+  withoutFilters,
 } from "@/lib/jobs/filters";
 import { buildFilterOptions } from "@/lib/jobs/options";
 import { getFeedFacets, searchJobs } from "@/lib/jobs/queries";
@@ -29,10 +31,12 @@ export default async function FeedPage({
   ]);
   const activeCount = activeFilterCount(filters);
   const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
-  const pageHref = (page: number) => {
-    const query = toSearchParams(filters, { page }).toString();
+  const href = (next: FeedFilters) => {
+    const query = toSearchParams(next).toString();
     return query ? `/?${query}` : "/";
   };
+  const pageHref = (page: number) => href({ ...filters, page });
+  const clearSearchHref = href({ ...filters, q: "", page: 1 });
 
   return (
     <>
@@ -45,31 +49,44 @@ export default async function FeedPage({
           {t("title")}
         </h1>
 
+        {/* Keyed on the query so the uncontrolled fields reset whenever a
+            link (clear search, clear filters) changes the URL. */}
         <FeedForm
+          key={toSearchParams({ ...filters, page: 1 }).toString()}
           filters={filters}
           options={buildFilterOptions(facets, locale)}
           activeCount={activeCount}
         >
           <section aria-labelledby="results-heading">
-            <p
-              id="results-heading"
-              className="text-sm font-semibold"
-              aria-live="polite"
-            >
-              {t("count", { count: total })}
-            </p>
+            <div className="flex flex-wrap items-center gap-2">
+              <p
+                id="results-heading"
+                className="text-sm font-semibold"
+                aria-live="polite"
+              >
+                {t("count", { count: total })}
+              </p>
+              {filters.q && (
+                <Link
+                  href={clearSearchHref}
+                  aria-label={t("clearSearchFor", { q: filters.q })}
+                  className="inline-flex min-h-8 max-w-full items-center gap-1.5 rounded-full border border-primary/35 bg-primary/10 py-1 pr-2 pl-3 text-xs font-semibold hover:bg-primary/20"
+                >
+                  <span className="truncate">
+                    {t("searchingFor", { q: filters.q })}
+                  </span>
+                  <X className="size-3.5 shrink-0" aria-hidden="true" />
+                </Link>
+              )}
+            </div>
 
             <div className="mt-4">
               {jobs.length === 0 ? (
-                <StateBlock
-                  icon={Search}
-                  title={t("emptyTitle")}
-                  copy={t("emptyBody")}
-                  action={
-                    <Button asChild variant="editorial" size="touch">
-                      <Link href="/">{t("clearFilters")}</Link>
-                    </Button>
-                  }
+                <EmptyResults
+                  filters={filters}
+                  activeCount={activeCount}
+                  searchAllHref={href(withoutFilters(filters))}
+                  clearSearchHref={clearSearchHref}
                 />
               ) : (
                 <ul className="grid gap-3" aria-label={t("results")}>
@@ -116,5 +133,60 @@ export default async function FeedPage({
         </FeedForm>
       </main>
     </>
+  );
+}
+
+/**
+ * Zero results. When a search and filters together match nothing, offer
+ * both ways out: the search without the filters, or the filters without
+ * the search.
+ */
+async function EmptyResults({
+  filters,
+  activeCount,
+  searchAllHref,
+  clearSearchHref,
+}: {
+  filters: FeedFilters;
+  activeCount: number;
+  searchAllHref: string;
+  clearSearchHref: string;
+}) {
+  const t = await getTranslations("Feed");
+  const { q } = filters;
+
+  if (q && activeCount > 0) {
+    return (
+      <StateBlock
+        icon={Search}
+        title={t("emptyBothTitle", { q })}
+        copy={t("emptyBothBody")}
+        action={
+          <div className="flex flex-col items-center gap-2 sm:flex-row">
+            <Button asChild variant="editorial" size="touch">
+              <Link href={searchAllHref}>{t("searchAllFor", { q })}</Link>
+            </Button>
+            <Button asChild variant="editorialOutline" size="touch">
+              <Link href={clearSearchHref}>{t("clearSearch")}</Link>
+            </Button>
+          </div>
+        }
+      />
+    );
+  }
+
+  return (
+    <StateBlock
+      icon={Search}
+      title={q ? t("emptySearchTitle", { q }) : t("emptyTitle")}
+      copy={q ? t("emptySearchBody") : t("emptyBody")}
+      action={
+        <Button asChild variant="editorial" size="touch">
+          <Link href={q ? clearSearchHref : "/"}>
+            {q ? t("clearSearch") : t("clearFilters")}
+          </Link>
+        </Button>
+      }
+    />
   );
 }

@@ -5,6 +5,7 @@ import {
   parseFeedFilters,
   postedSince,
   toSearchParams,
+  withoutFilters,
 } from "./filters";
 import { formatPayAmount, formatPostedAgo } from "./format";
 
@@ -93,6 +94,20 @@ describe("toSearchParams", () => {
     const filters = parseFeedFilters({ q: "law" });
     expect(toSearchParams(filters, { page: 2 }).toString()).toBe(
       "q=law&page=2",
+    );
+  });
+
+  it("keeps the search and sort when filters are removed", () => {
+    const filters = parseFeedFilters({
+      q: "finance",
+      domain: "law",
+      platform: "mercor",
+      minPay: "40",
+      sort: "pay",
+      page: "2",
+    });
+    expect(toSearchParams(withoutFilters(filters)).toString()).toBe(
+      "q=finance&sort=pay",
     );
   });
 });
