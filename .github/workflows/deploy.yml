@@ -63,7 +63,11 @@ jobs:
         id: ua
         env:
           INGEST_CONTACT_EMAIL: ${{ vars.INGEST_CONTACT_EMAIL }}
-        run: echo "value=$(node scripts/ingest-user-agent.mjs)" >> "$GITHUB_OUTPUT"
+        # Assign first so a missing contact email fails the step (bash -e).
+        run: |
+          ua="$(node scripts/ingest-user-agent.mjs)"
+          echo "User-Agent: $ua"
+          echo "value=$ua" >> "$GITHUB_OUTPUT"
 
       - name: Link the Supabase project
         run: pnpm exec supabase link --project-ref "$SUPABASE_PROJECT_REF"
