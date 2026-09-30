@@ -2,7 +2,7 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
 test.describe("home page", () => {
-  test("renders the placeholder in English", async ({ page }) => {
+  test("renders in English with the page title", async ({ page }) => {
     await page.goto("/");
 
     await expect(page).toHaveTitle(/Track your AI training job applications/);
