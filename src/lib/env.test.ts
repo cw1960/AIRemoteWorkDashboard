@@ -36,8 +36,15 @@ describe("getSiteUrl", () => {
     expect(getSiteUrl().origin).toBe("https://preview.example.com");
   });
 
+  it("falls back to Netlify's site URL", () => {
+    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "");
+    vi.stubEnv("URL", "https://example.netlify.app");
+    expect(getSiteUrl().origin).toBe("https://example.netlify.app");
+  });
+
   it("falls back to the configured site URL", () => {
     vi.stubEnv("NEXT_PUBLIC_SITE_URL", "");
+    vi.stubEnv("URL", "");
     expect(getSiteUrl().href).toBe(new URL(siteConfig.url).href);
   });
 

@@ -10,13 +10,17 @@ export function StateBlock({
   copy,
   action,
   tone,
+  headingLevel,
 }: {
   icon: LucideIcon;
   title: string;
   copy?: string;
   action?: ReactNode;
   tone?: "error";
+  /** Render the title as the page's h1 (whole-page states like 404). */
+  headingLevel?: 1;
 }) {
+  const Title = headingLevel === 1 ? "h1" : "p";
   return (
     <div
       role={tone === "error" ? "alert" : undefined}
@@ -32,7 +36,7 @@ export function StateBlock({
       >
         <Icon className="size-5" aria-hidden="true" />
       </span>
-      <p className="mt-4 text-base font-bold">{title}</p>
+      <Title className="mt-4 text-base font-bold">{title}</Title>
       {copy && <p className="mt-1 text-sm text-muted-foreground">{copy}</p>}
       {action && <div className="mt-5">{action}</div>}
     </div>

@@ -20,8 +20,15 @@ export function getPublicEnv(): PublicEnv {
   });
 }
 
-/** Canonical URL for this deploy; falls back to the production URL. */
+/**
+ * Canonical URL of the site. NEXT_PUBLIC_SITE_URL wins; otherwise Netlify's
+ * own URL variable (the site's main address, also on deploy previews), and
+ * last the configured production URL.
+ */
 export function getSiteUrl(): URL {
-  const raw = process.env.NEXT_PUBLIC_SITE_URL;
+  // Empty values count as unset.
+  const raw = [process.env.NEXT_PUBLIC_SITE_URL, process.env.URL].find(
+    (value) => value !== undefined && value !== "",
+  );
   return new URL(raw ? z.url().parse(raw) : siteConfig.url);
 }
