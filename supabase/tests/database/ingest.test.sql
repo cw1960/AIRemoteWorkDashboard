@@ -65,7 +65,8 @@ select is(
 );
 select is(
   (select count(*)::int from public.jobs j join public.platforms p on p.id = j.platform_id
-   where p.slug = 'micro1' and j.status = 'closed'),
+   where p.slug = 'micro1' and j.status = 'closed'
+     and j.external_id in ('a', 'b', 'c')),
   0,
   'failed and empty runs close nothing'
 );

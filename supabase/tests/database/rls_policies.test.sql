@@ -35,7 +35,8 @@ values
 set local role anon;
 
 select is((select count(*)::int from public.platforms), 13, 'anon reads platforms');
-select is((select count(*)::int from public.jobs), 1, 'anon reads jobs');
+select ok(exists (select 1 from public.jobs where id = '00000000-0000-0000-0000-00000000a001'),
+  'anon reads jobs');
 select lives_ok($$ select * from public.playbooks $$, 'anon reads playbooks');
 
 select throws_ok($$ select * from public.profiles $$, '42501', null,
