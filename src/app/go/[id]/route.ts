@@ -14,15 +14,19 @@ export async function GET(request: NextRequest, ctx: RouteContext<"/go/[id]">) {
   const job = await getOutboundJob(id);
 
   if (job?.status !== "open") {
+    // Relative on purpose: on Netlify, request.url carries the deploy's
+    // internal hostname rather than the one the visitor used.
     return noStore(
-      NextResponse.redirect(
-        new URL(`/jobs/${encodeURIComponent(id)}`, request.url),
-        303,
-      ),
+      new NextResponse(null, {
+        status: 303,
+        headers: { Location: `/jobs/${encodeURIComponent(id)}` },
+      }),
     );
   }
 
-  if (!isPreviewHost(request.headers.get("host"))) {
+  const host =
+    request.headers.get("x-forwarded-host") ?? request.headers.get("host");
+  if (!isPreviewHost(host)) {
     try {
       await logOutboundClick(job.id);
     } catch (error) {

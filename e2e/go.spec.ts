@@ -37,9 +37,8 @@ test.describe("apply redirect", () => {
     for (const id of [CLOSED_JOB, "not-a-job"]) {
       const response = await request.get(`/go/${id}`, { maxRedirects: 0 });
       expect(response.status()).toBe(303);
-      expect(new URL(response.headers().location ?? "").pathname).toBe(
-        `/jobs/${id}`,
-      );
+      // Relative, so it keeps the host the visitor used.
+      expect(response.headers().location).toBe(`/jobs/${id}`);
     }
   });
 
