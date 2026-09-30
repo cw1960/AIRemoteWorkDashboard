@@ -3,7 +3,7 @@
  * Debian iso-codes package (iso_3166-1.json). Sources such as Mercor use
  * alpha-3; the database stores alpha-2.
  */
-const ALPHA3_TO_ALPHA2: Readonly<Record<string, string>> = {
+export const ALPHA3_TO_ALPHA2: Readonly<Record<string, string>> = {
   ABW: "AW",
   AFG: "AF",
   AGO: "AO",

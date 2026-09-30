@@ -6,14 +6,73 @@
   "Layout": {
     "skipToContent": "Skip to main content"
   },
-  "HomePage": {
-    "eyebrow": "Coming soon",
-    "title": "Find AI training work. Track every application.",
-    "lead": "One free dashboard for remote AI training jobs, from first application to paid project."
-  },
   "NotFound": {
     "title": "Page not found",
     "body": "The page you're looking for doesn't exist or has moved.",
     "home": "Go to the home page"
+  },
+  "Feed": {
+    "title": "Remote AI training jobs",
+    "count": "{count, plural, =0 {No open jobs} one {# open job} other {# open jobs}}",
+    "searchLabel": "Search jobs",
+    "searchPlaceholder": "Search jobs, e.g. Spanish legal",
+    "search": "Search",
+    "sortLabel": "Sort by",
+    "sortNewest": "Newest",
+    "sortPay": "Highest pay",
+    "filters": "Filters",
+    "filtersActive": "{count, plural, one {# active} other {# active}}",
+    "clearAll": "Clear all",
+    "apply": "Show jobs",
+    "close": "Close filters",
+    "platform": "Platform",
+    "domain": "Domain",
+    "minPay": "Minimum pay ($ per hour)",
+    "minPayHint": "Hourly jobs only",
+    "language": "Language",
+    "country": "Open to people in",
+    "anyCountry": "Any country",
+    "posted": "Posted",
+    "postedAny": "Any time",
+    "posted1d": "Last 24 hours",
+    "posted7d": "Last 7 days",
+    "posted30d": "Last 30 days",
+    "emptyTitle": "No jobs match these filters.",
+    "emptyBody": "Try removing a filter or searching for something broader.",
+    "clearFilters": "Clear filters",
+    "errorTitle": "We couldn't load jobs.",
+    "errorBody": "Something went wrong on our side. Please try again.",
+    "retry": "Try again",
+    "previous": "Previous",
+    "next": "Next",
+    "pageOf": "Page {page} of {pages}",
+    "pagination": "Pagination",
+    "results": "Job results",
+    "postedAgo": "Posted {ago}",
+    "anyPay": "Any"
+  },
+  "Job": {
+    "pay": "{amount} {unit, select, hour {/ hr} day {/ day} week {/ week} month {/ month} year {/ year} task {/ task} session {/ session} project {/ project} other {}}",
+    "noPay": "Pay not listed"
+  },
+  "Domains": {
+    "software": "Software",
+    "ai-ml": "AI & machine learning",
+    "data": "Data",
+    "engineering": "Engineering",
+    "robotics": "Robotics",
+    "science": "Science",
+    "medicine": "Medicine",
+    "law": "Law",
+    "finance": "Finance",
+    "business": "Business",
+    "sales-marketing": "Sales & marketing",
+    "language": "Languages",
+    "humanities": "Humanities",
+    "arts-design": "Arts & design",
+    "education": "Education",
+    "trades": "Skilled trades",
+    "generalist": "Generalist",
+    "other": "Other"
   }
 }
