@@ -48,7 +48,7 @@ The vision is sound; the gaps are in data, tracking design, referral mechanics a
 | 4.2 Tracker | Upsell nudges | Removed for V1 per your direction |
 | 4.3, 4.4 | Pro features | Out of V1 |
 | 5. Stack | Lovable outputs Vite + React, PRD says Next.js | Use Lovable screens as the design source, then port components (see Stack) |
-| 6. Monetization | "Harvest referral codes from internal dashboards" | Legit for Mercor and micro1 (links on every listing); Outlier's rules discourage mass posting, so link to Outlier directly |
+| 6. Monetization | "Harvest referral codes from internal dashboards" | Legit for Mercor and micro1 (links on every listing); Outlier too, by the owner's decision (see Monetization) |
 | Missing | Email, analytics, legal pages, SEO | Added below |
 
 On referrals specifically: [Mercor](https://talent.docs.mercor.com/policies/referrals) puts a referral link on every listing and doesn't require you to work there. Third-party guides report micro1 pays a flat amount per listing, up to $3,000, after the hire logs 10 paid hours; [Outlier's guidelines](https://outlier.ai/legal/community-guidelines) prohibit spamming personal referral links. Add a plain affiliate disclosure on every outbound link.
@@ -162,7 +162,7 @@ Every listing comes straight from the platform that posts it, never from a compe
 | [DataAnnotation](https://www.dataannotation.tech/) | Server-rendered board, 107 roles at /job-board/{slug} | Parse HTML; all roles share one application | Yes, pay bands | Check | 1 |
 | [Terac](https://terac.com/opportunities) | Public opportunities list with spots left per study | Parse HTML; confirm it renders server-side | Yes, per session (often $100–350) or hourly | Reported | 1 |
 | [micro1](https://www.micro1.ai/experts/opportunities) | Listings load in the browser after the page opens | Trace the page's data call in dev tools, then fetch that JSON | Yes | Yes, per listing | 2 |
-| [Outlier](https://app.outlier.ai/opportunities) | Public opportunities board at app.outlier.ai | Trace the page's data call; small list | Yes, "up to" rates by country | Plain link only | 2 |
+| [Outlier](https://app.outlier.ai/opportunities) | Public opportunities board at app.outlier.ai | Trace the page's data call; small list | Yes, "up to" rates by country | Yes (format to confirm) | 2 |
 | [Turing](https://work.turing.com/jobs) | work.turing.com/jobs loads roles in the browser | Trace the page's data call | Yes, e.g. $100/hr | Check | 2 |
 | [SME Careers](https://aitrainer.work/platforms/sme-careers) | sme.careers (SuperAnnotate) loads roles in the browser; roughly 200+ roles | Trace the page's data call | Yes | Check | 2 |
 | [Handshake AI](https://joinhandshake.com/ai/opportunities/) | Public opportunities page; applying needs a Handshake account | Parse HTML | Yes, "up to" rates | Check | 3 |
@@ -271,8 +271,15 @@ V1 earns only through referral links, so every outbound click goes through `/go/
 | --- | --- | --- |
 | micro1 | Flat payout per listing, up to $3,000, after 10 paid hours | Referral link on every listing |
 | Mercor | 20% of the referral's earnings, capped at 4× their hourly rate | Referral link on every listing |
-| Outlier | Per-track links; mass posting discouraged | Plain link, no referral |
+| Outlier | Per-track links | Referral link (owner's decision, 2026-09-30); format to confirm when its adapter is built |
 | Others | Unknown | Plain link until checked |
+
+**Confirmed referral link formats** (codes are the owner's, safe to share; `{id}` = `jobs.external_id`):
+
+| Platform | Link | How confirmed |
+| --- | --- | --- |
+| micro1 | `https://jobs.micro1.ai/post/{id}?referralCode=425b88c3-88c8-4f6c-9e49-b2adea77e703&utm_source=referral&utm_medium=share&utm_campaign=job_referral` | Two per-job links from the owner's micro1 dashboard |
+| Mercor | `https://work.mercor.com/explore?listingId={id}&referralCode=0fed61c9-731f-407b-f095-c500767da8db` | Owner's short link `t.mercor.com/2TkEO` resolves to `work.mercor.com?referralCode=…`; Mercor's site-wide script reads `referralCode` on every page and records the listing |
 
 These figures come from third-party reviews; confirm them in each platform's dashboard before launch.
 
