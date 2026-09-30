@@ -26,12 +26,16 @@
   --color-ring: var(--ring);
 
   --font-sans: var(--font-family-sans);
+  --font-display: var(--font-family-display);
   --font-mono: var(--font-family-mono);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
 
   --ease-standard: var(--easing-standard);
 }
@@ -47,7 +51,44 @@
 
   /* Visible focus for every keyboard-focusable element (WCAG 2.4.7). */
   :focus-visible {
-    @apply outline-2 outline-offset-2 outline-ring;
+    outline: 3px solid var(--color-ring);
+    outline-offset: 3px;
+  }
+}
+
+/* Surface utilities from the Lovable design. */
+@utility page-backdrop {
+  background: var(--gradient-page);
+}
+
+@utility glass-panel {
+  background: var(--gradient-panel);
+  box-shadow: var(--shadow-glow);
+  backdrop-filter: blur(24px);
+}
+
+@utility gradient-primary {
+  background: var(--gradient-primary);
+}
+
+@utility gradient-text {
+  background: var(--gradient-primary);
+  background-clip: text;
+  color: transparent;
+}
+
+@utility step-enter {
+  animation: step-enter 240ms ease-out both;
+}
+
+@keyframes step-enter {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 

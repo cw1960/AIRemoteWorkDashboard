@@ -30,7 +30,7 @@ get alerts.
   hard-code these elsewhere.
 - **Small, reviewable commits** with clear messages. Never rewrite pushed
   history.
-- Current phase: **Phase 2 — Design + data** (see PLAN.md → Build plan).
+- Current phase: **Phase 3 — Feed** (see PLAN.md → Build plan).
 
 ## Stack (fixed — do not substitute)
 
@@ -140,8 +140,10 @@ Key rules:
   Strings live in `messages/<locale>.json`; the default locale has no URL
   prefix. Read the locale with `next/root-params`, not `setRequestLocale`.
 - `src/proxy.ts` — Next.js 16 proxy (formerly middleware): locale routing.
-- `src/styles/tokens.css` — design tokens; `src/app/globals.css` maps them
-  into Tailwind. `src/lib/utils.ts` has `cn()`; shadcn/ui components go in
+- `src/styles/tokens.css` — design tokens from the Lovable design (dark
+  "indigo glass"; the design reference repo is `cw1960/app-brand-builder`);
+  `src/app/globals.css` maps them into Tailwind and adds its surface utilities
+  (`page-backdrop`, `glass-panel`, `gradient-primary`, `gradient-text`). `src/lib/utils.ts` has `cn()`; shadcn/ui components go in
   `src/components/ui` (`components.json`).
 - `src/lib/env.ts` — Zod-validated env access. `src/lib/supabase/` — server
   and browser clients plus generated `database.types.ts`.
