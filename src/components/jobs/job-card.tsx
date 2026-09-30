@@ -1,0 +1,94 @@
+import { Clock3 } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
+
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Link } from "@/i18n/navigation";
+import type { Domain } from "@/lib/jobs/filters";
+import {
+  countryName,
+  formatPayAmount,
+  formatPostedAgo,
+  languageName,
+} from "@/lib/jobs/format";
+import type { JobCardData } from "@/lib/jobs/queries";
+
+export function JobCard({ job }: { job: JobCardData }) {
+  const t = useTranslations();
+  const locale = useLocale();
+  const amount = formatPayAmount(job.pay_min, job.pay_max, locale);
+  const tags = [
+    job.domain ? t(`Domains.${job.domain as Domain}`) : null,
+    job.languages.map((code) => languageName(code, locale)).join(", ") || null,
+    job.countries
+      .slice(0, 2)
+      .map((code) => countryName(code, locale))
+      .join(", ") || null,
+  ].filter((tag): tag is string => tag !== null);
+
+  return (
+    <article className="rounded-2xl border border-border p-4 glass-panel sm:p-5">
+      <h3 className="text-base font-bold sm:text-lg">
+        <Link href={`/jobs/${job.id}`} className="rounded hover:underline">
+          {job.title}
+        </Link>
+      </h3>
+      <p className="mt-1 flex items-center gap-2 text-sm text-muted-foreground">
+        <span
+          className="grid size-6 place-items-center rounded-md text-[11px] font-bold text-primary-foreground gradient-primary"
+          aria-hidden="true"
+        >
+          {job.platform.name.charAt(0).toUpperCase()}
+        </span>
+        {job.platform.name}
+      </p>
+      <p className="mt-3 text-lg font-extrabold">
+        {amount
+          ? t("Job.pay", { amount, unit: job.pay_unit ?? "other" })
+          : t("Job.noPay")}
+      </p>
+      <div className="mt-2 flex flex-wrap items-center gap-1.5">
+        {tags.map((tag) => (
+          <Badge
+            key={tag}
+            variant="outline"
+            className="border-border bg-secondary text-secondary-foreground"
+          >
+            {tag}
+          </Badge>
+        ))}
+        {job.posted_at && (
+          <span className="ml-1 inline-flex items-center gap-1 text-xs text-muted-foreground">
+            <Clock3 className="size-3" aria-hidden="true" />
+            {t("Feed.postedAgo", {
+              ago: formatPostedAgo(job.posted_at, locale),
+            })}
+          </span>
+        )}
+      </div>
+      {job.summary && (
+        <p className="mt-3 line-clamp-2 text-sm text-muted-foreground">
+          {job.summary}
+        </p>
+      )}
+    </article>
+  );
+}
+
+export function JobCardSkeleton() {
+  return (
+    <div
+      className="rounded-2xl border border-border bg-card p-5"
+      aria-hidden="true"
+    >
+      <Skeleton className="h-5 w-2/3" />
+      <Skeleton className="mt-2 h-4 w-28" />
+      <Skeleton className="mt-4 h-6 w-32" />
+      <div className="mt-3 flex gap-2">
+        <Skeleton className="h-5 w-16" />
+        <Skeleton className="h-5 w-20" />
+        <Skeleton className="h-5 w-24" />
+      </div>
+    </div>
+  );
+}
