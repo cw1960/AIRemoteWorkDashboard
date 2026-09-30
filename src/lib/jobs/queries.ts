@@ -1,13 +1,20 @@
 import "server-only";
 
+import { cache } from "react";
 import { z } from "zod";
 
 import type { Database } from "@/lib/supabase/database.types";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-import { type FeedFilters, PAGE_SIZE, postedSince } from "./filters";
+import {
+  type FeedFilters,
+  PAGE_SIZE,
+  parseFeedFilters,
+  postedSince,
+} from "./filters";
 
 type JobRow = Database["public"]["Tables"]["jobs"]["Row"];
+type PlatformRow = Database["public"]["Tables"]["platforms"]["Row"];
 
 /** One feed card: the columns selected below plus the platform. */
 export type JobCardRow = Pick<
@@ -103,3 +110,77 @@ export async function getFeedFacets(): Promise<FeedFacets> {
   if (error) throw new Error(error.message);
   return facetSchema.parse(data);
 }
+
+/** A platform as shown on its page and on job pages. */
+export type PlatformInfo = Pick<
+  PlatformRow,
+  "slug" | "name" | "site_url" | "onboarding_notes" | "countries_blocked"
+>;
+
+const PLATFORM_COLUMNS =
+  "slug, name, site_url, onboarding_notes, countries_blocked";
+
+/** One job page: the card plus what the page and structured data need. */
+export type JobDetail = Omit<JobCardRow, "platform"> &
+  Pick<
+    JobRow,
+    "status" | "closed_at" | "first_seen_at" | "countries_blocked"
+  > & { platform: PlatformInfo };
+
+const JOB_DETAIL_COLUMNS = `id, title, summary, domain, tags, pay_min, pay_max, pay_unit, languages, countries, posted_at, status, closed_at, first_seen_at, countries_blocked, platform:platforms!inner(${PLATFORM_COLUMNS})`;
+
+/**
+ * One job, open or closed; null when the id is malformed or unknown.
+ * Cached per request, so metadata and the page share one query.
+ */
+export const getJob = cache(async (id: string): Promise<JobDetail | null> => {
+  if (!z.guid().safeParse(id).success) return null;
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase
+    .from("jobs")
+    .select(JOB_DETAIL_COLUMNS)
+    .eq("id", id)
+    .maybeSingle();
+  if (error) throw new Error(error.message);
+  return data;
+});
+
+/** Up to three open jobs like this one: same domain, else same platform. */
+export async function getSimilarJobs(job: JobDetail): Promise<JobCardRow[]> {
+  const supabase = await createSupabaseServerClient();
+  let query = supabase
+    .from("jobs")
+    .select(JOB_CARD_COLUMNS)
+    .eq("status", "open")
+    .neq("id", job.id);
+  query = job.domain
+    ? query.eq("domain", job.domain)
+    : query.eq("platform.slug", job.platform.slug);
+  const { data, error } = await query
+    .order("posted_at", { ascending: false, nullsFirst: false })
+    .order("id")
+    .limit(3);
+  if (error) throw new Error(error.message);
+  return data;
+}
+
+/** One platform by slug; null when the slug is malformed or unknown. */
+export const getPlatform = cache(
+  async (slug: string): Promise<PlatformInfo | null> => {
+    const filters = parseFeedFilters({ platform: slug });
+    if (filters.platforms[0] !== slug) return null;
+    const supabase = await createSupabaseServerClient();
+    const { data, error } = await supabase
+      .from("platforms")
+      .select(PLATFORM_COLUMNS)
+      .eq("slug", slug)
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    return data;
+  },
+);
+
+/** A platform's newest open jobs and its open-job total. */
+export const getPlatformJobs = cache(async (slug: string) =>
+  searchJobs(parseFeedFilters({ platform: slug })),
+);
