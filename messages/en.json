@@ -131,5 +131,28 @@
     "notFound": "We can't find this platform.",
     "notFoundBody": "The link may be wrong.",
     "errorTitle": "We couldn't load this platform."
+  },
+  "Auth": {
+    "metaTitle": "Sign in",
+    "title": "Sign in to {appName}",
+    "intro": "We'll email you a link. No password needed.",
+    "why": "An account lets you track applications and get job alerts. Browsing jobs never needs one.",
+    "email": "Email",
+    "emailPlaceholder": "you@example.com",
+    "submit": "Email me a link",
+    "sending": "Sending…",
+    "sentTitle": "Check your email",
+    "sentBody": "We sent a sign-in link to {email}. It works once and expires in an hour.",
+    "sentHint": "No email after a few minutes? Check your spam folder, or try again.",
+    "tryAgain": "Use a different email",
+    "invalidEmail": "Enter a valid email address, like you@example.com.",
+    "rateLimited": "Too many sign-in emails were sent. Please wait a few minutes and try again.",
+    "failed": "We couldn't send the email. Please try again.",
+    "linkFailed": "That sign-in link didn't work. It may have expired or already been used. Enter your email to get a new one.",
+    "signedInAs": "You're signed in as {email}.",
+    "continue": "Continue",
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "account": "Account"
   }
 }

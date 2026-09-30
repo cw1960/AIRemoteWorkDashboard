@@ -39,11 +39,12 @@ jobs:
       - run: pnpm functions:check
 
       # The feed reads jobs at request time: build and test against a local
-      # Supabase stack seeded with supabase/seed.sql (sample jobs only).
+      # Supabase stack seeded with supabase/seed.sql (sample jobs only). Mailpit
+      # stays on: the sign-in test reads its magic link from there.
       - name: Start local Supabase (API and seeded database)
         run: >
           pnpm exec supabase start
-          -x studio,imgproxy,logflare,vector,supavisor,mailpit,realtime,storage-api,postgres-meta,edge-runtime
+          -x studio,imgproxy,logflare,vector,supavisor,realtime,storage-api,postgres-meta,edge-runtime
       - name: Point the app at local Supabase
         run: >
           pnpm exec supabase status -o env

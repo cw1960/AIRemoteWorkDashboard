@@ -232,6 +232,18 @@ otp_length = 6
 # Number of seconds before the email OTP expires (defaults to 1 hour).
 otp_expiry = 3600
 
+# Magic-link emails link to /auth/confirm with a token_hash, which works even
+# when the email is opened in another browser or app. {{ .RedirectTo }} is the
+# app's emailRedirectTo (…/auth/confirm?next=…). Production uses the same
+# text (Supabase dashboard → Authentication → Emails).
+[auth.email.template.magic_link]
+subject = "Your sign-in link"
+content_path = "./supabase/templates/magic-link.html"
+
+[auth.email.template.confirmation]
+subject = "Confirm your email and sign in"
+content_path = "./supabase/templates/confirmation.html"
+
 # Use a production-ready SMTP server
 # [auth.email.smtp]
 # enabled = true

@@ -13,6 +13,7 @@ import { Suspense } from "react";
 
 import { Breadcrumbs, Fact, PlatformMark } from "@/components/jobs/detail";
 import { JobCard, JobCardSkeleton } from "@/components/jobs/job-card";
+import { AccountNav } from "@/components/account-nav";
 import { SiteHeader } from "@/components/site-header";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -91,7 +92,9 @@ export default async function JobPage({
 
   return (
     <>
-      <SiteHeader />
+      <SiteHeader>
+        <AccountNav />
+      </SiteHeader>
       <main
         id="main"
         className="mx-auto w-full max-w-[1100px] px-4 pt-6 pb-16 sm:px-6"

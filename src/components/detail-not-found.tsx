@@ -1,5 +1,6 @@
 import { Search } from "lucide-react";
 
+import { AccountNav } from "@/components/account-nav";
 import { SiteHeader } from "@/components/site-header";
 import { StateBlock } from "@/components/state-block";
 import { Button } from "@/components/ui/button";
@@ -17,7 +18,9 @@ export function DetailNotFound({
 }) {
   return (
     <>
-      <SiteHeader />
+      <SiteHeader>
+        <AccountNav />
+      </SiteHeader>
       <main
         id="main"
         className="mx-auto w-full max-w-3xl flex-1 px-4 py-16 sm:px-6"
