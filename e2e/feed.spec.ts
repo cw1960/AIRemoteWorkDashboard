@@ -43,11 +43,50 @@ test.describe("job feed", () => {
   });
 
   test("shows an empty state with a way back", async ({ page }) => {
-    await page.goto("/?q=zzz-no-such-job");
+    // The seeded jobs are all older than a day.
+    await page.goto("/?posted=1d");
 
     await expect(page.getByText("No jobs match these filters.")).toBeVisible();
     await page.getByRole("link", { name: "Clear filters" }).click();
     await expect(page.locator(heading)).toHaveText("24 open jobs");
+  });
+
+  test("suggests clearing a search that matches nothing", async ({ page }) => {
+    await page.goto("/?q=zzz-no-such-job");
+
+    await expect(
+      page.getByText("No jobs match “zzz-no-such-job”."),
+    ).toBeVisible();
+    await page.getByRole("link", { name: "Clear search", exact: true }).click();
+    await expect(page.locator(heading)).toHaveText("24 open jobs");
+  });
+
+  test("offers both ways out when a search and filters match nothing", async ({
+    page,
+  }) => {
+    await page.goto("/?q=translator&domain=law");
+
+    await expect(
+      page.getByText("No jobs match “translator” with these filters."),
+    ).toBeVisible();
+    await page
+      .getByRole("link", { name: "Search all jobs for “translator”" })
+      .click();
+    await expect(page).toHaveURL(/\?q=translator$/);
+    await expect(page.locator(heading)).toHaveText("1 open job");
+  });
+
+  test("clears the search from the chip and resets the search box", async ({
+    page,
+  }) => {
+    await page.goto("/?q=translator");
+    await expect(page.locator(heading)).toHaveText("1 open job");
+
+    await page.getByRole("link", { name: "Clear search “translator”" }).click();
+    await expect(page.locator(heading)).toHaveText("24 open jobs");
+    await expect(
+      page.getByRole("searchbox", { name: "Search jobs" }),
+    ).toHaveValue("");
   });
 
   test("ignores invalid filter values", async ({ page }) => {

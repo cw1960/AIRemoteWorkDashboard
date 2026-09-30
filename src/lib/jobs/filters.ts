@@ -122,6 +122,20 @@ export function activeFilterCount(filters: FeedFilters): number {
   );
 }
 
+/** The same search and sort with every filter removed, back on page 1. */
+export function withoutFilters(filters: FeedFilters): FeedFilters {
+  return {
+    ...filters,
+    platforms: [],
+    domains: [],
+    languages: [],
+    country: null,
+    minPay: null,
+    posted: null,
+    page: 1,
+  };
+}
+
 const DAY_MS = 86_400_000;
 
 /** Earliest posting time for a "posted within" filter. */
