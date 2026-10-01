@@ -362,5 +362,10 @@
     "allOff": "Turn off all emails",
     "saved": "Saved",
     "failed": "Couldn't save. Please try again."
+  },
+  "SavedSearches": {
+    "quoted": "“{q}”",
+    "minPay": "{amount}+/hr",
+    "allJobs": "All new jobs"
   }
 }

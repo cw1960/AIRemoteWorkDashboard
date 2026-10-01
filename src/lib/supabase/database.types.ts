@@ -599,6 +599,21 @@ export type Database = {
           unsubscribe_token: string;
         }[];
       };
+      due_job_alerts: {
+        Args: { p_now: string; p_token: string };
+        Returns: {
+          email: string;
+          filters: Json;
+          frequency: Database["public"]["Enums"]["search_frequency"];
+          jobs: Json;
+          locale: string;
+          platform_names: string[];
+          search_id: string;
+          total: number;
+          unsubscribe_token: string;
+          user_id: string;
+        }[];
+      };
       due_reminders: {
         Args: { p_day: string; p_token: string };
         Returns: {
@@ -629,6 +644,10 @@ export type Database = {
         Returns: Json;
       };
       log_outbound_click: { Args: { p_job_id: string }; Returns: boolean };
+      mark_job_alerts_sent: {
+        Args: { p_at: string; p_search_ids: string[]; p_token: string };
+        Returns: undefined;
+      };
       mark_reminder_sent: {
         Args: { p_day: string; p_token: string; p_user_id: string };
         Returns: undefined;
