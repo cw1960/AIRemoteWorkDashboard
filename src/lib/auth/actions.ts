@@ -1,7 +1,6 @@
 "use server";
 
 import { headers } from "next/headers";
-import { redirect } from "next/navigation";
 import { z } from "zod";
 
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -63,10 +62,4 @@ export async function requestMagicLink(
   }
   console.error("magic link not sent", error.code, error.message);
   return { status: "error", code: "failed" };
-}
-
-export async function signOut(): Promise<never> {
-  const supabase = await createSupabaseServerClient();
-  await supabase.auth.signOut();
-  redirect("/");
 }

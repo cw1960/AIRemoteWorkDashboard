@@ -31,6 +31,17 @@ test.describe("sign-in", () => {
     await signOut.click();
     await expect(page).toHaveURL(/\/$/);
     await expect(page.getByRole("link", { name: "Sign in" })).toBeVisible();
+    // Still signed out after a reload, and private pages ask to sign in.
+    await page.goto("/dashboard");
+    await expect(page).toHaveURL(/\/sign-in\?next=%2Fdashboard$/);
+  });
+
+  test("only same-site forms can sign someone out", async ({ request }) => {
+    const response = await request.post("/auth/sign-out", {
+      headers: { "sec-fetch-site": "cross-site" },
+      maxRedirects: 0,
+    });
+    expect(response.status()).toBe(403);
   });
 
   test("rejects an invalid email", async ({ page }) => {
