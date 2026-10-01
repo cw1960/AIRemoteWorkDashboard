@@ -309,7 +309,8 @@
       "keep": "Keep card",
       "confirmDelete": "Delete",
       "deleteFailed": "Couldn't delete the card. Please try again."
-    }
+    },
+    "emailSettings": "Email settings"
   },
   "Track": {
     "trackThis": "Track this",
@@ -318,5 +319,48 @@
     "trackedLabel": "Tracked: open your dashboard",
     "tracking": "Adding…",
     "failed": "Couldn't add it to your board. Please try again."
+  },
+  "Emails": {
+    "unsubscribe": "Unsubscribe",
+    "settings": "Email settings",
+    "reasonWelcome": "You're getting this because you created an account on {name}.",
+    "reasonReminder": "You're getting this because you set a follow-up date on {name}. Reminders are sent at most once a day.",
+    "welcome": {
+      "subject": "Welcome to {name}",
+      "preview": "Your job search, in one place.",
+      "heading": "Welcome aboard",
+      "body": "Your dashboard keeps every application in one place. Save jobs with Track this, move them through the stages as you hear back, and keep notes on each one.",
+      "tip": "Tip: set a follow-up date on a card and we'll email you that day, so nothing slips.",
+      "cta": "Open my dashboard"
+    },
+    "reminder": {
+      "subject": "{count, plural, one {# follow-up} other {# follow-ups}} due today",
+      "preview": "{count, plural, one {One card} other {# cards}} on your board {count, plural, one {needs} other {need}} a follow-up today.",
+      "heading": "Time to follow up",
+      "intro": "{count, plural, one {This card on your board has} other {These cards on your board have}} a follow-up date today:",
+      "cta": "Open my dashboard"
+    }
+  },
+  "EmailSettings": {
+    "metaTitle": "Email settings",
+    "title": "Email settings",
+    "subtitle": "Choose which emails we send to {email}.",
+    "byLinkSubtitle": "Choose which emails we send you. Changes save straight away.",
+    "badLink": "This link doesn't work any more. Sign in and open Email settings to change your emails.",
+    "alerts_on": {
+      "label": "Job alerts",
+      "hint": "New jobs that match your saved searches."
+    },
+    "reminders_on": {
+      "label": "Follow-up reminders",
+      "hint": "On days when a card on your board is due for a follow-up."
+    },
+    "recap_on": {
+      "label": "Weekly recap",
+      "hint": "A short summary of your week."
+    },
+    "allOff": "Turn off all emails",
+    "saved": "Saved",
+    "failed": "Couldn't save. Please try again."
   }
 }

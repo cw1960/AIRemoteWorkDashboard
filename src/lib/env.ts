@@ -32,3 +32,16 @@ export function getSiteUrl(): URL {
   );
   return new URL(raw ? z.url().parse(raw) : siteConfig.url);
 }
+
+const serverSchema = z.object({
+  /** Unset (previews, local, CI): emails are skipped, not sent. */
+  RESEND_API_KEY: z.string().startsWith("re_").optional(),
+});
+
+export type ServerEnv = z.infer<typeof serverSchema>;
+
+/** Server-only env vars. Never call from client components. */
+export function getServerEnv(): ServerEnv {
+  const key = process.env.RESEND_API_KEY;
+  return serverSchema.parse({ RESEND_API_KEY: key === "" ? undefined : key });
+}

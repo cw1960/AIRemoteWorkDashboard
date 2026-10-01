@@ -1,4 +1,4 @@
-import { UserRound } from "lucide-react";
+import { Mail, UserRound } from "lucide-react";
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 
@@ -56,7 +56,15 @@ export default async function DashboardPage() {
         <h1 className="mt-2 font-display text-3xl font-extrabold sm:text-4xl">
           {t("title")}
         </h1>
-        <p className="mt-2 text-muted-foreground">{t("subtitle")}</p>
+        <div className="mt-2 flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
+          <p className="text-muted-foreground">{t("subtitle")}</p>
+          <Button asChild variant="editorialLink" size="touch" className="px-0">
+            <Link href="/settings">
+              <Mail aria-hidden="true" />
+              {t("emailSettings")}
+            </Link>
+          </Button>
+        </div>
 
         {onboarding && (
           <div className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-primary/25 bg-primary/10 p-5">

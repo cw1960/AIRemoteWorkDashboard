@@ -82,6 +82,10 @@ test.describe("dashboard", () => {
     await expect(
       page.getByRole("region", { name: "Assessment" }).getByText("Drag me"),
     ).toBeVisible();
+    // The move shows at once; wait until the server has saved it.
+    await expect(page.getByRole("status")).toHaveText(
+      "Moved “Drag me” to Assessment.",
+    );
     await page.reload();
     await expect(
       page.getByRole("region", { name: "Assessment" }).getByText("Drag me"),
