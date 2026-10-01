@@ -49,7 +49,7 @@ export function SaveSearchButton({
 
   if (initiallySaved === null) {
     return (
-      <Button asChild variant="editorialOutline" size="touch">
+      <Button asChild variant="editorial" size="touch">
         <Link href={signInHref}>
           <BellPlus aria-hidden="true" />
           {t("getAlerts")}
@@ -86,7 +86,7 @@ export function SaveSearchButton({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button type="button" variant="editorialOutline" size="touch">
+        <Button type="button" variant="editorial" size="touch">
           <BellPlus aria-hidden="true" />
           {t("getAlerts")}
         </Button>

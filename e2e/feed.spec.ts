@@ -122,4 +122,27 @@ test.describe("job feed", () => {
       .analyze();
     expect(results.violations).toEqual([]);
   });
+
+  test("the filter sidebar scrolls on its own on desktop", async ({
+    page,
+    isMobile,
+  }) => {
+    test.skip(isMobile, "Phones open filters in a sheet.");
+    await page.setViewportSize({ width: 1280, height: 640 });
+    await page.goto("/");
+    const panel = page
+      .getByRole("complementary", { name: "Filters" })
+      .locator("> div");
+    const box = await panel.boundingBox();
+    expect(box && box.y + box.height).toBeLessThanOrEqual(640);
+
+    // Scrolling the panel reaches its last filter while the page stays put.
+    await panel.evaluate((el) => {
+      el.scrollTop = el.scrollHeight;
+    });
+    expect(await page.evaluate(() => window.scrollY)).toBe(0);
+    await expect(
+      panel.locator("button, select, input, a").last(),
+    ).toBeInViewport();
+  });
 });

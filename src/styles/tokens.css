@@ -37,24 +37,29 @@
   --input: oklch(0.9 0.01 280 / 12%);
   --ring: oklch(0.7 0.12 275);
 
+  /* Pipeline stages: one hue per column, so cards read at a glance.
+     Used as a tinted fill and a left edge on board cards. */
+  --stage-saved: oklch(0.72 0.03 265);
+  --stage-applied: oklch(0.7 0.13 245);
+  --stage-assessment: oklch(0.78 0.13 80);
+  --stage-interviewing: oklch(0.7 0.15 305);
+  --stage-offered: oklch(0.75 0.15 150);
+  --stage-rejected: oklch(0.66 0.16 25);
+
   /* Surfaces: gradients and glow */
   --gradient-primary: linear-gradient(
     120deg,
     oklch(0.6 0.15 272),
     oklch(0.55 0.12 258)
   );
-  --gradient-page:
-    radial-gradient(
-      ellipse at 85% -5%,
-      oklch(0.45 0.12 275 / 14%),
-      transparent 50%
-    ),
-    radial-gradient(
-      ellipse at 0% 100%,
-      oklch(0.4 0.06 260 / 8%),
-      transparent 50%
-    ),
-    oklch(0.15 0.012 275);
+  /* Page background: a subtle pinkish-white glow on the left fading to
+     near-black on the right (owner's request, 2026-10-01). */
+  --gradient-page: linear-gradient(
+    90deg,
+    oklch(0.33 0.05 355) 0%,
+    oklch(0.17 0.015 330) 45%,
+    oklch(0.08 0.006 300) 100%
+  );
   --gradient-panel: linear-gradient(
     160deg,
     oklch(0.95 0.01 280 / 5%),

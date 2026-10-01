@@ -54,6 +54,7 @@ import {
   localToday,
   nextMonday,
 } from "@/lib/tracker/dates";
+import { STAGE_STYLES } from "@/lib/tracker/stage-styles";
 import { type Stage, STAGES } from "@/lib/tracker/stages";
 import { cn } from "@/lib/utils";
 
@@ -161,6 +162,19 @@ function Details({
           >
             <Icon className="size-3" aria-hidden="true" />
             {t(`kinds.${card.kind}`)}
+          </Badge>
+          <Badge
+            variant="outline"
+            className="gap-1.5 border-border bg-secondary text-muted-foreground"
+          >
+            <span
+              aria-hidden="true"
+              className={cn(
+                "size-2 rounded-full",
+                STAGE_STYLES[card.stage].dot,
+              )}
+            />
+            {t(`stages.${card.stage}`)}
           </Badge>
         </div>
         <SheetTitle className="mt-2 text-xl leading-snug font-extrabold break-words">
