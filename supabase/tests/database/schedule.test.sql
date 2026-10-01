@@ -8,11 +8,7 @@ select plan(15);
 
 select results_eq(
   $$ select jobname, schedule from cron.job where jobname like 'ingest-%' order by jobname $$,
-  $$ values ('ingest-invisible'::text, '17 */6 * * *'::text),
-            ('ingest-mercor', '7 */6 * * *'),
-            ('ingest-micro1', '37 */6 * * *'),
-            ('ingest-welo-data', '27 */6 * * *'),
-            ('ingest-xai', '47 */6 * * *') $$,
+  $$ values ('ingest-mercor'::text, '7 */6 * * *'::text), ('ingest-micro1', '37 */6 * * *') $$,
   'each platform runs every 6 hours, staggered'
 );
 

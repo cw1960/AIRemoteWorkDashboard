@@ -78,6 +78,12 @@ get alerts.
 
 - **V1 is completely free.** No Stripe, no Pro tier, no paywalls, no upsell
   nudges, no Resume Tuner, no Interview Simulator.
+- **Only platforms with a referral program get a fetcher** (owner's decision,
+  2026-10-01: referrals are how the app earns). Build an adapter only after
+  the platform's referral link format is confirmed and recorded in PLAN.md →
+  Monetization. Greenhouse/Lever adapters for Invisible, Welo Data and xAI
+  were built in PR #13 and reverted for this reason; restore them from git
+  history if those platforms add referral programs.
 - **Job data comes only from the platforms themselves.** Never scrape
   competitor boards (aitrainer.work, aitraining.jobs, Skillora, AIWorkfinder,
   AlignList, labelingjobs.net) or **OpenTrain AI** (platform card only).
@@ -150,13 +156,10 @@ Key rules:
 - `supabase/` — `config.toml`, `migrations/`, `functions/`, `tests/database/`
   (pgTAP; includes a guard that every public table has RLS on).
 - `supabase/functions/ingest/` — the ingestion Edge Function (Deno).
-  `supabase/functions/_shared/ingest/` — pure adapters, shared by Deno and
-  Vitest, tested against recorded fixtures: Mercor and micro1 have their
-  own; Greenhouse and Lever boards share `greenhouse.ts` / `lever.ts` with a
-  per-board filter that keeps AI-training roles only (`sources.ts` lists
-  them all). Storing and the closing rule live in SQL: `ingest_jobs()`.
-  pg_cron calls the function every 6 h per platform (cron job
-  `ingest-<slug>`) via `private.invoke_ingest()` with a token kept in Vault.
+  `supabase/functions/_shared/ingest/` — pure adapters (one per platform),
+  shared by Deno and Vitest, tested against recorded fixtures. Storing and
+  the closing rule live in SQL: `ingest_jobs()`. pg_cron calls the function
+  every 6 h via `private.invoke_ingest()` with a token kept in Vault.
 - `.github/workflows/deploy.yml` — the only way to production: manual
   "Run workflow" (dry run by default) pushes migrations, deploys functions,
   sets function secrets. `scripts/ingest-user-agent.mjs` builds the bot

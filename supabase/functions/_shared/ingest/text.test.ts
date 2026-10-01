@@ -1,16 +1,9 @@
 import { describe, expect, it } from "vitest";
 
-import { countriesFromLocation, toAlpha2 } from "./countries.ts";
+import { toAlpha2 } from "./countries.ts";
 import { collect } from "./job.ts";
 import { detectLanguages } from "./languages.ts";
-import {
-  decodeEntities,
-  htmlToText,
-  parseHourlyPay,
-  sectionAfter,
-  summarize,
-  toIsoUtc,
-} from "./text.ts";
+import { summarize, toIsoUtc } from "./text.ts";
 
 describe("summarize", () => {
   it("returns the first paragraph as plain text", () => {
@@ -102,79 +95,5 @@ describe("collect", () => {
     ]);
     expect(result.jobs.map((j) => j.external_id)).toEqual(["x"]);
     expect(result.skipped).toBe(3);
-  });
-});
-
-describe("htmlToText", () => {
-  it("turns (double-escaped) HTML into paragraphs", () => {
-    expect(
-      htmlToText(
-        "&lt;h2&gt;About&lt;/h2&gt;&lt;p&gt;We pay &amp;amp; care.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;One&lt;/li&gt;&lt;/ul&gt;",
-      ),
-    ).toBe("About\n\nWe pay & care.\n\nOne");
-  });
-
-  it("decodes named and numeric entities", () => {
-    expect(decodeEntities("It&rsquo;s &#36;20 &#x2013; &bogus;")).toBe(
-      "It’s $20 – &bogus;",
-    );
-  });
-});
-
-describe("sectionAfter", () => {
-  it("returns the text after a matching heading", () => {
-    expect(
-      sectionAfter("Company intro\nABOUT THE ROLE:\nYou will teach.", [
-        "About the role",
-      ]),
-    ).toBe("You will teach.");
-  });
-
-  it("returns everything when no heading matches", () => {
-    expect(sectionAfter("Just text", ["About the role"])).toBe("Just text");
-  });
-});
-
-describe("parseHourlyPay", () => {
-  it.each([
-    ["Pay: $22 per hour.", 22, 22],
-    ["$35/hour - $45/hour depending on experience", 35, 45],
-    ["from $6-to- $65 per hour", 6, 65],
-    ["$2.40 USD per hour", 2.4, 2.4],
-    ["between $20 and $30 hourly", 30, 30],
-  ])("%s", (text, min, max) => {
-    expect(parseHourlyPay(text)).toEqual({
-      pay_min: min,
-      pay_max: max,
-      pay_unit: "hour",
-    });
-  });
-
-  it.each([["$120,000 a year"], ["$50 per task"], ["No pay listed"], [null]])(
-    "ignores %s",
-    (text) => {
-      expect(parseHourlyPay(text)).toEqual({
-        pay_min: null,
-        pay_max: null,
-        pay_unit: null,
-      });
-    },
-  );
-});
-
-describe("countriesFromLocation", () => {
-  it.each([
-    ["United States of America", ["US"]],
-    ["Remote US", ["US"]],
-    ["Mexico City, Mexico", ["MX"]],
-    ["Spain; Portugal", ["ES", "PT"]],
-    ["South Africa", ["ZA"]],
-    ["World Wide - Remote", []],
-    ["Remote International", []],
-    ["Remote", []],
-    ["Atlantis", []],
-    [null, []],
-  ])("%s → %j", (location, expected) => {
-    expect(countriesFromLocation(location)).toEqual(expected);
   });
 });
