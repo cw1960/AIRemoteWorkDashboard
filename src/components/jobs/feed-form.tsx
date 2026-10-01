@@ -175,7 +175,7 @@ export function FeedForm({
 
       <div className="mt-6 grid gap-6 md:grid-cols-[280px_minmax(0,1fr)] lg:grid-cols-[300px_minmax(0,1fr)]">
         <aside className="hidden md:block" aria-label={t("filters")}>
-          <div className="sticky top-24 rounded-2xl border border-border p-5 glass-panel">
+          <div className="sticky top-24 max-h-[calc(100dvh-15rem)] overflow-y-auto overscroll-contain rounded-2xl border border-border p-5 glass-panel">
             <div className="flex items-center justify-between">
               <h2 className="font-bold">{t("filters")}</h2>
               {activeCount > 0 && clearAll}
