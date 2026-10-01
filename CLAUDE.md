@@ -83,7 +83,9 @@ get alerts.
   the platform's referral link format is confirmed and recorded in PLAN.md →
   Monetization. Greenhouse/Lever adapters for Invisible, Welo Data and xAI
   were built in PR #13 and reverted for this reason; restore them from git
-  history if those platforms add referral programs.
+  history if those platforms add referral programs. Platform pages follow
+  the same rule: `/platforms/<slug>` is a 404 until the platform has a
+  `referral_url_template`.
 - **Job data comes only from the platforms themselves.** Never scrape
   competitor boards (aitrainer.work, aitraining.jobs, Skillora, AIWorkfinder,
   AlignList, labelingjobs.net) or **OpenTrain AI** (platform card only).
