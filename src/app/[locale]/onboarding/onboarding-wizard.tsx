@@ -169,7 +169,9 @@ export function OnboardingWizard({
           </div>
         )}
         <Button asChild variant="editorial" size="touch" className="mt-8">
-          <Link href={doneHref}>{t("doneAction")}</Link>
+          <Link href={doneHref}>
+            {doneHref === "/dashboard" ? t("doneDashboard") : t("doneContinue")}
+          </Link>
         </Button>
       </section>
     );
