@@ -78,6 +78,12 @@ get alerts.
 
 - **V1 is completely free.** No Stripe, no Pro tier, no paywalls, no upsell
   nudges, no Resume Tuner, no Interview Simulator.
+- **Only platforms with a referral program get a fetcher** (owner's decision,
+  2026-10-01: referrals are how the app earns). Build an adapter only after
+  the platform's referral link format is confirmed and recorded in PLAN.md →
+  Monetization. Greenhouse/Lever adapters for Invisible, Welo Data and xAI
+  were built in PR #13 and reverted for this reason; restore them from git
+  history if those platforms add referral programs.
 - **Job data comes only from the platforms themselves.** Never scrape
   competitor boards (aitrainer.work, aitraining.jobs, Skillora, AIWorkfinder,
   AlignList, labelingjobs.net) or **OpenTrain AI** (platform card only).
