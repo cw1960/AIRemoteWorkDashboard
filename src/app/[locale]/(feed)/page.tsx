@@ -3,6 +3,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 
 import { FeedForm } from "@/components/jobs/feed-form";
 import { JobCard } from "@/components/jobs/job-card";
+import { AccountNav } from "@/components/account-nav";
 import { SiteHeader } from "@/components/site-header";
 import { StateBlock } from "@/components/state-block";
 import { Button } from "@/components/ui/button";
@@ -40,7 +41,9 @@ export default async function FeedPage({
 
   return (
     <>
-      <SiteHeader />
+      <SiteHeader>
+        <AccountNav />
+      </SiteHeader>
       <main
         id="main"
         className="mx-auto w-full max-w-[1400px] px-4 pt-6 pb-16 sm:px-6 lg:px-8"

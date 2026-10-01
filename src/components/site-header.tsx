@@ -1,7 +1,13 @@
+import type { ReactNode } from "react";
+
 import { siteConfig } from "@/config/site";
 import { Link } from "@/i18n/navigation";
 
-export function SiteHeader() {
+/**
+ * The top bar. `children` goes on the right: pages pass <AccountNav />;
+ * error and loading states (client or static) leave it empty.
+ */
+export function SiteHeader({ children }: { children?: ReactNode }) {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/75 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-[1400px] items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
@@ -14,6 +20,9 @@ export function SiteHeader() {
           </span>
           <span className="truncate font-extrabold">{siteConfig.name}</span>
         </Link>
+        {children && (
+          <div className="flex min-w-0 items-center gap-2">{children}</div>
+        )}
       </div>
     </header>
   );

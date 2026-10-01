@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 
 import { Breadcrumbs, Fact, PlatformMark } from "@/components/jobs/detail";
 import { JobCard } from "@/components/jobs/job-card";
+import { AccountNav } from "@/components/account-nav";
 import { SiteHeader } from "@/components/site-header";
 import { StateBlock } from "@/components/state-block";
 import { Badge } from "@/components/ui/badge";
@@ -59,7 +60,9 @@ export default async function PlatformPage({
 
   return (
     <>
-      <SiteHeader />
+      <SiteHeader>
+        <AccountNav />
+      </SiteHeader>
       <main
         id="main"
         className="mx-auto w-full max-w-[1100px] px-4 pt-6 pb-16 sm:px-6"
