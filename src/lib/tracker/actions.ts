@@ -6,7 +6,8 @@ import { z } from "zod";
 import { getSessionUser } from "@/lib/auth/session";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-import { endPosition, STAGES } from "./stages";
+import { fromDateInput, toDateInput } from "./dates";
+import { endPosition, type Stage, STAGES } from "./stages";
 
 export type ActionResult =
   | { ok: true; id: string }
@@ -240,4 +241,141 @@ export async function trackPlatform(input: unknown): Promise<ActionResult> {
   }
   revalidatePath("/[locale]/dashboard", "page");
   return { ok: true, id: data.id };
+}
+
+const updateSchema = z
+  .object({
+    id: z.uuid(),
+    /** Manual cards only: job and platform cards keep their source's name. */
+    title: z.string().trim().min(1).max(300).optional(),
+    appliedOn: z.iso.date().nullable().optional(),
+    nextActionOn: z.iso.date().nullable().optional(),
+    notes: z.string().max(10_000).optional(),
+  })
+  .refine(
+    (input) =>
+      input.title !== undefined ||
+      input.appliedOn !== undefined ||
+      input.nextActionOn !== undefined ||
+      input.notes !== undefined,
+  );
+
+/** Edits a card's title (manual cards), dates or notes. */
+export async function updateCard(input: unknown): Promise<ActionResult> {
+  const parsed = updateSchema.safeParse(input);
+  if (!parsed.success) return { ok: false, error: "invalid" };
+  const user = await getSessionUser();
+  if (!user) return { ok: false, error: "auth" };
+  const { id, title, appliedOn, nextActionOn, notes } = parsed.data;
+
+  const supabase = await createSupabaseServerClient();
+  let query = supabase
+    .from("tracker_cards")
+    .update({
+      ...(title === undefined ? {} : { title }),
+      ...(appliedOn === undefined
+        ? {}
+        : { applied_at: fromDateInput(appliedOn ?? "") }),
+      ...(nextActionOn === undefined
+        ? {}
+        : { next_action_at: fromDateInput(nextActionOn ?? "") }),
+      ...(notes === undefined ? {} : { notes: notes.trim() ? notes : null }),
+    })
+    .eq("user_id", user.id)
+    .eq("id", id);
+  if (title !== undefined) query = query.eq("kind", "manual");
+  const { data, error } = await query.select("id");
+  if (error) {
+    console.error("card not updated", error);
+    return { ok: false, error: "failed" };
+  }
+  if (data.length === 0) return { ok: false, error: "invalid" };
+  revalidatePath("/[locale]/dashboard", "page");
+  return { ok: true, id };
+}
+
+const cardIdSchema = z.object({ id: z.uuid() });
+
+/** Deletes a card; its stage history goes with it. */
+export async function deleteCard(input: unknown): Promise<ActionResult> {
+  const parsed = cardIdSchema.safeParse(input);
+  if (!parsed.success) return { ok: false, error: "invalid" };
+  const user = await getSessionUser();
+  if (!user) return { ok: false, error: "auth" };
+
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase
+    .from("tracker_cards")
+    .delete()
+    .eq("user_id", user.id)
+    .eq("id", parsed.data.id)
+    .select("id");
+  if (error) {
+    console.error("card not deleted", error);
+    return { ok: false, error: "failed" };
+  }
+  if (data.length === 0) return { ok: false, error: "invalid" };
+  revalidatePath("/[locale]/dashboard", "page");
+  return { ok: true, id: parsed.data.id };
+}
+
+/** One stage change in a card's history; `from` is null when it was added. */
+export interface CardEvent {
+  from: Stage | null;
+  to: Stage;
+  viaEmail: boolean;
+  at: string;
+}
+
+/** What the card details sheet shows beyond the board tile. */
+export interface CardDetails {
+  appliedOn: string;
+  nextActionOn: string;
+  notes: string;
+  /** Job cards: when the listing closed. */
+  closedAt: string | null;
+  history: CardEvent[];
+}
+
+export type DetailsResult =
+  | { ok: true; details: CardDetails }
+  | { ok: false; error: "invalid" | "auth" | "failed" };
+
+/** A card's dates, notes and stage history, oldest move first. */
+export async function getCardDetails(input: unknown): Promise<DetailsResult> {
+  const parsed = cardIdSchema.safeParse(input);
+  if (!parsed.success) return { ok: false, error: "invalid" };
+  const user = await getSessionUser();
+  if (!user) return { ok: false, error: "auth" };
+
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase
+    .from("tracker_cards")
+    .select(
+      "applied_at, next_action_at, notes, job:jobs(closed_at), events:card_events(from_stage, to_stage, source, at)",
+    )
+    .eq("user_id", user.id)
+    .eq("id", parsed.data.id)
+    .order("at", { referencedTable: "card_events" })
+    .maybeSingle();
+  if (error) {
+    console.error("card details not loaded", error);
+    return { ok: false, error: "failed" };
+  }
+  if (!data) return { ok: false, error: "invalid" };
+  return {
+    ok: true,
+    details: {
+      appliedOn: toDateInput(data.applied_at),
+      nextActionOn: toDateInput(data.next_action_at),
+      notes: data.notes ?? "",
+      closedAt: data.job?.closed_at ?? null,
+      history: data.events.map((event) => ({
+        from: event.from_stage,
+        to: event.to_stage,
+        viaEmail: event.source === "email",
+        at: event.at,
+      })),
+    },
+  };
 }

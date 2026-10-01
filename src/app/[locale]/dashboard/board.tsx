@@ -36,6 +36,8 @@ import type { BoardCard } from "@/lib/tracker/queries";
 import { type Stage, STAGES } from "@/lib/tracker/stages";
 import { cn } from "@/lib/utils";
 
+import { CardDetailsSheet } from "./card-details";
+
 /** A card plus labels resolved on the server (dates, pay). */
 export interface BoardCardView extends BoardCard {
   payLabel: string | null;
@@ -55,7 +57,7 @@ const DRAG_TYPE = "application/x-tracker-card";
  * The pipeline: six columns on desktop, one column at a time with stage tabs
  * on phones. Cards move by drag-and-drop (desktop) or the "Move to…" menu
  * (everywhere, keyboard included). Moves show at once and roll back if the
- * server refuses them.
+ * server refuses them. A card's title opens its details sheet.
  */
 export function Board({ initialCards }: { initialCards: BoardCardView[] }) {
   const t = useTranslations("Dashboard");
@@ -67,30 +69,33 @@ export function Board({ initialCards }: { initialCards: BoardCardView[] }) {
     text: "",
     error: false,
   });
-  const [, startTransition] = useTransition();
+  const [openId, setOpenId] = useState<string | null>(null);
 
-  function move(id: string, stage: Stage) {
+  async function move(id: string, stage: Stage): Promise<boolean> {
     const card = cards.find((c) => c.id === id);
-    if (!card || card.stage === stage) return;
-    const before = cards;
-    setCards(
-      cards.map((c) =>
-        c.id === id ? { ...c, stage, position: Number.MAX_SAFE_INTEGER } : c,
-      ),
-    );
+    if (!card || card.stage === stage) return false;
+    const update = (to: Stage, position: number) => {
+      setCards((current) =>
+        current.map((c) => (c.id === id ? { ...c, stage: to, position } : c)),
+      );
+    };
+    update(stage, Number.MAX_SAFE_INTEGER);
     setActiveStage(stage);
-    startTransition(async () => {
-      const result = await moveCard({ id, stage });
-      if (result.ok) {
-        setStatus({
-          text: t("moved", { title: card.title, stage: t(`stages.${stage}`) }),
-          error: false,
-        });
-      } else {
-        setCards(before);
-        setStatus({ text: t("moveFailed"), error: true });
-      }
-    });
+    const result = await moveCard({ id, stage }).catch(() => null);
+    if (result?.ok) {
+      setStatus({
+        text: t("moved", { title: card.title, stage: t(`stages.${stage}`) }),
+        error: false,
+      });
+      return true;
+    }
+    update(card.stage, card.position);
+    setStatus({ text: t("moveFailed"), error: true });
+    return false;
+  }
+
+  function onMove(id: string, stage: Stage) {
+    void move(id, stage);
   }
 
   const byStage = (stage: Stage) =>
@@ -182,7 +187,8 @@ export function Board({ initialCards }: { initialCards: BoardCardView[] }) {
             <Column
               stage={activeStage}
               cards={byStage(activeStage)}
-              onMove={move}
+              onMove={onMove}
+              onOpen={setOpenId}
               showHeading={false}
             />
           </div>
@@ -194,13 +200,35 @@ export function Board({ initialCards }: { initialCards: BoardCardView[] }) {
                 key={stage}
                 stage={stage}
                 cards={byStage(stage)}
-                onMove={move}
+                onMove={onMove}
+                onOpen={setOpenId}
                 showHeading
               />
             ))}
           </div>
         </>
       )}
+
+      <CardDetailsSheet
+        card={cards.find((c) => c.id === openId) ?? null}
+        onClose={() => {
+          setOpenId(null);
+        }}
+        onMove={move}
+        onPatch={(id, patch) => {
+          setCards((current) =>
+            current.map((c) => (c.id === id ? { ...c, ...patch } : c)),
+          );
+        }}
+        onDeleted={(card) => {
+          setOpenId(null);
+          setCards((current) => current.filter((c) => c.id !== card.id));
+          setStatus({
+            text: t("deleted", { title: card.title }),
+            error: false,
+          });
+        }}
+      />
     </section>
   );
 }
@@ -209,11 +237,13 @@ function Column({
   stage,
   cards,
   onMove,
+  onOpen,
   showHeading,
 }: {
   stage: Stage;
   cards: BoardCardView[];
   onMove: (id: string, stage: Stage) => void;
+  onOpen: (id: string) => void;
   showHeading: boolean;
 }) {
   const t = useTranslations("Dashboard");
@@ -267,7 +297,7 @@ function Column({
         <ul className="grid gap-2">
           {cards.map((card) => (
             <li key={card.id}>
-              <Tile card={card} onMove={onMove} />
+              <Tile card={card} onMove={onMove} onOpen={onOpen} />
             </li>
           ))}
         </ul>
@@ -279,9 +309,11 @@ function Column({
 function Tile({
   card,
   onMove,
+  onOpen,
 }: {
   card: BoardCardView;
   onMove: (id: string, stage: Stage) => void;
+  onOpen: (id: string) => void;
 }) {
   const t = useTranslations("Dashboard");
   const Icon = KIND_ICONS[card.kind];
@@ -333,16 +365,15 @@ function Tile({
         </DropdownMenu>
       </div>
       <h4 className="mt-1 text-sm leading-snug font-bold break-words">
-        {card.job ? (
-          <Link
-            href={`/jobs/${card.job.id}`}
-            className="rounded hover:underline"
-          >
-            {card.title}
-          </Link>
-        ) : (
-          card.title
-        )}
+        <button
+          type="button"
+          onClick={() => {
+            onOpen(card.id);
+          }}
+          className="cursor-pointer rounded text-left break-words hover:underline"
+        >
+          {card.title}
+        </button>
       </h4>
       {(card.platformName ?? card.payLabel) && (
         <p className="mt-1 text-xs text-muted-foreground">
