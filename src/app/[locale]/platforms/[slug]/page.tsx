@@ -12,7 +12,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { countryName } from "@/lib/jobs/format";
+import { TrackButton } from "@/components/track-button";
+import { getSessionUser } from "@/lib/auth/session";
 import { getPlatform, getPlatformJobs } from "@/lib/jobs/queries";
+import { isPlatformTracked, trackedLookup } from "@/lib/tracker/queries";
 
 const LATEST_JOBS = 5;
 
@@ -43,6 +46,7 @@ export async function generateMetadata({
 /** A platform's page: how joining works, key facts, its newest jobs. */
 export default async function PlatformPage({
   params,
+  searchParams,
 }: PageProps<"/[locale]/platforms/[slug]">) {
   const { slug } = await params;
   // Loaded before anything streams, so an unknown platform is a real 404.
@@ -55,6 +59,12 @@ export default async function PlatformPage({
     getTranslations("JobPage"),
     getLocale(),
   ]);
+  const [isTracked, user, query] = await Promise.all([
+    trackedLookup(jobs.map((job) => job.id)),
+    getSessionUser(),
+    searchParams,
+  ]);
+  const platformTracked = user ? await isPlatformTracked(platform.slug) : null;
   const siteLabel = platform.site_url.replace(/^https:\/\/(www\.)?/, "");
   const feedHref = `/?platform=${platform.slug}`;
 
@@ -102,6 +112,14 @@ export default async function PlatformPage({
                   <span className="sr-only">{t("opensInNewTab")}</span>
                 </a>
               </p>
+              <div className="mt-3 flex flex-wrap items-center gap-2">
+                <TrackButton
+                  target={{ kind: "platform", slug: platform.slug }}
+                  tracked={platformTracked}
+                  signInHref={`/sign-in?next=${encodeURIComponent(`/platforms/${platform.slug}?track=1`)}`}
+                  autoTrack={query.track === "1"}
+                />
+              </div>
             </div>
           </section>
 
@@ -156,7 +174,7 @@ export default async function PlatformPage({
               <ul className="grid gap-3">
                 {jobs.slice(0, LATEST_JOBS).map((job) => (
                   <li key={job.id}>
-                    <JobCard job={job} />
+                    <JobCard job={job} tracked={isTracked(job.id)} />
                   </li>
                 ))}
               </ul>

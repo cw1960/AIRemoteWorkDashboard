@@ -5,6 +5,7 @@ import {
   ApplyButton,
   ReferralDisclosure,
 } from "@/components/jobs/apply-button";
+import { TrackButton } from "@/components/track-button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "@/i18n/navigation";
@@ -17,7 +18,19 @@ import {
 } from "@/lib/jobs/format";
 import type { JobCardData } from "@/lib/jobs/queries";
 
-export function JobCard({ job }: { job: JobCardData }) {
+/** Where "Track this" sends signed-out visitors: sign in, then track. */
+export function trackSignInHref(jobId: string): string {
+  return `/sign-in?next=${encodeURIComponent(`/jobs/${jobId}?track=1`)}`;
+}
+
+export function JobCard({
+  job,
+  tracked,
+}: {
+  job: JobCardData;
+  /** Whether the user tracks this job; null when signed out. */
+  tracked: boolean | null;
+}) {
   const t = useTranslations();
   const locale = useLocale();
   const amount = formatPayAmount(job.pay_min, job.pay_max, locale);
@@ -75,10 +88,15 @@ export function JobCard({ job }: { job: JobCardData }) {
           {job.summary}
         </p>
       )}
-      <div className="mt-4 flex flex-col gap-2 sm:flex-row-reverse sm:items-center sm:justify-between">
+      <div className="mt-4 grid grid-cols-2 gap-2 sm:flex sm:justify-end">
+        <TrackButton
+          target={{ kind: "job", id: job.id }}
+          tracked={tracked}
+          signInHref={trackSignInHref(job.id)}
+        />
         <ApplyButton jobId={job.id} platform={job.platform.name} />
-        <ReferralDisclosure />
       </div>
+      <ReferralDisclosure className="mt-2 sm:text-right" />
     </article>
   );
 }
