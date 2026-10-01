@@ -109,13 +109,10 @@ test.describe("platform page", () => {
     await expect(page.locator("#results-heading")).toHaveText("13 open jobs");
   });
 
-  test("shows an empty state for a platform without open jobs", async ({
-    page,
-  }) => {
-    await page.goto("/platforms/outlier");
-    await expect(
-      page.getByText("No open Outlier jobs right now."),
-    ).toBeVisible();
+  test("hides platforms without a referral program", async ({ page }) => {
+    // Outlier has no confirmed referral link yet, so it isn't listed.
+    const response = await page.goto("/platforms/outlier");
+    expect(response?.status()).toBe(404);
   });
 
   test("answers 404 for an unknown platform", async ({ page }) => {
