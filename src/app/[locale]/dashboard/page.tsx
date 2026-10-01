@@ -9,19 +9,21 @@ import { Link, redirect } from "@/i18n/navigation";
 import { getSessionUser } from "@/lib/auth/session";
 import { formatPayAmount } from "@/lib/jobs/format";
 import { getMatchedJobs, profileCanMatch } from "@/lib/matching/queries";
+import { getPassport } from "@/lib/passport/queries";
 import { needsOnboarding } from "@/lib/profile/queries";
 import { dueView } from "@/lib/tracker/dates";
 import { type BoardCard, getBoard } from "@/lib/tracker/queries";
 
 import { Board, type BoardCardView } from "./board";
 import { MatchedJobs } from "./matched-jobs";
+import { PlatformPassport } from "./platform-passport";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Dashboard");
   return { title: t("metaTitle"), robots: { index: false } };
 }
 
-/** The signed-in user's dashboard: matched jobs and the pipeline board. */
+/** The signed-in user's dashboard: Platform Passport, matched jobs and the pipeline board. */
 export default async function DashboardPage() {
   const [locale, user] = await Promise.all([getLocale(), getSessionUser()]);
   if (!user) {
@@ -29,14 +31,16 @@ export default async function DashboardPage() {
     return null;
   }
 
-  const [t, tJob, cards, onboarding, matches, canMatch] = await Promise.all([
-    getTranslations("Dashboard"),
-    getTranslations("Job"),
-    getBoard(),
-    needsOnboarding(user.id),
-    getMatchedJobs(6),
-    profileCanMatch(),
-  ]);
+  const [t, tJob, cards, onboarding, matches, canMatch, passport] =
+    await Promise.all([
+      getTranslations("Dashboard"),
+      getTranslations("Job"),
+      getBoard(),
+      needsOnboarding(user.id),
+      getMatchedJobs(6),
+      profileCanMatch(),
+      getPassport(),
+    ]);
   const views = boardViews(cards ?? [], locale, (amount, unit) =>
     tJob("pay", { amount, unit }),
   );
@@ -91,6 +95,11 @@ export default async function DashboardPage() {
             </Button>
           </div>
         )}
+
+        <PlatformPassport
+          entries={passport}
+          today={new Date().toISOString().slice(0, 10)}
+        />
 
         <MatchedJobs matches={matches} canMatch={canMatch === true} />
 
