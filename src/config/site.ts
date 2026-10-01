@@ -13,6 +13,8 @@ export const siteConfig = {
   url: "https://airemoteworkdashboard.com",
   /** Resend sending subdomain (SPF, DKIM, DMARC verified). */
   senderDomain: "mail.airemoteworkdashboard.com",
+  /** From address for the app's emails (on the sending subdomain). */
+  senderAddress: "hello@mail.airemoteworkdashboard.com",
   /** Resend receiving subdomain for email auto-capture. */
   inboundDomain: "in.airemoteworkdashboard.com",
   /** Contact address for users, and for the ingestion User-Agent. */

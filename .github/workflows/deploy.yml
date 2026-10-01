@@ -101,6 +101,12 @@ jobs:
           pnpm exec supabase db query --linked
           "select public.set_ingest_url('https://${SUPABASE_PROJECT_REF}.supabase.co')"
 
+      - name: Point the email reminders at the site
+        if: ${{ !inputs.dry_run }}
+        run: >
+          pnpm exec supabase db query --linked
+          "select public.set_app_url('$(node scripts/site-url.mjs)')"
+
       - name: Run ingestion once
         if: ${{ !inputs.dry_run && inputs.run_ingest }}
         run: |

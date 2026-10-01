@@ -163,6 +163,12 @@ Key rules:
   shared by Deno and Vitest, tested against recorded fixtures. Storing and
   the closing rule live in SQL: `ingest_jobs()`. pg_cron calls the function
   every 6 h via `private.invoke_ingest()` with a token kept in Vault.
+- `src/emails/` — React Email templates (pure, strings passed in);
+  `src/lib/email/` — translated rendering, Resend sending (skipped when
+  `RESEND_API_KEY` is unset: previews, local, CI) and email prefs. pg_cron
+  calls `/api/cron/reminders` daily via `private.invoke_reminders()`; the
+  route reads due reminders through token-gated SQL functions (cron token
+  in Vault), so the app holds no service role key.
 - `.github/workflows/deploy.yml` — the only way to production: manual
   "Run workflow" (dry run by default) pushes migrations, deploys functions,
   sets function secrets. `scripts/ingest-user-agent.mjs` builds the bot

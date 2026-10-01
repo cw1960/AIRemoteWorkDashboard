@@ -77,31 +77,37 @@ export type Database = {
           alerts_on: boolean;
           created_at: string;
           inbound_token: string;
+          last_reminder_on: string | null;
           recap_on: boolean;
           reminders_on: boolean;
           unsubscribe_token: string;
           updated_at: string;
           user_id: string;
+          welcomed_at: string | null;
         };
         Insert: {
           alerts_on?: boolean;
           created_at?: string;
           inbound_token?: string;
+          last_reminder_on?: string | null;
           recap_on?: boolean;
           reminders_on?: boolean;
           unsubscribe_token?: string;
           updated_at?: string;
           user_id?: string;
+          welcomed_at?: string | null;
         };
         Update: {
           alerts_on?: boolean;
           created_at?: string;
           inbound_token?: string;
+          last_reminder_on?: string | null;
           recap_on?: boolean;
           reminders_on?: boolean;
           unsubscribe_token?: string;
           updated_at?: string;
           user_id?: string;
+          welcomed_at?: string | null;
         };
         Relationships: [];
       };
@@ -585,6 +591,32 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      claim_welcome_email: {
+        Args: Record<PropertyKey, never>;
+        Returns: {
+          email: string;
+          locale: string;
+          unsubscribe_token: string;
+        }[];
+      };
+      due_reminders: {
+        Args: { p_day: string; p_token: string };
+        Returns: {
+          cards: Json;
+          email: string;
+          locale: string;
+          unsubscribe_token: string;
+          user_id: string;
+        }[];
+      };
+      email_prefs_by_token: {
+        Args: { p_token: string };
+        Returns: {
+          alerts_on: boolean;
+          recap_on: boolean;
+          reminders_on: boolean;
+        }[];
+      };
       feed_facets: { Args: Record<PropertyKey, never>; Returns: Json };
       ingest_jobs: {
         Args: {
@@ -597,6 +629,20 @@ export type Database = {
         Returns: Json;
       };
       log_outbound_click: { Args: { p_job_id: string }; Returns: boolean };
+      mark_reminder_sent: {
+        Args: { p_day: string; p_token: string; p_user_id: string };
+        Returns: undefined;
+      };
+      set_app_url: { Args: { p_url: string }; Returns: undefined };
+      set_email_prefs_by_token: {
+        Args: {
+          p_alerts_on?: boolean;
+          p_recap_on?: boolean;
+          p_reminders_on?: boolean;
+          p_token: string;
+        };
+        Returns: boolean;
+      };
       set_ingest_url: { Args: { p_url: string }; Returns: undefined };
       verify_ingest_token: { Args: { p_token: string }; Returns: boolean };
     };

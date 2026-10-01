@@ -49,3 +49,40 @@ export async function signIn(
   await expect(page.getByRole("status")).toContainText("Check your email");
   await page.goto(await magicLink(request, email));
 }
+
+/**
+ * Reads a column of the signed-in user's own email_prefs row through the
+ * Supabase REST API, as that user (session from the auth cookie).
+ */
+export async function ownEmailPrefs(
+  page: Page,
+  request: APIRequestContext,
+): Promise<{ unsubscribe_token: string; reminders_on: boolean }> {
+  const cookies = await page.context().cookies();
+  const raw = cookies
+    .filter((c) => /^sb-.+-auth-token(\.\d+)?$/.test(c.name))
+    .sort((a, b) => a.name.localeCompare(b.name, "en", { numeric: true }))
+    .map((c) => c.value)
+    .join("");
+  const json = raw.startsWith("base64-")
+    ? Buffer.from(raw.slice(7), "base64url").toString("utf8")
+    : decodeURIComponent(raw);
+  const { access_token } = JSON.parse(json) as { access_token: string };
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "http://127.0.0.1:54321";
+  const response = await request.get(
+    `${url}/rest/v1/email_prefs?select=unsubscribe_token,reminders_on`,
+    {
+      headers: {
+        apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "",
+        Authorization: `Bearer ${access_token}`,
+      },
+    },
+  );
+  const rows = (await response.json()) as {
+    unsubscribe_token: string;
+    reminders_on: boolean;
+  }[];
+  const row = rows[0];
+  if (!row) throw new Error("no email_prefs row");
+  return row;
+}
