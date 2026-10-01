@@ -34,6 +34,7 @@ import { Link } from "@/i18n/navigation";
 import { addManualCard, moveCard } from "@/lib/tracker/actions";
 import type { BoardCard } from "@/lib/tracker/queries";
 import { type Stage, STAGES } from "@/lib/tracker/stages";
+import { STAGE_STYLES } from "@/lib/tracker/stage-styles";
 import { cn } from "@/lib/utils";
 
 import { CardDetailsSheet } from "./card-details";
@@ -172,6 +173,13 @@ export function Board({ initialCards }: { initialCards: BoardCardView[] }) {
                     setActiveStage(stage);
                   }}
                 >
+                  <span
+                    aria-hidden="true"
+                    className={cn(
+                      "size-2 rounded-full",
+                      STAGE_STYLES[stage].dot,
+                    )}
+                  />
                   {t(`stages.${stage}`)}
                   <Badge variant="secondary">{byStage(stage).length}</Badge>
                 </Button>
@@ -278,7 +286,14 @@ function Column({
     >
       {showHeading && (
         <div className="flex min-h-11 items-center justify-between gap-2 px-2">
-          <h3 id={headingId} className="text-sm font-bold">
+          <h3
+            id={headingId}
+            className="flex items-center gap-2 text-sm font-bold"
+          >
+            <span
+              aria-hidden="true"
+              className={cn("size-2.5 rounded-full", STAGE_STYLES[stage].dot)}
+            />
             {t(`stages.${stage}`)}
           </h3>
           <Badge variant="secondary">
@@ -327,7 +342,10 @@ function Tile({
         event.dataTransfer.setData(DRAG_TYPE, card.id);
         event.dataTransfer.effectAllowed = "move";
       }}
-      className="cursor-grab rounded-xl border border-border bg-background/65 p-3 shadow-sm active:cursor-grabbing"
+      className={cn(
+        "cursor-grab rounded-xl border border-l-4 border-border p-3 shadow-sm active:cursor-grabbing",
+        STAGE_STYLES[card.stage].tile,
+      )}
     >
       <div className="flex items-start justify-between gap-2">
         <Badge

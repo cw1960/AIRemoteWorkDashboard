@@ -74,9 +74,19 @@ export default async function FeedPage({
         id="main"
         className="mx-auto w-full max-w-[1400px] px-4 pt-6 pb-16 sm:px-6 lg:px-8"
       >
-        <h1 className="font-display text-2xl font-extrabold sm:text-3xl">
-          {t("title")}
-        </h1>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h1 className="font-display text-2xl font-extrabold sm:text-3xl">
+            {t("title")}
+          </h1>
+          <SaveSearchButton
+            key={alertQuery}
+            query={alertQuery}
+            description={alertDescription}
+            saved={saved}
+            signInHref={saveSignInHref}
+            autoOpen={params.save === "1"}
+          />
+        </div>
 
         {/* Keyed on the query so the uncontrolled fields reset whenever a
             link (clear search, clear filters) changes the URL. */}
@@ -95,16 +105,7 @@ export default async function FeedPage({
               >
                 {t("count", { count: total })}
               </p>
-              <div className="ml-auto">
-                <SaveSearchButton
-                  key={alertQuery}
-                  query={alertQuery}
-                  description={alertDescription}
-                  saved={saved}
-                  signInHref={saveSignInHref}
-                  autoOpen={params.save === "1"}
-                />
-              </div>
+
               {filters.q && (
                 <Link
                   href={clearSearchHref}

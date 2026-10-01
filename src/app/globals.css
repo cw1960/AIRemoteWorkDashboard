@@ -24,6 +24,12 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-stage-saved: var(--stage-saved);
+  --color-stage-applied: var(--stage-applied);
+  --color-stage-assessment: var(--stage-assessment);
+  --color-stage-interviewing: var(--stage-interviewing);
+  --color-stage-offered: var(--stage-offered);
+  --color-stage-rejected: var(--stage-rejected);
 
   --font-sans: var(--font-family-sans);
   --font-display: var(--font-family-display);
