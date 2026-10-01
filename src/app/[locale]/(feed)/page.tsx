@@ -26,6 +26,7 @@ import { emailLocale } from "@/lib/email/messages";
 import { INTRO_COOKIE } from "@/lib/intro";
 import { buildFilterOptions } from "@/lib/jobs/options";
 import { getFeedFacets, searchJobs } from "@/lib/jobs/queries";
+import { getMatchReasons } from "@/lib/matching/queries";
 import { trackedLookup } from "@/lib/tracker/queries";
 
 /** The public job feed: server-rendered, filters in the URL. */
@@ -45,7 +46,11 @@ export default async function FeedPage({
     ]);
   // Signed-out visitors see the introduction until they hide it.
   const showIntro = saved === null && !cookieStore.has(INTRO_COOKIE);
-  const isTracked = await trackedLookup(jobs.map((job) => job.id));
+  const jobIds = jobs.map((job) => job.id);
+  const [isTracked, matches] = await Promise.all([
+    trackedLookup(jobIds),
+    getMatchReasons(jobIds),
+  ]);
   const activeCount = activeFilterCount(filters);
   const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
   const href = (next: FeedFilters) => {
@@ -140,7 +145,11 @@ export default async function FeedPage({
                 <ul className="grid gap-3" aria-label={t("results")}>
                   {jobs.map((job) => (
                     <li key={job.id}>
-                      <JobCard job={job} tracked={isTracked(job.id)} />
+                      <JobCard
+                        job={job}
+                        tracked={isTracked(job.id)}
+                        match={matches.get(job.id)}
+                      />
                     </li>
                   ))}
                 </ul>

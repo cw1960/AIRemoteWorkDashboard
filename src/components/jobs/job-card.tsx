@@ -1,4 +1,4 @@
-import { Clock3 } from "lucide-react";
+import { Clock3, Sparkles } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
 import {
@@ -17,6 +17,7 @@ import {
   languageName,
 } from "@/lib/jobs/format";
 import type { JobCardData } from "@/lib/jobs/queries";
+import type { MatchReasons } from "@/lib/matching/reasons";
 
 /** Where "Track this" sends signed-out visitors: sign in, then track. */
 export function trackSignInHref(jobId: string): string {
@@ -26,10 +27,13 @@ export function trackSignInHref(jobId: string): string {
 export function JobCard({
   job,
   tracked,
+  match,
 }: {
   job: JobCardData;
   /** Whether the user tracks this job; null when signed out. */
   tracked: boolean | null;
+  /** Why the job fits the signed-in user, when it does. */
+  match?: MatchReasons | undefined;
 }) {
   const t = useTranslations();
   const locale = useLocale();
@@ -83,6 +87,7 @@ export function JobCard({
           </span>
         )}
       </div>
+      {match && <MatchLine reasons={match} />}
       {job.summary && (
         <p className="mt-3 line-clamp-2 text-sm text-muted-foreground">
           {job.summary}
@@ -98,6 +103,40 @@ export function JobCard({
       </div>
       <ReferralDisclosure className="mt-2 sm:text-right" />
     </article>
+  );
+}
+
+/** "Fits you: Law, Spanish, meets your rate" */
+function MatchLine({ reasons }: { reasons: MatchReasons }) {
+  const t = useTranslations();
+  const locale = useLocale();
+  const parts = [
+    reasons.domain ? t(`Domains.${reasons.domain as Domain}`) : null,
+    reasons.languages.length > 0
+      ? t("Match.reasonLanguages", {
+          languages: new Intl.ListFormat(locale, { type: "unit" }).format(
+            reasons.languages.map((code) => languageName(code, locale)),
+          ),
+        })
+      : null,
+    reasons.payOk ? t("Match.reasonPay") : null,
+    reasons.country
+      ? t("Match.reasonCountry", {
+          country: countryName(reasons.country, locale),
+        })
+      : null,
+  ].filter((part): part is string => part !== null);
+
+  return (
+    <p className="mt-3 flex items-start gap-1.5 text-sm font-semibold text-primary">
+      <Sparkles className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+      <span>
+        {t("Match.fitsYou")}{" "}
+        <span className="text-foreground">
+          {new Intl.ListFormat(locale, { type: "conjunction" }).format(parts)}
+        </span>
+      </span>
+    </p>
   );
 }
 

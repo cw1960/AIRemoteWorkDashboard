@@ -8,18 +8,20 @@ import { Button } from "@/components/ui/button";
 import { Link, redirect } from "@/i18n/navigation";
 import { getSessionUser } from "@/lib/auth/session";
 import { formatPayAmount } from "@/lib/jobs/format";
+import { getMatchedJobs, profileCanMatch } from "@/lib/matching/queries";
 import { needsOnboarding } from "@/lib/profile/queries";
 import { dueView } from "@/lib/tracker/dates";
 import { type BoardCard, getBoard } from "@/lib/tracker/queries";
 
 import { Board, type BoardCardView } from "./board";
+import { MatchedJobs } from "./matched-jobs";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Dashboard");
   return { title: t("metaTitle"), robots: { index: false } };
 }
 
-/** The signed-in user's dashboard. Phase 4: the pipeline board. */
+/** The signed-in user's dashboard: matched jobs and the pipeline board. */
 export default async function DashboardPage() {
   const [locale, user] = await Promise.all([getLocale(), getSessionUser()]);
   if (!user) {
@@ -27,11 +29,13 @@ export default async function DashboardPage() {
     return null;
   }
 
-  const [t, tJob, cards, onboarding] = await Promise.all([
+  const [t, tJob, cards, onboarding, matches, canMatch] = await Promise.all([
     getTranslations("Dashboard"),
     getTranslations("Job"),
     getBoard(),
     needsOnboarding(user.id),
+    getMatchedJobs(6),
+    profileCanMatch(),
   ]);
   const views = boardViews(cards ?? [], locale, (amount, unit) =>
     tJob("pay", { amount, unit }),
@@ -66,7 +70,8 @@ export default async function DashboardPage() {
           </Button>
         </div>
 
-        {onboarding && (
+        {/* Without a field or language, Matched jobs asks for them instead. */}
+        {onboarding && canMatch && (
           <div className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-primary/25 bg-primary/10 p-5">
             <div className="flex gap-4">
               <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-primary/15 text-primary">
@@ -86,6 +91,8 @@ export default async function DashboardPage() {
             </Button>
           </div>
         )}
+
+        <MatchedJobs matches={matches} canMatch={canMatch === true} />
 
         <Board initialCards={views} />
       </main>
