@@ -3,7 +3,6 @@ import { getTranslations } from "next-intl/server";
 
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
-import { signOut } from "@/lib/auth/actions";
 import { getSessionUser } from "@/lib/auth/session";
 
 /** Header account area: "Sign in", or the signed-in email and "Sign out". */
@@ -48,7 +47,7 @@ export async function AccountNav() {
           <span className="sr-only sm:not-sr-only">{t("profile")}</span>
         </Link>
       </Button>
-      <form action={signOut}>
+      <form action="/auth/sign-out" method="post">
         <Button
           type="submit"
           variant="editorialOutline"
