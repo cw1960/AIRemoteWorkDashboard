@@ -69,6 +69,7 @@ select throws_ok(
 
 select results_eq(
   $$ select search_id, total from public.due_job_alerts((select token from t), '2026-10-05T14:00:00Z')
+     where email in ('a@example.com', 'b@example.com')
      order by search_id $$,
   $$ values ('00000000-0000-0000-0000-0000000005a1'::uuid, 2),
             ('00000000-0000-0000-0000-0000000005b1'::uuid, 0),

@@ -339,6 +339,15 @@
       "heading": "Time to follow up",
       "intro": "{count, plural, one {This card on your board has} other {These cards on your board have}} a follow-up date today:",
       "cta": "Open my dashboard"
+    },
+    "reasonAlert": "You're getting this because you saved a job search on {name}.",
+    "alert": {
+      "subject": "{count, plural, one {# new job} other {# new jobs}} for your saved searches",
+      "preview": "{count, plural, one {A new job matches} other {# new jobs match}} your saved searches.",
+      "heading": "{count, plural, one {A new job for you} other {# new jobs for you}}",
+      "intro": "These jobs are new since your last alert. Open one to see the details and apply.",
+      "count": "{count, plural, one {# new job} other {# new jobs}}",
+      "seeAll": "See all {count} new jobs"
     }
   },
   "EmailSettings": {
@@ -366,6 +375,39 @@
   "SavedSearches": {
     "quoted": "“{q}”",
     "minPay": "{amount}+/hr",
-    "allJobs": "All new jobs"
+    "allJobs": "All new jobs",
+    "getAlerts": "Get alerts",
+    "alertsOn": "Alerts on",
+    "alertsOnLabel": "Alerts on for this search: manage them in Email settings",
+    "dialogTitle": "Get alerts for this search",
+    "dialogBody": "We'll email you new jobs that match. Change or stop them any time in Email settings.",
+    "howOften": "How often?",
+    "frequency": {
+      "daily": "Daily",
+      "weekly": "Weekly"
+    },
+    "frequencyHint": {
+      "daily": "One email a day when there are new matches",
+      "weekly": "One email a week with everything new"
+    },
+    "limit": "You already have 10 saved searches. Delete one in Email settings to add another.",
+    "saveFailed": "Couldn't save this search. Please try again.",
+    "cancel": "Cancel",
+    "save": "Save search",
+    "heading": "Saved searches",
+    "intro": "New jobs matching these searches are emailed to you when Job alerts are on.",
+    "listLabel": "Your saved searches",
+    "frequencyFor": "How often to email {search}",
+    "seeJobs": "See jobs",
+    "delete": "Delete",
+    "deleteSearch": "Delete saved search {search}",
+    "deleted": "Deleted “{search}”.",
+    "deleteFailed": "Couldn't delete the search. Please try again.",
+    "updated": "Saved.",
+    "updateFailed": "Couldn't save. Please try again.",
+    "emptyTitle": "No saved searches yet",
+    "emptyBody": "Filter the job feed, then tap Get alerts to hear about new matches.",
+    "browseJobs": "Browse jobs",
+    "alertsOff": "Job alerts are off, so these searches won't be emailed. Turn Job alerts on above."
   }
 }
