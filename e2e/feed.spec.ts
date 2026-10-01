@@ -129,6 +129,14 @@ test.describe("job feed", () => {
   }) => {
     test.skip(isMobile, "Phones open filters in a sheet.");
     await page.setViewportSize({ width: 1280, height: 640 });
+    // Measure the feed layout itself, without the welcome introduction.
+    await page.context().addCookies([
+      {
+        name: "intro_dismissed",
+        value: "1",
+        url: test.info().project.use.baseURL ?? "http://localhost:3000",
+      },
+    ]);
     await page.goto("/");
     const panel = page
       .getByRole("complementary", { name: "Filters" })

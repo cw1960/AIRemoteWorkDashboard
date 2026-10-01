@@ -1,3 +1,4 @@
+import { Check } from "lucide-react";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 
@@ -62,7 +63,35 @@ export default async function SignInPage({
               <div className="mt-5">
                 <SignInForm next={next} linkFailed={params.error === "link"} />
               </div>
-              <p className="mt-5 text-xs text-muted-foreground">{t("why")}</p>
+              <p className="mt-5 text-xs text-muted-foreground">
+                {t.rich("consent", {
+                  terms: (chunks) => (
+                    <Link href="/legal/terms" className="underline">
+                      {chunks}
+                    </Link>
+                  ),
+                  privacy: (chunks) => (
+                    <Link href="/legal/privacy" className="underline">
+                      {chunks}
+                    </Link>
+                  ),
+                })}
+              </p>
+              <div className="mt-6 border-t border-border pt-5">
+                <p className="text-sm font-bold">{t("benefitsTitle")}</p>
+                <ul className="mt-2 grid gap-2 text-sm text-muted-foreground">
+                  {(["track", "remind", "alerts"] as const).map((key) => (
+                    <li key={key} className="flex gap-2">
+                      <Check
+                        className="mt-0.5 size-4 shrink-0 text-primary"
+                        aria-hidden="true"
+                      />
+                      {t(`benefits.${key}`)}
+                    </li>
+                  ))}
+                </ul>
+                <p className="mt-3 text-xs text-muted-foreground">{t("why")}</p>
+              </div>
             </>
           )}
         </div>

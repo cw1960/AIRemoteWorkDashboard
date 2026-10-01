@@ -4,6 +4,7 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
+import { SiteFooter } from "@/components/site-footer";
 import { siteConfig } from "@/config/site";
 import { routing } from "@/i18n/routing";
 import { getSiteUrl } from "@/lib/env";
@@ -69,7 +70,10 @@ export default async function LocaleLayout({
         >
           {t("skipToContent")}
         </a>
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider>
+          {children}
+          <SiteFooter />
+        </NextIntlClientProvider>
       </body>
     </html>
   );

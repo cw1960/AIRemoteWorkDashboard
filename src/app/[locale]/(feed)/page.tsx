@@ -1,6 +1,8 @@
 import { ChevronLeft, ChevronRight, Search, X } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
+import { cookies } from "next/headers";
 
+import { IntroBand } from "@/components/intro-band";
 import { FeedForm } from "@/components/jobs/feed-form";
 import { SaveSearchButton } from "@/components/jobs/save-search-button";
 import { JobCard } from "@/components/jobs/job-card";
@@ -21,6 +23,7 @@ import { describeLabels } from "@/lib/alerts/labels";
 import { isSearchSaved } from "@/lib/alerts/queries";
 import { describeSearch, toSavedFilters } from "@/lib/alerts/saved-search";
 import { emailLocale } from "@/lib/email/messages";
+import { INTRO_COOKIE } from "@/lib/intro";
 import { buildFilterOptions } from "@/lib/jobs/options";
 import { getFeedFacets, searchJobs } from "@/lib/jobs/queries";
 import { trackedLookup } from "@/lib/tracker/queries";
@@ -31,13 +34,17 @@ export default async function FeedPage({
 }: PageProps<"/[locale]">) {
   const params = await searchParams;
   const filters = parseFeedFilters(params);
-  const [t, locale, { jobs, total }, facets, saved] = await Promise.all([
-    getTranslations("Feed"),
-    getLocale(),
-    searchJobs(filters),
-    getFeedFacets(),
-    isSearchSaved(filters),
-  ]);
+  const [t, locale, { jobs, total }, facets, saved, cookieStore] =
+    await Promise.all([
+      getTranslations("Feed"),
+      getLocale(),
+      searchJobs(filters),
+      getFeedFacets(),
+      isSearchSaved(filters),
+      cookies(),
+    ]);
+  // Signed-out visitors see the introduction until they hide it.
+  const showIntro = saved === null && !cookieStore.has(INTRO_COOKIE);
   const isTracked = await trackedLookup(jobs.map((job) => job.id));
   const activeCount = activeFilterCount(filters);
   const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
@@ -74,7 +81,8 @@ export default async function FeedPage({
         id="main"
         className="mx-auto w-full max-w-[1400px] px-4 pt-6 pb-16 sm:px-6 lg:px-8"
       >
-        <div className="flex flex-wrap items-center justify-between gap-3">
+        {showIntro && <IntroBand />}
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-3 first:mt-0">
           <h1 className="font-display text-2xl font-extrabold sm:text-3xl">
             {t("title")}
           </h1>

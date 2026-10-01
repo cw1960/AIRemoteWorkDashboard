@@ -27,7 +27,8 @@ get alerts.
 - **Brand and domain live in one config file** (`src/config/site.ts`): name
   "AI Remote Work Dashboard", domain `airemoteworkdashboard.com`, sender
   `mail.airemoteworkdashboard.com`, inbound `in.airemoteworkdashboard.com`,
-  contact email. Locales live in `src/i18n/routing.ts`. Never hard-code
+  contact email, and the operator named in the legal pages (El Barrial Devs,
+  Santiago, Nuevo León, Mexico) with the legal pages' last-updated date. Locales live in `src/i18n/routing.ts`. Never hard-code
   these elsewhere.
 - **Small, reviewable commits** with clear messages. Never rewrite pushed
   history.
@@ -177,6 +178,11 @@ Key rules:
   calls `/api/cron/reminders` daily via `private.invoke_reminders()`; the
   route reads due reminders through token-gated SQL functions (cron token
   in Vault), so the app holds no service role key.
+- Legal pages (`/legal/terms|privacy|cookies|affiliates`) and
+  `/how-it-works` take their text from `messages/<locale>.json` (`Legal`,
+  `HowItWorks`). Only essential cookies are used (sign-in, language,
+  `intro_dismissed`), so there is no cookie banner; adding analytics or ads
+  requires a consent banner first.
 - `.github/workflows/deploy.yml` — the only way to production: manual
   "Run workflow" (dry run by default) pushes migrations, deploys functions,
   sets function secrets. `scripts/ingest-user-agent.mjs` builds the bot
