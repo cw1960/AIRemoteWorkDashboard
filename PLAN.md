@@ -294,7 +294,8 @@ These figures come from third-party reviews; confirm them in each platform's das
 **Decisions needed from you:**
 
 - [x] Domain: airemoteworkdashboard.com (bought 2026-10-01, DNS on Netlify)
-- [ ] Brand name (replaces `APP_NAME`)
+- [x] Brand name: AI Remote Work Dashboard
+- [x] Contact email: 1960bcv@gmail.com
 - [ ] English only, or English + Spanish at launch
 - [ ] The 4–6 launch sources (suggested: Mercor, micro1, Alignerr, Outlier, DataAnnotation, Handshake AI)
 - [ ] Next.js on Netlify (recommended) or Vite + React straight from Lovable
