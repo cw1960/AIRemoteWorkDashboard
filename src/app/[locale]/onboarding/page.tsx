@@ -60,7 +60,11 @@ export default async function OnboardingPage({
         <AccountNav />
       </SiteHeader>
       <main id="main" className="w-full flex-1 px-4 pt-6 sm:px-6 lg:px-8">
-        <OnboardingWizard data={data} options={options} doneHref={next} />
+        <OnboardingWizard
+          data={data}
+          options={options}
+          doneHref={next === "/" ? "/dashboard" : next}
+        />
       </main>
     </>
   );

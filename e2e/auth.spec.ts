@@ -23,7 +23,7 @@ test.describe("sign-in", () => {
     for (let step = 0; step < 5; step += 1) {
       await page.getByRole("button", { name: "Skip" }).click();
     }
-    await page.getByRole("link", { name: "Browse jobs" }).click();
+    await page.getByRole("link", { name: "Continue" }).click();
     await expect(page).toHaveURL(/\/platforms\/mercor$/);
     const signOut = page.getByRole("button", { name: "Sign out" });
     await expect(signOut).toBeVisible();

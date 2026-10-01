@@ -159,7 +159,8 @@
     "signIn": "Sign in",
     "signOut": "Sign out",
     "account": "Account",
-    "profile": "Profile"
+    "profile": "Profile",
+    "dashboard": "Dashboard"
   },
   "Onboarding": {
     "metaTitle": "Set up your profile",
@@ -220,6 +221,54 @@
     "doneBody": "Your profile is saved. You can change it any time from Profile in the header.",
     "doneSkipped": "{count, plural, one {You skipped # step} other {You skipped # steps}}",
     "doneSkippedBody": "Fill them in later so we can match jobs more accurately.",
-    "doneAction": "Browse jobs"
+    "doneDashboard": "Go to my dashboard",
+    "doneContinue": "Continue"
+  },
+  "Dashboard": {
+    "metaTitle": "Your dashboard",
+    "title": "Your dashboard",
+    "subtitle": "Here's the shortest path to your next offer.",
+    "nav": "Dashboard",
+    "jobs": "Jobs",
+    "pipeline": "Pipeline",
+    "pipelineEyebrow": "Keep momentum",
+    "stages": {
+      "saved": "Saved",
+      "applied": "Applied",
+      "assessment": "Assessment",
+      "interviewing": "Interviewing",
+      "offered": "Offered",
+      "rejected": "Rejected"
+    },
+    "stagesLabel": "Pipeline stages",
+    "kinds": {
+      "job": "Job",
+      "platform": "Platform",
+      "manual": "Manual"
+    },
+    "cardCount": "{count, plural, one {# card} other {# cards}}",
+    "noCards": "No cards",
+    "closed": "Closed",
+    "due": "Follow up {date}",
+    "overdue": "Overdue · {date}",
+    "moveCard": "Move {title}",
+    "moveTo": "Move to…",
+    "moved": "Moved “{title}” to {stage}.",
+    "moveFailed": "Couldn't move the card. Please try again.",
+    "addCard": "Add card",
+    "addTitle": "Add a card",
+    "addDescription": "Track something that isn't in the job feed, like a direct application.",
+    "cardTitle": "Card title",
+    "cardTitlePlaceholder": "e.g. Follow up with recruiter",
+    "cancel": "Cancel",
+    "addToSaved": "Add to Saved",
+    "addFailed": "Couldn't add the card. Please try again.",
+    "emptyTitle": "Track your first job",
+    "emptyBody": "Save a job from the feed with Track this, or add something you're already applying to.",
+    "findJob": "Find a job",
+    "walkthroughTitle": "Start with one small step",
+    "walkthroughBody": "Track your first job from the feed, or add something you're already applying to.",
+    "completeProfile": "Finish your profile",
+    "completeProfileBody": "A complete profile lets us match jobs to you."
   }
 }

@@ -1,4 +1,4 @@
-import { LogOut, UserRound } from "lucide-react";
+import { LayoutDashboard, LogOut, UserRound } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
 import { Button } from "@/components/ui/button";
@@ -26,6 +26,17 @@ export async function AccountNav() {
       <span className="hidden max-w-[16rem] truncate text-sm text-muted-foreground sm:inline">
         {user.email}
       </span>
+      <Button
+        asChild
+        variant="editorialOutline"
+        size="touch"
+        className="px-3 sm:px-5"
+      >
+        <Link href="/dashboard">
+          <LayoutDashboard aria-hidden="true" />
+          <span className="sr-only sm:not-sr-only">{t("dashboard")}</span>
+        </Link>
+      </Button>
       <Button
         asChild
         variant="editorialOutline"
