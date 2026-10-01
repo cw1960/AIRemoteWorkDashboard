@@ -5,10 +5,12 @@ import { getTranslations } from "next-intl/server";
 import { render } from "react-email";
 
 import { siteConfig } from "@/config/site";
+import { type AlertSearch, JobAlertEmail } from "@/emails/job-alert";
 import { ReminderEmail } from "@/emails/reminder";
 import { WelcomeEmail } from "@/emails/welcome";
 import { routing } from "@/i18n/routing";
 import { getSiteUrl } from "@/lib/env";
+import { formatPayAmount } from "@/lib/jobs/format";
 import { type Stage, STAGES } from "@/lib/tracker/stages";
 
 import type { EmailList } from "./prefs";
@@ -44,7 +46,7 @@ export function oneClickUnsubscribeUrl(token: string, list: EmailList): string {
 async function footer(
   locale: Locale,
   unsubscribeToken: string,
-  reasonKey: "reasonWelcome" | "reasonReminder",
+  reasonKey: "reasonWelcome" | "reasonReminder" | "reasonAlert",
 ) {
   const t = await getTranslations({ locale, namespace: "Emails" });
   return {
@@ -131,5 +133,83 @@ export async function reminderEmail(input: {
     html: await render(element),
     text: await render(element, { plainText: true }),
     unsubscribeUrl: oneClickUnsubscribeUrl(input.unsubscribeToken, "reminders"),
+  };
+}
+
+export interface AlertSearchInput {
+  description: string;
+  frequency: "daily" | "weekly";
+  /** The feed query for this search (no sort or page). */
+  feedQuery: string;
+  total: number;
+  jobs: {
+    id: string;
+    title: string;
+    platform: string;
+    pay_min: number | null;
+    pay_max: number | null;
+    pay_unit: string | null;
+  }[];
+}
+
+export async function jobAlertEmail(input: {
+  to: string;
+  locale: string | null;
+  unsubscribeToken: string;
+  searches: AlertSearchInput[];
+}): Promise<OutgoingEmail> {
+  const locale = emailLocale(input.locale);
+  const [t, tJob] = await Promise.all([
+    getTranslations({ locale, namespace: "Emails.alert" }),
+    getTranslations({ locale, namespace: "Job" }),
+  ]);
+  const total = input.searches.reduce((sum, s) => sum + s.total, 0);
+  const searches: AlertSearch[] = input.searches.map((search) => {
+    const seeAllParams = new URLSearchParams(search.feedQuery);
+    seeAllParams.set("posted", search.frequency === "daily" ? "1d" : "7d");
+    return {
+      description: search.description,
+      countLabel: t("count", { count: search.total }),
+      jobs: search.jobs.map((job) => {
+        const amount = formatPayAmount(job.pay_min, job.pay_max, locale);
+        return {
+          title: job.title,
+          detail: [
+            job.platform,
+            amount
+              ? tJob("pay", { amount, unit: job.pay_unit ?? "other" })
+              : null,
+          ]
+            .filter(Boolean)
+            .join(" · "),
+          url: appUrl(`/jobs/${job.id}`, locale),
+        };
+      }),
+      seeAll:
+        search.total > search.jobs.length
+          ? {
+              label: t("seeAll", { count: search.total }),
+              url: appUrl(`/?${seeAllParams.toString()}`, locale),
+            }
+          : null,
+    };
+  });
+  const element = (
+    <JobAlertEmail
+      lang={locale}
+      brand={siteConfig.name}
+      preview={t("preview", { count: total })}
+      heading={t("heading", { count: total })}
+      intro={t("intro")}
+      searches={searches}
+      footer={await footer(locale, input.unsubscribeToken, "reasonAlert")}
+    />
+  );
+  return {
+    to: input.to,
+    subject: t("subject", { count: total }),
+    html: await render(element),
+    text: await render(element, { plainText: true }),
+    unsubscribeUrl: oneClickUnsubscribeUrl(input.unsubscribeToken, "alerts"),
   };
 }

@@ -2,6 +2,7 @@ import { ChevronLeft, ChevronRight, Search, X } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { FeedForm } from "@/components/jobs/feed-form";
+import { SaveSearchButton } from "@/components/jobs/save-search-button";
 import { JobCard } from "@/components/jobs/job-card";
 import { AccountNav } from "@/components/account-nav";
 import { SiteHeader } from "@/components/site-header";
@@ -16,6 +17,10 @@ import {
   toSearchParams,
   withoutFilters,
 } from "@/lib/jobs/filters";
+import { describeLabels } from "@/lib/alerts/labels";
+import { isSearchSaved } from "@/lib/alerts/queries";
+import { describeSearch, toSavedFilters } from "@/lib/alerts/saved-search";
+import { emailLocale } from "@/lib/email/messages";
 import { buildFilterOptions } from "@/lib/jobs/options";
 import { getFeedFacets, searchJobs } from "@/lib/jobs/queries";
 import { trackedLookup } from "@/lib/tracker/queries";
@@ -24,12 +29,14 @@ import { trackedLookup } from "@/lib/tracker/queries";
 export default async function FeedPage({
   searchParams,
 }: PageProps<"/[locale]">) {
-  const filters = parseFeedFilters(await searchParams);
-  const [t, locale, { jobs, total }, facets] = await Promise.all([
+  const params = await searchParams;
+  const filters = parseFeedFilters(params);
+  const [t, locale, { jobs, total }, facets, saved] = await Promise.all([
     getTranslations("Feed"),
     getLocale(),
     searchJobs(filters),
     getFeedFacets(),
+    isSearchSaved(filters),
   ]);
   const isTracked = await trackedLookup(jobs.map((job) => job.id));
   const activeCount = activeFilterCount(filters);
@@ -40,6 +47,23 @@ export default async function FeedPage({
   };
   const pageHref = (page: number) => href({ ...filters, page });
   const clearSearchHref = href({ ...filters, q: "", page: 1 });
+
+  // "Get alerts": the search without sort, page or "posted within".
+  const alertQuery = toSearchParams({
+    ...filters,
+    sort: "newest",
+    page: 1,
+    posted: null,
+  }).toString();
+  const platformNames = new Map(facets.platforms.map((p) => [p.slug, p.name]));
+  const alertDescription = describeSearch(
+    toSavedFilters(filters),
+    filters.platforms.map((slug) => platformNames.get(slug) ?? slug),
+    await describeLabels(emailLocale(locale)),
+  );
+  const saveParams = new URLSearchParams(alertQuery);
+  saveParams.set("save", "1");
+  const saveSignInHref = `/sign-in?next=${encodeURIComponent(`/?${saveParams.toString()}`)}`;
 
   return (
     <>
@@ -71,6 +95,16 @@ export default async function FeedPage({
               >
                 {t("count", { count: total })}
               </p>
+              <div className="ml-auto">
+                <SaveSearchButton
+                  key={alertQuery}
+                  query={alertQuery}
+                  description={alertDescription}
+                  saved={saved}
+                  signInHref={saveSignInHref}
+                  autoOpen={params.save === "1"}
+                />
+              </div>
               {filters.q && (
                 <Link
                   href={clearSearchHref}

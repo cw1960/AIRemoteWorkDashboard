@@ -37,7 +37,9 @@ test.describe("email settings", () => {
     await expectNoAxeViolations(page);
 
     await reminders.click();
-    await expect(page.getByRole("status")).toHaveText("Saved");
+    await expect(
+      page.getByRole("status").filter({ hasText: /^Saved$/ }),
+    ).toBeVisible();
     await page.reload();
     await expect(reminders).not.toBeChecked();
     await expect(

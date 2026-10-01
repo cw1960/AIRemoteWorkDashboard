@@ -1,6 +1,7 @@
 import { render } from "react-email";
 import { describe, expect, it } from "vitest";
 
+import { JobAlertEmail } from "./job-alert";
 import { ReminderEmail } from "./reminder";
 import { WelcomeEmail } from "./welcome";
 
@@ -57,5 +58,51 @@ describe("email templates", () => {
     const text = await render(element, { plainText: true });
     expect(text).toContain("Applied · Mercor");
     expect(text).toContain("Unsubscribe");
+  });
+
+  it("renders each search with its jobs and a see-all link", async () => {
+    const html = await render(
+      <JobAlertEmail
+        lang="en"
+        brand="Brand"
+        preview="Preview"
+        heading="3 new jobs for you"
+        intro="Intro"
+        searches={[
+          {
+            description: "Law · Spanish",
+            countLabel: "12 new jobs",
+            jobs: [
+              {
+                title: "Contract Lawyer",
+                detail: "Mercor · $40–50 / hr",
+                url: "https://example.com/jobs/1",
+              },
+            ],
+            seeAll: {
+              label: "See all 12 new jobs",
+              url: "https://example.com/?domain=law",
+            },
+          },
+          {
+            description: "All new jobs",
+            countLabel: "1 new job",
+            jobs: [
+              {
+                title: "Tutor",
+                detail: "micro1",
+                url: "https://example.com/jobs/2",
+              },
+            ],
+            seeAll: null,
+          },
+        ]}
+        footer={footer}
+      />,
+    );
+    expect(html).toContain("Law · Spanish");
+    expect(html).toContain('href="https://example.com/jobs/1"');
+    expect(html).toContain("See all 12 new jobs");
+    expect(html.match(/See all/g)).toHaveLength(1);
   });
 });
