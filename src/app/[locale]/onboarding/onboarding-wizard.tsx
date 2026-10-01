@@ -550,7 +550,10 @@ export function OnboardingWizard({
         </aside>
       </div>
 
-      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/90 px-4 py-3 backdrop-blur-xl md:static md:mt-2 md:border-0 md:bg-transparent md:px-0 md:backdrop-blur-none">
+      <div
+        data-bottom-bar
+        className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/90 px-4 py-3 backdrop-blur-xl md:static md:mt-2 md:border-0 md:bg-transparent md:px-0 md:backdrop-blur-none"
+      >
         <div className="mx-auto flex max-w-5xl items-center gap-2">
           <Button
             type="button"

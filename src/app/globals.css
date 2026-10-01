@@ -109,3 +109,10 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* Pages with a fixed action bar on phones: keep the footer clear of it. */
+@media (width < 48rem) {
+  body:has([data-bottom-bar]) > footer {
+    padding-bottom: 7rem;
+  }
+}

@@ -64,6 +64,9 @@ test.describe("card details", () => {
       sheet.getByLabel("Applied on", { exact: true }),
     ).not.toHaveValue("");
 
+    // A move refreshes the page data in the background; scan once it settles.
+    await page.waitForLoadState("networkidle");
+    await expect(page).toHaveTitle(/\S/);
     const results = await new AxeBuilder({ page })
       .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
       .analyze();

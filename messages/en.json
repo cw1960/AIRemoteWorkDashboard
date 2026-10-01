@@ -1,7 +1,7 @@
 {
   "Metadata": {
     "title": "{appName} — Track your AI training job applications",
-    "description": "Find remote AI training jobs from Mercor, micro1, Alignerr, Outlier and more, and track every application in one free dashboard."
+    "description": "Find remote AI training jobs from Mercor and micro1, and track every application in one free dashboard."
   },
   "Layout": {
     "skipToContent": "Skip to main content"
@@ -141,7 +141,7 @@
     "metaTitle": "Sign in",
     "title": "Sign in to {appName}",
     "intro": "We'll email you a link. No password needed.",
-    "why": "An account lets you track applications and get job alerts. Browsing jobs never needs one.",
+    "why": "Browsing jobs never needs an account.",
     "email": "Email",
     "emailPlaceholder": "you@example.com",
     "submit": "Email me a link",
@@ -160,7 +160,14 @@
     "signOut": "Sign out",
     "account": "Account",
     "profile": "Profile",
-    "dashboard": "Dashboard"
+    "dashboard": "Dashboard",
+    "benefitsTitle": "A free account lets you:",
+    "benefits": {
+      "track": "Track every application on your own board",
+      "remind": "Get a reminder when it's time to follow up",
+      "alerts": "Get emailed new jobs that match your searches"
+    },
+    "consent": "By continuing you agree to our <terms>Terms of Use</terms> and <privacy>Privacy Notice</privacy>."
   },
   "Onboarding": {
     "metaTitle": "Set up your profile",
@@ -409,5 +416,205 @@
     "emptyBody": "Filter the job feed, then tap Get alerts to hear about new matches.",
     "browseJobs": "Browse jobs",
     "alertsOff": "Job alerts are off, so these searches won't be emailed. Turn Job alerts on above."
+  },
+  "Footer": {
+    "label": "Site",
+    "howItWorks": "How it works",
+    "terms": "Terms",
+    "privacy": "Privacy",
+    "cookies": "Cookies",
+    "affiliates": "Affiliate disclosure",
+    "contact": "Contact",
+    "copyright": "© {year} {operator}. Job listings belong to the platforms that post them."
+  },
+  "Intro": {
+    "label": "Welcome",
+    "title": "Find remote AI-training work, and never lose track of an application.",
+    "steps": {
+      "find": {
+        "title": "Find",
+        "body": "Browse paid AI-training jobs from Mercor and micro1. No account needed."
+      },
+      "track": {
+        "title": "Track",
+        "body": "Save jobs with Track this and move them across your own board as you hear back."
+      },
+      "remind": {
+        "title": "Get reminded",
+        "body": "Set follow-up dates and get job alerts by email. All free."
+      }
+    },
+    "signUp": "Create a free account",
+    "learnMore": "How it works",
+    "dismiss": "Hide this introduction"
+  },
+  "HowItWorks": {
+    "metaTitle": "How it works",
+    "metaDescription": "How to find remote AI-training jobs and track your applications on {name}, for free.",
+    "title": "How {name} works",
+    "intro": "{name} brings remote AI-training jobs into one place and gives you a free board to track every application, so nothing slips through the cracks.",
+    "steps": {
+      "browse": {
+        "title": "1. Browse jobs",
+        "body": "The job feed lists open roles from Mercor and micro1, refreshed every few hours. Search by title and filter by platform, field, language, country and minimum pay. You don't need an account to browse."
+      },
+      "account": {
+        "title": "2. Create a free account",
+        "body": "Enter your email and we send you a sign-in link. There's no password to remember. A short profile (your field, languages, country and availability) takes about a minute and can be skipped."
+      },
+      "track": {
+        "title": "3. Track jobs you care about",
+        "body": "Tap Track this on any job and it lands in the Saved column of your board. You can also add your own cards for applications made elsewhere."
+      },
+      "board": {
+        "title": "4. Move cards as you progress",
+        "body": "Your board has six stages: Saved, Applied, Assessment, Interviewing, Offered and Rejected. Drag cards on a computer, or use the Move menu on any device. Open a card to add notes, the date you applied and a follow-up date."
+      },
+      "remind": {
+        "title": "5. Get follow-up reminders",
+        "body": "Set a follow-up date on a card and we email you that day, so you remember to check in or chase a reply."
+      },
+      "alerts": {
+        "title": "6. Get job alerts",
+        "body": "Filter the feed, tap Get alerts and choose daily or weekly. We email you new jobs that match. Change or stop any email in Email settings, or with the unsubscribe link in every email."
+      },
+      "free": {
+        "title": "Free, and how we earn",
+        "body": "{name} is free to use. When you apply through our links, the platform may pay us a referral fee if you're hired. It never costs you anything and doesn't change which jobs we show."
+      }
+    },
+    "ctaTitle": "Ready to start?",
+    "ctaSignUp": "Create a free account",
+    "ctaBrowse": "Browse jobs"
+  },
+  "Legal": {
+    "updated": "Last updated {date}",
+    "contactLine": "Questions? Email us at {email}.",
+    "docs": {
+      "terms": {
+        "metaTitle": "Terms of Use",
+        "title": "Terms of Use",
+        "intro": "These terms govern your use of {name} (the \"Service\"), operated by {operator} of {location} (\"we\", \"us\"). By using the Service you agree to them. If you don't agree, please don't use the Service.",
+        "sections": {
+          "service": {
+            "heading": "1. What the Service is",
+            "body": "The Service lists remote AI-training job opportunities published by third-party platforms, such as Mercor and micro1, and offers free tools to track your applications, set reminders and receive job alerts. We are not an employer, recruiter or staffing agency, and we are not part of the hiring process of any platform."
+          },
+          "eligibility": {
+            "heading": "2. Who can use it",
+            "body": "You must be at least 18 years old and able to form a binding contract to create an account. You are responsible for your use of the Service and for keeping access to your email account secure, since sign-in links are sent there."
+          },
+          "listings": {
+            "heading": "3. Job listings",
+            "body": "Listings come from the platforms that post them. We show a short summary and link to the platform for full details. We do our best to keep listings accurate and current, but we don't guarantee that any job is available, that its pay or requirements are correct, or that you will be hired. Always check the details on the platform before applying.\n\nApplications, contracts and payments for any job are between you and the platform. Their own terms apply."
+          },
+          "referrals": {
+            "heading": "4. Referral links",
+            "body": "Some links to platforms include our referral code. If you join or are hired through them, the platform may pay us a fee. This never costs you anything. See our Affiliate Disclosure for details."
+          },
+          "content": {
+            "heading": "5. Your content",
+            "body": "Notes, cards, saved searches and profile answers you add belong to you. You give us permission to store and process them only to provide the Service to you. Don't add content that is unlawful or that you have no right to use."
+          },
+          "use": {
+            "heading": "6. Acceptable use",
+            "body": "Don't misuse the Service. For example, don't try to access other people's accounts, interfere with the Service's operation, send it automated traffic at a volume a person couldn't, or use it to break the law or any platform's terms."
+          },
+          "availability": {
+            "heading": "7. Availability and changes",
+            "body": "The Service is provided free of charge. We may change, suspend or stop any part of it at any time. We may suspend or close accounts that break these terms. You can stop using the Service and ask us to delete your account at any time."
+          },
+          "warranty": {
+            "heading": "8. No warranty",
+            "body": "The Service is provided \"as is\" and \"as available\", without warranties of any kind, to the fullest extent permitted by law."
+          },
+          "liability": {
+            "heading": "9. Limitation of liability",
+            "body": "To the fullest extent permitted by law, we are not liable for any indirect, incidental or consequential loss, or for any loss arising from a third-party platform, a job listing, or a missed email. Nothing in these terms limits liability that cannot be limited by law, or your rights as a consumer under the law of the country where you live."
+          },
+          "law": {
+            "heading": "10. Governing law",
+            "body": "These terms are governed by the laws of Mexico. Any dispute will be handled by the competent courts of {region}, Mexico, unless the law of the country where you live gives you the right to bring a claim there."
+          },
+          "changes": {
+            "heading": "11. Changes to these terms",
+            "body": "We may update these terms. We'll change the date at the top of this page, and for important changes we'll let account holders know by email. Continuing to use the Service after a change means you accept the new terms."
+          }
+        }
+      },
+      "privacy": {
+        "metaTitle": "Privacy Notice",
+        "title": "Privacy Notice",
+        "intro": "This notice explains what personal data {name} collects, why, and the choices you have. {operator}, of {location}, is responsible for your data.",
+        "sections": {
+          "collect": {
+            "heading": "1. What we collect",
+            "body": "If you only browse, we don't ask for any personal data.\n\nIf you create an account, we keep: your email address; the profile answers you choose to give (field of work, skills, languages, country, availability and target pay); your tracker cards, notes, dates and stage history; your platform statuses; your saved searches; and your email preferences.\n\nWhen you click Apply, we record which job was clicked and when (and your account, if you're signed in), so we can measure referrals. Our hosting providers also keep standard technical logs, such as IP addresses, for security."
+          },
+          "use": {
+            "heading": "2. Why we use it",
+            "body": "We use your data to provide the Service: to sign you in, show your board, send the emails you ask for (sign-in links, the welcome email, follow-up reminders and job alerts), match jobs to your profile, keep the Service secure, and understand how referral links are used. We don't sell your data, and we don't use it for advertising.\n\nWe rely on providing the Service you requested (contract) and our legitimate interest in running and securing it. Where the law requires consent, for example for optional emails, you can withdraw it at any time in Email settings."
+          },
+          "share": {
+            "heading": "3. Who we share it with",
+            "body": "We use a small number of service providers who process data on our behalf: Supabase (database and sign-in), Netlify (website hosting) and Resend (email delivery). They may process data in the United States or other countries, under contracts and safeguards that protect it.\n\nWhen you apply through our links, the platform (for example Mercor or micro1) receives our referral code. It doesn't receive your data from us. Anything you give a platform is covered by its own privacy policy."
+          },
+          "keep": {
+            "heading": "4. How long we keep it",
+            "body": "We keep your account data for as long as your account exists. If you ask us to delete your account, we delete your personal data within 30 days, apart from anything we must keep by law. Click records not linked to an account may be kept for statistics."
+          },
+          "rights": {
+            "heading": "5. Your rights",
+            "body": "Depending on where you live, including under the EU and UK GDPR and Mexico's personal data protection law (your ARCO rights), you can ask to access, correct or delete your data, object to or restrict its use, or receive a copy. You can stop optional emails at any time in Email settings. To make a request, email us at {email}. You can also complain to your local data protection authority."
+          },
+          "security": {
+            "heading": "6. Security",
+            "body": "Data is encrypted in transit, and access to each account's data is restricted to that account. No system is perfectly secure, so please keep access to your email account safe."
+          },
+          "children": {
+            "heading": "7. Children",
+            "body": "The Service is for people aged 18 and over. We don't knowingly collect data from children."
+          },
+          "changes": {
+            "heading": "8. Changes",
+            "body": "We may update this notice. We'll change the date at the top, and for important changes we'll let account holders know by email."
+          }
+        }
+      },
+      "cookies": {
+        "metaTitle": "Cookie Notice",
+        "title": "Cookie Notice",
+        "intro": "{name} uses only a few cookies, all needed for the site to work. We don't use advertising or analytics cookies, so we don't show a cookie banner.",
+        "sections": {
+          "which": {
+            "heading": "1. The cookies we use",
+            "body": "Sign-in cookies (names starting with \"sb-\"): keep you signed in. They are set when you sign in and removed when you sign out.\n\nLanguage cookie (NEXT_LOCALE): remembers the site language.\n\nIntroduction cookie (intro_dismissed): remembers that you hid the welcome introduction, for up to a year."
+          },
+          "third": {
+            "heading": "2. Third-party cookies",
+            "body": "We don't place third-party cookies. When you follow a link to a job platform, that platform's own cookie policy applies on its site."
+          },
+          "control": {
+            "heading": "3. Your choices",
+            "body": "You can delete or block cookies in your browser settings. If you block the sign-in cookies, you won't be able to stay signed in. If we ever add optional cookies, such as analytics, we'll ask for your consent first."
+          }
+        }
+      },
+      "affiliates": {
+        "metaTitle": "Affiliate Disclosure",
+        "title": "Affiliate Disclosure",
+        "intro": "{name} is free because some links to job platforms are referral links.",
+        "sections": {
+          "how": {
+            "heading": "How it works",
+            "body": "When you click Apply, you go to the platform through our link, which may add our referral code. Today that applies to Mercor and micro1. If you join or are hired through the link, the platform may pay us a referral fee under its own referral program."
+          },
+          "you": {
+            "heading": "What it means for you",
+            "body": "It never costs you anything, and it doesn't change your pay or your chances of being hired. Jobs are listed and sorted the same way whether or not they earn us a fee. We mark referral links with a short notice next to the Apply button."
+          }
+        }
+      }
+    }
   }
 }
