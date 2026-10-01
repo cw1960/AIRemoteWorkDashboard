@@ -52,13 +52,13 @@
     oklch(0.6 0.15 272),
     oklch(0.55 0.12 258)
   );
-  /* Page background: a subtle bluish-white glow on the left fading to
+  /* Page background: a subtle pinkish-white glow on the left fading to
      near-black on the right (owner's request, 2026-10-01). */
   --gradient-page: linear-gradient(
     90deg,
-    oklch(0.3 0.045 255) 0%,
-    oklch(0.17 0.015 270) 45%,
-    oklch(0.08 0.006 275) 100%
+    oklch(0.33 0.05 355) 0%,
+    oklch(0.17 0.015 330) 45%,
+    oklch(0.08 0.006 300) 100%
   );
   --gradient-panel: linear-gradient(
     160deg,
