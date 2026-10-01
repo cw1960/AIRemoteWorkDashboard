@@ -150,10 +150,13 @@ Key rules:
 - `supabase/` — `config.toml`, `migrations/`, `functions/`, `tests/database/`
   (pgTAP; includes a guard that every public table has RLS on).
 - `supabase/functions/ingest/` — the ingestion Edge Function (Deno).
-  `supabase/functions/_shared/ingest/` — pure adapters (one per platform),
-  shared by Deno and Vitest, tested against recorded fixtures. Storing and
-  the closing rule live in SQL: `ingest_jobs()`. pg_cron calls the function
-  every 6 h via `private.invoke_ingest()` with a token kept in Vault.
+  `supabase/functions/_shared/ingest/` — pure adapters, shared by Deno and
+  Vitest, tested against recorded fixtures: Mercor and micro1 have their
+  own; Greenhouse and Lever boards share `greenhouse.ts` / `lever.ts` with a
+  per-board filter that keeps AI-training roles only (`sources.ts` lists
+  them all). Storing and the closing rule live in SQL: `ingest_jobs()`.
+  pg_cron calls the function every 6 h per platform (cron job
+  `ingest-<slug>`) via `private.invoke_ingest()` with a token kept in Vault.
 - `.github/workflows/deploy.yml` — the only way to production: manual
   "Run workflow" (dry run by default) pushes migrations, deploys functions,
   sets function secrets. `scripts/ingest-user-agent.mjs` builds the bot

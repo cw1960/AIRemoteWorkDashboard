@@ -34,7 +34,7 @@ values
 
 set local role anon;
 
-select is((select count(*)::int from public.platforms), 13, 'anon reads platforms');
+select is((select count(*)::int from public.platforms), 14, 'anon reads platforms');
 select ok(exists (select 1 from public.jobs where id = '00000000-0000-0000-0000-00000000a001'),
   'anon reads jobs');
 select lives_ok($$ select * from public.playbooks $$, 'anon reads playbooks');
@@ -64,7 +64,7 @@ set local role authenticated;
 select set_config('request.jwt.claims',
   '{"sub":"00000000-0000-0000-0000-0000000000a1","role":"authenticated"}', true);
 
-select is((select count(*)::int from public.platforms), 13, 'users read platforms');
+select is((select count(*)::int from public.platforms), 14, 'users read platforms');
 
 select results_eq($$ select user_id from public.profiles $$,
   $$ values ('00000000-0000-0000-0000-0000000000a1'::uuid) $$,

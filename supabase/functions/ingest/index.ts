@@ -1,5 +1,5 @@
 /**
- * POST /functions/v1/ingest  {"platform": "mercor" | "micro1"}
+ * POST /functions/v1/ingest  {"platform": "<slug>"} (see SOURCE_SLUGS)
  *
  * Fetches one platform's listings and stores them through ingest_jobs(),
  * which logs the run and applies the closing rule. A failed run emails
