@@ -9,6 +9,7 @@ import { Link, redirect } from "@/i18n/navigation";
 import { getSessionUser } from "@/lib/auth/session";
 import { formatPayAmount } from "@/lib/jobs/format";
 import { needsOnboarding } from "@/lib/profile/queries";
+import { dueView } from "@/lib/tracker/dates";
 import { type BoardCard, getBoard } from "@/lib/tracker/queries";
 
 import { Board, type BoardCardView } from "./board";
@@ -17,8 +18,6 @@ export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Dashboard");
   return { title: t("metaTitle"), robots: { index: false } };
 }
-
-const DAY_MS = 86_400_000;
 
 /** The signed-in user's dashboard. Phase 4: the pipeline board. */
 export default async function DashboardPage() {
@@ -96,24 +95,17 @@ function boardViews(
   payLabel: (amount: string, unit: string) => string,
 ): BoardCardView[] {
   const now = Date.now();
-  const dateFormat = new Intl.DateTimeFormat(locale, {
-    day: "numeric",
-    month: "short",
-    timeZone: "UTC",
-  });
   return cards.map((card) => {
     const amount = card.job
       ? formatPayAmount(card.job.payMin, card.job.payMax, locale)
       : null;
-    const due = card.nextActionAt ? Date.parse(card.nextActionAt) : null;
     return {
       ...card,
       payLabel:
         amount && card.job
           ? payLabel(amount, card.job.payUnit ?? "other")
           : null,
-      dueLabel: due === null ? null : dateFormat.format(due),
-      overdue: due !== null && due < now - DAY_MS / 2,
+      ...dueView(card.nextActionAt, locale, now),
     };
   });
 }
