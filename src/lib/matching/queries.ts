@@ -7,6 +7,14 @@ import { JOB_CARD_COLUMNS, type JobCardRow } from "@/lib/jobs/queries";
 import { hasReasons, type MatchReasons } from "@/lib/matching/reasons";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
+/**
+ * Matching is an extra: if it fails (e.g. a deploy ran before its migration),
+ * the dashboard and feed still render, just without matches.
+ */
+function matchingFailed(message: string) {
+  console.error(`match_jobs failed: ${message}`);
+}
+
 const rowSchema = z.object({
   job_id: z.string(),
   score: z.number(),
@@ -39,7 +47,10 @@ export async function getMatchedJobs(limit: number): Promise<MatchedJob[]> {
     p_user_id: user.id,
     p_limit: limit,
   });
-  if (error) throw new Error(error.message);
+  if (error) {
+    matchingFailed(error.message);
+    return [];
+  }
   const rows = z
     .array(rowSchema)
     .parse(data)
@@ -75,7 +86,10 @@ export async function getMatchReasons(
     p_user_id: user.id,
     p_job_ids: [...jobIds],
   });
-  if (error) throw new Error(error.message);
+  if (error) {
+    matchingFailed(error.message);
+    return new Map();
+  }
   return new Map(
     z
       .array(rowSchema)
