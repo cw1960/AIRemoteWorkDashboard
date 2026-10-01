@@ -283,6 +283,19 @@ V1 earns only through referral links, so every outbound click goes through `/go/
 
 These figures come from third-party reviews; confirm them in each platform's dashboard before launch.
 
+**Platform vetting (2026-10-01).** V1 promotes only Mercor and micro1 (owner's decision). Checked against robots.txt and terms of service:
+
+| Platform | Result | Reason |
+| --- | --- | --- |
+| Handshake AI | Excluded | Terms forbid bulk collection of job descriptions by scraping; referral link is one general sign-up link, not per job |
+| Outlier | Excluded | Community guidelines forbid crawling or scraping |
+| Terac | Excluded | Terms forbid spiders, scrapers and data mining |
+| Alignerr | Excluded | Terms forbid crawling, scraping or spidering any page |
+| Turing | Excluded | Site blocks bots (Incapsula) |
+| Mindrift | Excluded | No job listings or referral program found |
+| DataAnnotation, SME Careers | Unchecked | Terms not reachable from the build environment |
+| Mercor, micro1 | Kept | Terms also restrict scraping; owner keeps the fetchers running (one request per 6 h) while seeking written permission |
+
 **Metrics to watch from launch:**
 
 - Weekly active users, and the share who have at least 3 tracker cards

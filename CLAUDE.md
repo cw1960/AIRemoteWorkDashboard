@@ -87,6 +87,14 @@ get alerts.
   history if those platforms add referral programs. Platform pages follow
   the same rule: `/platforms/<slug>` is a 404 until the platform has a
   `referral_url_template`.
+- **V1 promotes only Mercor and micro1** (owner's decision, 2026-10-01).
+  Vetted and excluded: Handshake AI, Outlier, Terac, Alignerr (terms forbid
+  scraping), Turing (blocks bots), Mindrift (no listings or referral
+  program). DataAnnotation and SME Careers are unchecked. Mercor's and
+  micro1's terms also restrict scraping; the owner chose to keep both
+  fetchers running (one light request per 6 h) while seeking permission.
+  Any new platform needs robots.txt **and** terms checked before an
+  adapter is built.
 - **Job data comes only from the platforms themselves.** Never scrape
   competitor boards (aitrainer.work, aitraining.jobs, Skillora, AIWorkfinder,
   AlignList, labelingjobs.net) or **OpenTrain AI** (platform card only).
