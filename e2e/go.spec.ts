@@ -54,7 +54,11 @@ test.describe("apply buttons", () => {
   }) => {
     await page.goto(`/jobs/${MERCOR_JOB}`);
 
-    const apply = page.getByRole("link", { name: /^Apply on Mercor/ });
+    // "Apply on Mercor" on desktop; "Apply" in the phone bar.
+    const apply = page
+      .getByTestId("job-actions")
+      .filter({ visible: true })
+      .getByRole("link", { name: /^Apply( on Mercor)? \(opens Mercor/ });
     await expect(apply).toBeVisible();
     await expect(apply).toHaveAttribute("href", `/go/${MERCOR_JOB}`);
     await expect(apply).toHaveAttribute("target", "_blank");

@@ -16,9 +16,14 @@ import {
   ApplyButton,
   ReferralDisclosure,
 } from "@/components/jobs/apply-button";
-import { JobCard, JobCardSkeleton } from "@/components/jobs/job-card";
+import {
+  JobCard,
+  JobCardSkeleton,
+  trackSignInHref,
+} from "@/components/jobs/job-card";
 import { AccountNav } from "@/components/account-nav";
 import { SiteHeader } from "@/components/site-header";
+import { TrackButton } from "@/components/track-button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "@/i18n/navigation";
@@ -31,6 +36,7 @@ import {
   languageName,
 } from "@/lib/jobs/format";
 import { getJob, getSimilarJobs, type JobDetail } from "@/lib/jobs/queries";
+import { trackedLookup } from "@/lib/tracker/queries";
 import { jobPostingJsonLd, serializeJsonLd } from "@/lib/jobs/structured-data";
 import { cn } from "@/lib/utils";
 
@@ -72,6 +78,7 @@ export async function generateMetadata({
 /** A job's page: key facts, how joining works, similar jobs. */
 export default async function JobPage({
   params,
+  searchParams,
 }: PageProps<"/[locale]/jobs/[id]">) {
   const { id } = await params;
   // Loaded before anything streams, so an unknown job is a real 404.
@@ -85,6 +92,18 @@ export default async function JobPage({
     getLocale(),
   ]);
   const closed = job.status !== "open";
+  const [isTracked, query] = await Promise.all([
+    trackedLookup([job.id]),
+    searchParams,
+  ]);
+  const track = (
+    <TrackButton
+      target={{ kind: "job", id: job.id }}
+      tracked={isTracked(job.id)}
+      signInHref={trackSignInHref(job.id)}
+      autoTrack={query.track === "1"}
+    />
+  );
   const amount = formatPayAmount(job.pay_min, job.pay_max, locale);
   const blocked = [
     ...new Set([...job.platform.countries_blocked, ...job.countries_blocked]),
@@ -222,12 +241,18 @@ export default async function JobPage({
                 <p className="mt-2 text-sm text-muted-foreground">
                   {t("fullDetails", { platform: job.platform.name })}
                 </p>
-                <div className="mt-5 hidden gap-2 md:grid md:justify-items-start">
-                  <ApplyButton
-                    jobId={job.id}
-                    platform={job.platform.name}
-                    long
-                  />
+                <div
+                  data-testid="job-actions"
+                  className="mt-5 hidden gap-2 md:grid"
+                >
+                  <div className="flex flex-wrap gap-2">
+                    <ApplyButton
+                      jobId={job.id}
+                      platform={job.platform.name}
+                      long
+                    />
+                    {track}
+                  </div>
                   <ReferralDisclosure />
                 </div>
               </>
@@ -279,13 +304,14 @@ export default async function JobPage({
       </main>
 
       {!closed && (
-        <div className="fixed inset-x-0 bottom-0 z-30 grid gap-1 border-t border-border bg-background/90 p-3 backdrop-blur-xl md:hidden">
-          <ApplyButton
-            jobId={job.id}
-            platform={job.platform.name}
-            long
-            className="w-full"
-          />
+        <div
+          data-testid="job-actions"
+          className="fixed inset-x-0 bottom-0 z-30 grid gap-1 border-t border-border bg-background/90 p-3 backdrop-blur-xl md:hidden"
+        >
+          <div className="grid grid-cols-2 gap-2">
+            {track}
+            <ApplyButton jobId={job.id} platform={job.platform.name} />
+          </div>
           <ReferralDisclosure className="text-center" />
         </div>
       )}
@@ -301,6 +327,7 @@ async function SimilarJobs({
   heading: string;
 }) {
   const similar = await getSimilarJobs(job);
+  const isTracked = await trackedLookup(similar.map((item) => item.id));
   if (similar.length === 0) return null;
   return (
     <section aria-labelledby="similar" className="mt-8">
@@ -310,7 +337,7 @@ async function SimilarJobs({
       <ul className="mt-3 grid gap-3 md:grid-cols-3">
         {similar.map((item) => (
           <li key={item.id}>
-            <JobCard job={item} />
+            <JobCard job={item} tracked={isTracked(item.id)} />
           </li>
         ))}
       </ul>

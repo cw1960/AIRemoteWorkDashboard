@@ -59,3 +59,53 @@ export async function getBoard(): Promise<BoardCard[] | null> {
       : null,
   }));
 }
+
+/** Which of these jobs the signed-in user tracks (empty when signed out). */
+export async function getTrackedJobIds(
+  jobIds: readonly string[],
+): Promise<Set<string>> {
+  const user = await getSessionUser();
+  if (!user || jobIds.length === 0) return new Set();
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase
+    .from("tracker_cards")
+    .select("job_id")
+    .eq("user_id", user.id)
+    .eq("kind", "job")
+    .in("job_id", jobIds);
+  if (error) throw new Error(error.message);
+  return new Set(data.flatMap((card) => (card.job_id ? [card.job_id] : [])));
+}
+
+/** Whether the signed-in user tracks onboarding with this platform. */
+export async function isPlatformTracked(
+  platformSlug: string,
+): Promise<boolean> {
+  const user = await getSessionUser();
+  if (!user) return false;
+  const supabase = await createSupabaseServerClient();
+  const { count, error } = await supabase
+    .from("tracker_cards")
+    .select("id, platform:platforms!inner(slug)", {
+      count: "exact",
+      head: true,
+    })
+    .eq("user_id", user.id)
+    .eq("kind", "platform")
+    .eq("platform.slug", platformSlug);
+  if (error) throw new Error(error.message);
+  return (count ?? 0) > 0;
+}
+
+/**
+ * For job cards: whether each job is tracked, or null for every job when
+ * signed out (the button then leads to sign-in).
+ */
+export async function trackedLookup(
+  jobIds: readonly string[],
+): Promise<(jobId: string) => boolean | null> {
+  const user = await getSessionUser();
+  if (!user) return () => null;
+  const tracked = await getTrackedJobIds(jobIds);
+  return (jobId) => tracked.has(jobId);
+}

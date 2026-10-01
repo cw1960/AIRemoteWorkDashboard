@@ -270,5 +270,13 @@
     "walkthroughBody": "Track your first job from the feed, or add something you're already applying to.",
     "completeProfile": "Finish your profile",
     "completeProfileBody": "A complete profile lets us match jobs to you."
+  },
+  "Track": {
+    "trackThis": "Track this",
+    "trackOnboarding": "Track onboarding",
+    "tracked": "Tracked",
+    "trackedLabel": "Tracked: open your dashboard",
+    "tracking": "Adding…",
+    "failed": "Couldn't add it to your board. Please try again."
   }
 }

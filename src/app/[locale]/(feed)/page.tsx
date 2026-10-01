@@ -18,6 +18,7 @@ import {
 } from "@/lib/jobs/filters";
 import { buildFilterOptions } from "@/lib/jobs/options";
 import { getFeedFacets, searchJobs } from "@/lib/jobs/queries";
+import { trackedLookup } from "@/lib/tracker/queries";
 
 /** The public job feed: server-rendered, filters in the URL. */
 export default async function FeedPage({
@@ -30,6 +31,7 @@ export default async function FeedPage({
     searchJobs(filters),
     getFeedFacets(),
   ]);
+  const isTracked = await trackedLookup(jobs.map((job) => job.id));
   const activeCount = activeFilterCount(filters);
   const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
   const href = (next: FeedFilters) => {
@@ -95,7 +97,7 @@ export default async function FeedPage({
                 <ul className="grid gap-3" aria-label={t("results")}>
                   {jobs.map((job) => (
                     <li key={job.id}>
-                      <JobCard job={job} />
+                      <JobCard job={job} tracked={isTracked(job.id)} />
                     </li>
                   ))}
                 </ul>
