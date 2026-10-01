@@ -6,19 +6,7 @@
  * User-Agent with a contact address, time out, and stop at the first error
  * (the run is then logged as failed and closes nothing).
  */
-import {
-  GREENHOUSE_BOARDS,
-  type GreenhouseBoard,
-  greenhouseBoardUrl,
-  parseGreenhouseBoard,
-} from "./greenhouse.ts";
 import { collect, type ParseResult } from "./job.ts";
-import {
-  LEVER_SITES,
-  type LeverSite,
-  leverPostingsUrl,
-  parseLeverPostings,
-} from "./lever.ts";
 import { MERCOR_EXPLORE_URL, parseMercorExplorePage } from "./mercor.ts";
 import {
   micro1PageCount,
@@ -97,37 +85,10 @@ async function fetchMicro1(ctx: FetchContext): Promise<SourceResult> {
   };
 }
 
-function greenhouse(config: GreenhouseBoard) {
-  return async (ctx: FetchContext): Promise<SourceResult> => {
-    const response = await request(ctx, greenhouseBoardUrl(config.board), {
-      headers: { Accept: "application/json" },
-    });
-    return {
-      ...parseGreenhouseBoard(await response.json(), config),
-      requests: 1,
-    };
-  };
-}
-
-function lever(config: LeverSite) {
-  return async (ctx: FetchContext): Promise<SourceResult> => {
-    const response = await request(ctx, leverPostingsUrl(config.site), {
-      headers: { Accept: "application/json" },
-    });
-    return {
-      ...parseLeverPostings(await response.json(), config),
-      requests: 1,
-    };
-  };
-}
-
 /** Platforms with an adapter, keyed by `platforms.slug`. */
 export const SOURCES = {
   mercor: fetchMercor,
   micro1: fetchMicro1,
-  invisible: greenhouse(GREENHOUSE_BOARDS.invisible),
-  "welo-data": lever(LEVER_SITES["welo-data"]),
-  xai: greenhouse(GREENHOUSE_BOARDS.xai),
 } as const satisfies Record<
   string,
   (ctx: FetchContext) => Promise<SourceResult>
