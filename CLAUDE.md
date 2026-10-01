@@ -24,10 +24,11 @@ get alerts.
 - **Ask before adding any dependency** not implied by the stack below.
 - **Secrets** live in `.env.local` (gitignored). Every variable is documented
   in `.env.example`. No secrets in client code or in git.
-- **Open decisions stay as placeholders** in one config file (`src/config/site.ts`):
-  `APP_NAME`, `yourdomain.com`, sender domain `mail.yourdomain.com`, inbound
-  domain `in.yourdomain.com`. Locales live in `src/i18n/routing.ts`. Never
-  hard-code these elsewhere.
+- **Brand and domain live in one config file** (`src/config/site.ts`): domain
+  `airemoteworkdashboard.com`, sender `mail.airemoteworkdashboard.com`,
+  inbound `in.airemoteworkdashboard.com`; the brand name (`APP_NAME`) and
+  support email are still open placeholders. Locales live in
+  `src/i18n/routing.ts`. Never hard-code these elsewhere.
 - **Small, reviewable commits** with clear messages. Never rewrite pushed
   history.
 - Current phase: **Phase 3 — Feed** (see PLAN.md → Build plan).
