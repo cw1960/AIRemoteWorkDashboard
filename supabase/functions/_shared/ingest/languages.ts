@@ -97,6 +97,11 @@ const LANGUAGE_NAMES: Readonly<Record<string, string>> = {
   Zulu: "zu",
 };
 
+/** Every ISO 639-1 code we recognise, sorted (for pickers). */
+export const LANGUAGE_CODES: readonly string[] = [
+  ...new Set(Object.values(LANGUAGE_NAMES)),
+].sort();
+
 const PATTERN = new RegExp(
   `\\b(${Object.keys(LANGUAGE_NAMES).join("|")})\\b`,
   "g",

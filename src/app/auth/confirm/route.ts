@@ -3,6 +3,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 import { safeNextPath } from "@/lib/auth/next-path";
+import { needsOnboarding } from "@/lib/profile/queries";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 const OTP_TYPES = [
@@ -31,21 +32,28 @@ export async function GET(request: NextRequest) {
   const params = parsed.success ? parsed.data : {};
   const supabase = await createSupabaseServerClient();
 
-  let signedIn = false;
+  let userId: string | null = null;
   if (params.token_hash && params.type) {
-    const { error } = await supabase.auth.verifyOtp({
+    const { data, error } = await supabase.auth.verifyOtp({
       token_hash: params.token_hash,
       type: params.type,
     });
-    signedIn = !error;
+    userId = error ? null : (data.user?.id ?? null);
   } else if (params.code) {
-    const { error } = await supabase.auth.exchangeCodeForSession(params.code);
-    signedIn = !error;
+    const { data, error } = await supabase.auth.exchangeCodeForSession(
+      params.code,
+    );
+    userId = error ? null : data.user.id;
   }
 
-  const location = signedIn
-    ? safeNextPath(params.next)
-    : `/sign-in?error=link&next=${encodeURIComponent(safeNextPath(params.next))}`;
+  const next = safeNextPath(params.next);
+  let location = `/sign-in?error=link&next=${encodeURIComponent(next)}`;
+  if (userId) {
+    // First sign-in: the short profile comes first, then where they were.
+    location = (await needsOnboarding(userId))
+      ? `/onboarding?next=${encodeURIComponent(next)}`
+      : next;
+  }
   return new NextResponse(null, {
     status: 303,
     headers: { Location: location, "Cache-Control": "no-store" },

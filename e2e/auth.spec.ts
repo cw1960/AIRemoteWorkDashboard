@@ -1,38 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
-import { expect, type APIRequestContext, test } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
-// Magic-link sign-in against the local Supabase stack. Its emails land in
-// Mailpit, whose API the tests read the link from.
-const MAILPIT = process.env.MAILPIT_URL ?? "http://127.0.0.1:54324";
-
-/** The sign-in link from the newest email to `to`, waiting for it. */
-async function magicLink(request: APIRequestContext, to: string) {
-  let link: string | undefined;
-  await expect
-    .poll(
-      async () => {
-        const search = await request.get(`${MAILPIT}/api/v1/search`, {
-          params: { query: `to:"${to}"` },
-        });
-        const { messages } = (await search.json()) as {
-          messages: { ID: string }[];
-        };
-        const id = messages[0]?.ID;
-        if (!id) return undefined;
-        const message = await request.get(`${MAILPIT}/api/v1/message/${id}`);
-        const { HTML } = (await message.json()) as { HTML: string };
-        link = /href="([^"]+)"/.exec(HTML)?.[1]?.replaceAll("&amp;", "&");
-        return link;
-      },
-      { timeout: 15_000 },
-    )
-    .toBeTruthy();
-  return link ?? "";
-}
-
-function uniqueEmail(project: string) {
-  return `e2e-${project}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}@example.com`;
-}
+import { magicLink, uniqueEmail } from "./helpers";
 
 test.describe("sign-in", () => {
   test("signs in with a magic link and returns to the page", async ({
@@ -49,6 +18,12 @@ test.describe("sign-in", () => {
 
     await page.goto(await magicLink(request, email));
 
+    // A first sign-in goes through the short profile, then back.
+    await expect(page).toHaveURL(/\/onboarding\?next=%2Fplatforms%2Fmercor$/);
+    for (let step = 0; step < 5; step += 1) {
+      await page.getByRole("button", { name: "Skip" }).click();
+    }
+    await page.getByRole("link", { name: "Browse jobs" }).click();
     await expect(page).toHaveURL(/\/platforms\/mercor$/);
     const signOut = page.getByRole("button", { name: "Sign out" });
     await expect(signOut).toBeVisible();

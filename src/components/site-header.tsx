@@ -21,7 +21,7 @@ export function SiteHeader({ children }: { children?: ReactNode }) {
           <span className="truncate font-extrabold">{siteConfig.name}</span>
         </Link>
         {children && (
-          <div className="flex min-w-0 items-center gap-2">{children}</div>
+          <div className="flex shrink-0 items-center gap-2">{children}</div>
         )}
       </div>
     </header>

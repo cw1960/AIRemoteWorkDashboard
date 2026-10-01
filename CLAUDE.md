@@ -31,7 +31,7 @@ get alerts.
   these elsewhere.
 - **Small, reviewable commits** with clear messages. Never rewrite pushed
   history.
-- Current phase: **Phase 3 — Feed** (see PLAN.md → Build plan).
+- Current phase: **Phase 4 — Tracker + profile** (see PLAN.md → Build plan).
 
 ## Stack (fixed — do not substitute)
 

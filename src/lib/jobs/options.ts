@@ -14,7 +14,7 @@ export interface FilterOptions {
   countries: { code: string; name: string }[];
 }
 
-const COUNTRY_CODES = [...new Set(Object.values(ALPHA3_TO_ALPHA2))];
+export const COUNTRY_CODES = [...new Set(Object.values(ALPHA3_TO_ALPHA2))];
 
 export function buildFilterOptions(
   facets: FeedFacets,
