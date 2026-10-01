@@ -1,5 +1,6 @@
 import { Mail, UserRound } from "lucide-react";
 import type { Metadata } from "next";
+import { z } from "zod";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { AccountNav } from "@/components/account-nav";
@@ -8,30 +9,46 @@ import { Button } from "@/components/ui/button";
 import { Link, redirect } from "@/i18n/navigation";
 import { getSessionUser } from "@/lib/auth/session";
 import { formatPayAmount } from "@/lib/jobs/format";
-import { getMatchedJobs, profileCanMatch } from "@/lib/matching/queries";
-import { getPassport } from "@/lib/passport/queries";
+import {
+  countNewMatches,
+  getMatchedJobs,
+  profileCanMatch,
+} from "@/lib/matching/queries";
+import { getPassport, type PassportEntry } from "@/lib/passport/queries";
 import { needsOnboarding } from "@/lib/profile/queries";
+import { buildTodayItems, type TodayItem } from "@/lib/today/items";
+import { recordDashboardVisit } from "@/lib/today/queries";
 import { dueView } from "@/lib/tracker/dates";
 import { type BoardCard, getBoard } from "@/lib/tracker/queries";
 
 import { Board, type BoardCardView } from "./board";
 import { MatchedJobs } from "./matched-jobs";
 import { PlatformPassport } from "./platform-passport";
+import { TodayPanel } from "./today-panel";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Dashboard");
   return { title: t("metaTitle"), robots: { index: false } };
 }
 
-/** The signed-in user's dashboard: Platform Passport, matched jobs and the pipeline board. */
-export default async function DashboardPage() {
-  const [locale, user] = await Promise.all([getLocale(), getSessionUser()]);
+/**
+ * The signed-in user's dashboard: Today panel, Platform Passport, matched
+ * jobs and the pipeline board.
+ */
+export default async function DashboardPage({
+  searchParams,
+}: PageProps<"/[locale]/dashboard">) {
+  const [locale, user, params] = await Promise.all([
+    getLocale(),
+    getSessionUser(),
+    searchParams,
+  ]);
   if (!user) {
     redirect({ href: "/sign-in?next=%2Fdashboard", locale });
     return null;
   }
 
-  const [t, tJob, cards, onboarding, matches, canMatch, passport] =
+  const [t, tJob, cards, onboarding, matches, canMatch, passport, lastVisit] =
     await Promise.all([
       getTranslations("Dashboard"),
       getTranslations("Job"),
@@ -40,7 +57,14 @@ export default async function DashboardPage() {
       getMatchedJobs(6),
       profileCanMatch(),
       getPassport(),
+      recordDashboardVisit(),
     ]);
+  const { items: todayItems, day } = await todayView(
+    cards ?? [],
+    passport,
+    lastVisit,
+  );
+  const openCard = z.uuid().safeParse(params.card);
   const views = boardViews(cards ?? [], locale, (amount, unit) =>
     tJob("pay", { amount, unit }),
   );
@@ -96,17 +120,33 @@ export default async function DashboardPage() {
           </div>
         )}
 
-        <PlatformPassport
-          entries={passport}
-          today={new Date().toISOString().slice(0, 10)}
-        />
+        <TodayPanel items={todayItems} />
+
+        <PlatformPassport entries={passport} today={day} />
 
         <MatchedJobs matches={matches} canMatch={canMatch === true} />
 
-        <Board initialCards={views} />
+        <Board
+          initialCards={views}
+          openCardId={openCard.success ? openCard.data : null}
+        />
       </main>
     </>
   );
+}
+
+/** The Today panel's items, and today (UTC) as "YYYY-MM-DD". */
+async function todayView(
+  cards: BoardCard[],
+  passport: PassportEntry[],
+  lastVisit: string | null,
+): Promise<{ items: TodayItem[]; day: string }> {
+  const now = Date.now();
+  const newMatches = lastVisit ? await countNewMatches(lastVisit) : 0;
+  return {
+    items: buildTodayItems({ cards, passport, newMatches, now }),
+    day: new Date(now).toISOString().slice(0, 10),
+  };
 }
 
 /**

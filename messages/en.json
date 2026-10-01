@@ -646,5 +646,26 @@
     "saved": "Saved",
     "failed": "Couldn't save. Please try again.",
     "empty": "No platforms to show yet."
+  },
+  "Today": {
+    "title": "Today",
+    "subtitle": "What needs you now, most urgent first.",
+    "overdue": "Follow up on {title}",
+    "overdueNote": "Was due {date}",
+    "dueToday": "Follow up on {title}",
+    "dueTodayNote": "Due today",
+    "reapply": "You can reapply to {platform}",
+    "reapplyNote": "Your waiting period is over.",
+    "reapplyAction": "Reapply",
+    "assessment": "Finish your assessment: {title}",
+    "assessmentNote": "Assessments often have a deadline.",
+    "closed": "{title} is no longer listed",
+    "closedNote": "Applied already? Keep it. If not, you can remove it.",
+    "newMatches": "{count, plural, one {# new matched job} other {# new matched jobs}} since your last visit",
+    "newMatchesAction": "See matches",
+    "open": "Open",
+    "openCard": "Open {title}",
+    "emptyTitle": "You're all caught up",
+    "emptyBody": "Follow-ups, assessments and new matches will show up here."
   }
 }

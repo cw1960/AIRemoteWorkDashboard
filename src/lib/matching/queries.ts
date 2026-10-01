@@ -73,6 +73,38 @@ export async function getMatchedJobs(limit: number): Promise<MatchedJob[]> {
 }
 
 /**
+ * How many of the user's matches (among their best 100) were first seen
+ * after `since`: the Today panel's "new matches since your last visit".
+ */
+export async function countNewMatches(since: string): Promise<number> {
+  const user = await getSessionUser();
+  if (!user) return 0;
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase.rpc("match_jobs", {
+    p_user_id: user.id,
+    p_limit: 100,
+  });
+  if (error) {
+    matchingFailed(error.message);
+    return 0;
+  }
+  const ids = z
+    .array(rowSchema)
+    .parse(data)
+    .filter((row) => hasReasons(toReasons(row)))
+    .map((row) => row.job_id);
+  if (ids.length === 0) return 0;
+
+  const { count, error: countError } = await supabase
+    .from("jobs")
+    .select("id", { count: "exact", head: true })
+    .in("id", ids)
+    .gt("first_seen_at", since);
+  if (countError) throw new Error(countError.message);
+  return count ?? 0;
+}
+
+/**
  * Match reasons for jobs on a page (the feed), for the signed-in user.
  * Empty when signed out; jobs without reasons are left out.
  */
