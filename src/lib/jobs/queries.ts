@@ -164,7 +164,11 @@ export async function getSimilarJobs(job: JobDetail): Promise<JobCardRow[]> {
   return data;
 }
 
-/** One platform by slug; null when the slug is malformed or unknown. */
+/**
+ * One listed platform by slug; null when the slug is malformed or unknown,
+ * or the platform has no referral program (no confirmed referral link):
+ * only platforms that pay referrals are listed (CLAUDE.md).
+ */
 export const getPlatform = cache(
   async (slug: string): Promise<PlatformInfo | null> => {
     const filters = parseFeedFilters({ platform: slug });
@@ -174,6 +178,7 @@ export const getPlatform = cache(
       .from("platforms")
       .select(PLATFORM_COLUMNS)
       .eq("slug", slug)
+      .not("referral_url_template", "is", null)
       .maybeSingle();
     if (error) throw new Error(error.message);
     return data;
