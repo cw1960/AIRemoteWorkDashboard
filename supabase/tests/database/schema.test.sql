@@ -24,9 +24,10 @@ select is(
 );
 
 select is(
-  (select count(*)::int from public.platforms where referral_url_template is not null),
+  (select count(*)::int from public.platforms
+   where strpos(referral_url_template, '{external_id}') = 0),
   0,
-  'no referral templates are seeded'
+  'every referral template has the job id placeholder'
 );
 
 select is(
@@ -190,6 +191,9 @@ select results_eq(
 );
 
 -- Outbound clicks ------------------------------------------------------------
+
+-- Start without a referral link (production has one for Mercor).
+update public.platforms set referral_url_template = null where slug = 'mercor';
 
 select is(
   public.log_outbound_click('00000000-0000-0000-0000-00000000a001'),

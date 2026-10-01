@@ -61,7 +61,11 @@
   },
   "Job": {
     "pay": "{amount} {unit, select, hour {/ hr} day {/ day} week {/ week} month {/ month} year {/ year} task {/ task} session {/ session} project {/ project} other {}}",
-    "noPay": "Pay not listed"
+    "noPay": "Pay not listed",
+    "apply": "Apply",
+    "applyOn": "Apply on {platform}",
+    "opensInNewTab": "(opens {platform} in a new tab)",
+    "disclosure": "We may earn a referral fee if you're hired. It never costs you anything."
   },
   "Domains": {
     "software": "Software",
@@ -101,6 +105,7 @@
     "openTo": "Open to",
     "anywhere": "No country limits listed",
     "notAvailableIn": "Not available in",
+    "fullDetails": "Full details and the application are on {platform}'s site.",
     "howJoining": "How joining {platform} works",
     "noNotes": "Joining steps for {platform} aren't written up yet.",
     "platformGuide": "About {platform}",

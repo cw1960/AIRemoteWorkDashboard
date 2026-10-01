@@ -53,7 +53,7 @@ select throws_ok($$ update public.jobs set title = 'x' $$, '42501', null,
   'anon cannot edit jobs');
 select throws_ok($$ truncate public.jobs $$, '42501', null,
   'anon cannot truncate jobs');
-select is(public.log_outbound_click('00000000-0000-0000-0000-00000000a001'), false,
+select lives_ok($$ select public.log_outbound_click('00000000-0000-0000-0000-00000000a001') $$,
   'anon can log an outbound click');
 
 reset role;
