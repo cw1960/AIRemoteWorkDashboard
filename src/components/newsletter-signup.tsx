@@ -2,7 +2,7 @@
 
 import { CircleAlert, MailCheck } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { type FormEvent, useId, useState, useTransition } from "react";
+import { type SubmitEvent, useId, useState, useTransition } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -36,7 +36,7 @@ export function NewsletterSignup({
   const [status, setStatus] = useState<Status>("idle");
   const [pending, startTransition] = useTransition();
 
-  function onSubmit(event: FormEvent<HTMLFormElement>) {
+  function onSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
     const input = {
