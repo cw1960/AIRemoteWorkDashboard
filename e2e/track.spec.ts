@@ -70,7 +70,7 @@ test.describe("track this", () => {
     await page.goto(`/jobs/${MICRO1_JOB}`);
     const actions = page.getByTestId("job-actions").filter({ visible: true });
     await actions.getByRole("link", { name: "Track this" }).click();
-    await page.getByLabel("Email").fill(email);
+    await page.getByLabel("Email", { exact: true }).fill(email);
     await page.getByRole("button", { name: "Email me a link" }).click();
     await page.goto(await magicLink(request, email));
     await skipOnboarding(page);

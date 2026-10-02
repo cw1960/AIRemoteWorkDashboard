@@ -459,6 +459,29 @@
     "contact": "Contact",
     "copyright": "© {year} {operator}. Job listings belong to the platforms that post them."
   },
+  "Newsletter": {
+    "footer": {
+      "title": "Get {newsletter}",
+      "body": "The best AI-work opportunities and what's changing in the market, free every weekday."
+    },
+    "job": {
+      "title": "Want the best of these in your inbox?",
+      "body": "{newsletter} picks a few AI-work opportunities worth applying for, every weekday. Free."
+    },
+    "dashboard": {
+      "title": "The daily briefing on AI work",
+      "body": "Opportunities, pay trends and practical advice from {newsletter}, free every weekday."
+    },
+    "email": "Your email for the newsletter",
+    "emailPlaceholder": "you@example.com",
+    "website": "Website",
+    "submit": "Subscribe free",
+    "subscribing": "Subscribing…",
+    "subscribed": "Check your inbox and click the link to confirm your subscription.",
+    "invalid": "Enter a valid email address.",
+    "failed": "Something went wrong. Please try again.",
+    "fineprint": "Free. One short email each weekday. Unsubscribe anytime."
+  },
   "Intro": {
     "label": "Welcome",
     "title": "Find remote AI-training work, and never lose track of an application.",
@@ -581,7 +604,7 @@
         "sections": {
           "collect": {
             "heading": "1. What we collect",
-            "body": "If you only browse, we don't ask for any personal data.\n\nIf you create an account, we keep: your email address; the profile answers you choose to give (field of work, skills, languages, country, availability and target pay); your tracker cards, notes, dates and stage history; your platform statuses; your saved searches; and your email preferences.\n\nIf you forward emails to your private tracking address, our email provider (Resend) receives them and we read them once to update your board. We keep only the sender's domain and the subject line, never the email itself.\n\nWhen you click Apply, we record which job was clicked and when (and your account, if you're signed in), so we can measure referrals. Our hosting providers also keep standard technical logs, such as IP addresses, for security.\n\nIf you subscribe to {newsletter}, we keep your email address, when you subscribed, and where you signed up (for example, the page or link you came from). Our newsletter provider records whether each issue is delivered and whether you open it or click its links, so we can see which parts readers find useful."
+            "body": "If you only browse, we don't ask for any personal data.\n\nIf you create an account, we keep: your email address; the profile answers you choose to give (field of work, skills, languages, country, availability and target pay); your tracker cards, notes, dates and stage history; your platform statuses; your saved searches; and your email preferences.\n\nIf you forward emails to your private tracking address, our email provider (Resend) receives them and we read them once to update your board. We keep only the sender's domain and the subject line, never the email itself.\n\nWhen you click Apply, we record which job was clicked and when (and your account, if you're signed in), so we can measure referrals. Our hosting providers also keep standard technical logs, such as IP addresses, for security.\n\nIf you subscribe to {newsletter}, we keep your email address, when you subscribed, and where you signed up (for example, the page or link you came from). When you subscribe through a form on this site, the form sends your email address straight to our newsletter provider; we also count the signup, recording only which form it was and the campaign tags in the page address, never who you are. Our newsletter provider records whether each issue is delivered and whether you open it or click its links, so we can see which parts readers find useful."
           },
           "use": {
             "heading": "2. Why we use it",

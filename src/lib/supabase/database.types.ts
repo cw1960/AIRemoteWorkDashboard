@@ -532,6 +532,36 @@ export type Database = {
         };
         Relationships: [];
       };
+      site_events: {
+        Row: {
+          at: string;
+          event: string;
+          id: number;
+          source: string;
+          utm_campaign: string | null;
+          utm_medium: string | null;
+          utm_source: string | null;
+        };
+        Insert: {
+          at?: string;
+          event: string;
+          id?: never;
+          source: string;
+          utm_campaign?: string | null;
+          utm_medium?: string | null;
+          utm_source?: string | null;
+        };
+        Update: {
+          at?: string;
+          event?: string;
+          id?: never;
+          source?: string;
+          utm_campaign?: string | null;
+          utm_medium?: string | null;
+          utm_source?: string | null;
+        };
+        Relationships: [];
+      };
       tracker_cards: {
         Row: {
           applied_at: string | null;
@@ -667,6 +697,16 @@ export type Database = {
         Returns: Json;
       };
       log_outbound_click: { Args: { p_job_id: string }; Returns: boolean };
+      log_site_event: {
+        Args: {
+          p_event: string;
+          p_source: string;
+          p_utm_campaign?: string;
+          p_utm_medium?: string;
+          p_utm_source?: string;
+        };
+        Returns: undefined;
+      };
       mark_job_alerts_sent: {
         Args: { p_at: string; p_search_ids: string[]; p_token: string };
         Returns: undefined;

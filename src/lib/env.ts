@@ -41,16 +41,30 @@ const serverSchema = z.object({
     .enum(["true", "false"])
     .default("false")
     .transform((value) => value === "true"),
+  /**
+   * Beehiiv API key and publication for newsletter signups. Production only:
+   * unset (previews, local, CI), signups are skipped, not sent.
+   */
+  BEEHIIV_API_KEY: z.string().min(1).optional(),
+  BEEHIIV_PUBLICATION_ID: z
+    .string()
+    .regex(/^pub_[0-9a-f-]{36}$/)
+    .optional(),
 });
 
 export type ServerEnv = z.infer<typeof serverSchema>;
 
 /** Server-only env vars. Never call from client components. */
 export function getServerEnv(): ServerEnv {
-  const key = process.env.RESEND_API_KEY;
-  const inbound = process.env.INBOUND_EMAIL_ENABLED;
   return serverSchema.parse({
-    RESEND_API_KEY: key === "" ? undefined : key,
-    INBOUND_EMAIL_ENABLED: inbound === "" ? undefined : inbound,
+    RESEND_API_KEY: unsetIfEmpty(process.env.RESEND_API_KEY),
+    INBOUND_EMAIL_ENABLED: unsetIfEmpty(process.env.INBOUND_EMAIL_ENABLED),
+    BEEHIIV_API_KEY: unsetIfEmpty(process.env.BEEHIIV_API_KEY),
+    BEEHIIV_PUBLICATION_ID: unsetIfEmpty(process.env.BEEHIIV_PUBLICATION_ID),
   });
+}
+
+/** Empty values count as unset. */
+function unsetIfEmpty(value: string | undefined): string | undefined {
+  return value === "" ? undefined : value;
 }

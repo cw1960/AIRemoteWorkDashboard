@@ -37,16 +37,14 @@ and the dashboard-side tasks (see "Newsletter" below).
   `mail.airemoteworkdashboard.com` (also the inbound domain for auto-capture),
   contact email, and the operator named in the legal pages (El Barrial Devs,
   Santiago, Nuevo León, Mexico) with the legal pages' last-updated date.
-  The newsletter's name ("AI Remote Work Today") and domain go in the same
-  file when its first phase adds them. Locales live in `src/i18n/routing.ts`.
+  The newsletter's name ("AI Remote Work Today") and domain live there too
+  (`siteConfig.newsletter`). Locales live in `src/i18n/routing.ts`.
   Never hard-code these elsewhere.
 - **Small, reviewable commits** with clear messages. Never rewrite pushed
   history.
-- Current phase: **Newsletter N1 — Publication setup**, run from the
-  newsletter repo; this repo's part (legal pages) is done. Next here is N2
-  (site signup form), after approval. The dashboard's open Phase 5–7 items
-  (beta invites, beta fixes, Lovable screens) continue alongside (see
-  PLAN.md → Build plan).
+- Current phase: **Newsletter N2 — Site signups** (approved 2026-10-02;
+  N1 is done). The dashboard's open Phase 5–7 items (beta invites, beta
+  fixes, Lovable screens) continue alongside (see PLAN.md → Build plan).
 
 ## Stack (fixed — do not substitute)
 
@@ -175,11 +173,13 @@ this repo:
   this is not spamming). Confirmed link formats: PLAN.md → Monetization.
 - Out of V1: headless-browser scraping, community, reviews, native apps.
 
-## Data model (12 tables)
+## Data model (12 tables, plus `site_events`)
 
 Public read: `platforms`, `playbooks`, `jobs`. Admin only: `ingest_runs`.
 Owner-only (RLS `user_id = auth.uid()`): everything user-owned.
-`outbound_clicks`: insert via function, admin read.
+`outbound_clicks`: insert via function, admin read. `site_events` (newsletter
+N2): anonymous signup counts by source and campaign, insert via
+`log_site_event()`, admin read, no personal data.
 
 | Table                | Key columns                                                                                                                                            |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -248,6 +248,11 @@ Key rules:
   "Run workflow" (dry run by default) pushes migrations, deploys functions,
   sets function secrets. `scripts/ingest-user-agent.mjs` builds the bot
   User-Agent from `siteConfig`.
+- Newsletter signup (N2): `src/components/newsletter-signup.tsx` in the
+  footer, on job pages and on the dashboard; `src/lib/newsletter/` holds the
+  Zod schema, the Beehiiv API call and the server action, which also counts
+  the signup in `site_events`. Needs `BEEHIIV_API_KEY` and
+  `BEEHIIV_PUBLICATION_ID` (production only); previews do nothing.
 - Email auto-capture: `supabase/functions/inbound-email/` (Resend
   `email.received` webhook, Svix signature check) with pure rules in
   `supabase/functions/_shared/inbound/`; `record_inbound_email()` moves or

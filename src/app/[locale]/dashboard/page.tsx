@@ -4,6 +4,7 @@ import { z } from "zod";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { AccountNav } from "@/components/account-nav";
+import { NewsletterSignup } from "@/components/newsletter-signup";
 import { SiteHeader } from "@/components/site-header";
 import { Button } from "@/components/ui/button";
 import { Link, redirect } from "@/i18n/navigation";
@@ -161,6 +162,12 @@ export default async function DashboardPage({
           initialCards={views}
           openCardId={openCard.success ? openCard.data : null}
           stats={views.length > 0 ? <PipelineStats stats={stats} /> : undefined}
+        />
+
+        <NewsletterSignup
+          source="dashboard"
+          defaultEmail={user.email ?? undefined}
+          className="mt-8 rounded-2xl border border-border p-5 glass-panel"
         />
       </main>
     </>

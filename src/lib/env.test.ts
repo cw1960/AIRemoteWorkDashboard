@@ -61,4 +61,18 @@ describe("getServerEnv", () => {
     vi.stubEnv("INBOUND_EMAIL_ENABLED", "true");
     expect(getServerEnv().INBOUND_EMAIL_ENABLED).toBe(true);
   });
+
+  it("treats empty Beehiiv settings as unset", () => {
+    vi.stubEnv("BEEHIIV_API_KEY", "");
+    vi.stubEnv("BEEHIIV_PUBLICATION_ID", "");
+    expect(getServerEnv()).toMatchObject({
+      BEEHIIV_API_KEY: undefined,
+      BEEHIIV_PUBLICATION_ID: undefined,
+    });
+  });
+
+  it("rejects a malformed Beehiiv publication id", () => {
+    vi.stubEnv("BEEHIIV_PUBLICATION_ID", "AI Remote Work Today");
+    expect(() => getServerEnv()).toThrow();
+  });
 });
