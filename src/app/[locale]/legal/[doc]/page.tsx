@@ -5,13 +5,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { AccountNav } from "@/components/account-nav";
 import { SiteHeader } from "@/components/site-header";
 import { siteConfig } from "@/config/site";
-
-const DOCS = ["terms", "privacy", "cookies", "affiliates"] as const;
-type Doc = (typeof DOCS)[number];
-
-function isDoc(value: string): value is Doc {
-  return (DOCS as readonly string[]).includes(value);
-}
+import { isLegalDoc, LEGAL_DOCS } from "@/lib/legal";
 
 /** Values the legal texts refer to, all from the brand config. */
 const values = {
@@ -23,14 +17,14 @@ const values = {
 };
 
 export function generateStaticParams() {
-  return DOCS.map((doc) => ({ doc }));
+  return LEGAL_DOCS.map((doc) => ({ doc }));
 }
 
 export async function generateMetadata({
   params,
 }: PageProps<"/[locale]/legal/[doc]">): Promise<Metadata> {
   const { doc } = await params;
-  if (!isDoc(doc)) return {};
+  if (!isLegalDoc(doc)) return {};
   const t = await getTranslations("Legal");
   return { title: t(`docs.${doc}.metaTitle`) };
 }
@@ -40,7 +34,7 @@ export default async function LegalPage({
   params,
 }: PageProps<"/[locale]/legal/[doc]">) {
   const { doc } = await params;
-  if (!isDoc(doc)) notFound();
+  if (!isLegalDoc(doc)) notFound();
   const [legal, locale] = await Promise.all([
     getTranslations("Legal"),
     getLocale(),

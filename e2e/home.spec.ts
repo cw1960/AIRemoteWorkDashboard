@@ -54,3 +54,16 @@ test("unknown paths return a localized 404", async ({ page }) => {
     page.getByRole("link", { name: "Go to the home page" }),
   ).toHaveAttribute("href", "/");
 });
+
+test("serves a sitemap of public pages, platforms and open jobs", async ({
+  request,
+}) => {
+  const response = await request.get("/sitemap.xml");
+  expect(response.status()).toBe(200);
+  const xml = await response.text();
+  expect(xml).toContain("/how-it-works</loc>");
+  expect(xml).toContain("/legal/privacy</loc>");
+  expect(xml).toContain("/platforms/mercor</loc>");
+  expect(xml).toMatch(/\/jobs\/[0-9a-f-]{36}<\/loc>/);
+  expect(xml).not.toContain("/dashboard");
+});
