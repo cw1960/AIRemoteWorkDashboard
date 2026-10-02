@@ -255,7 +255,7 @@ Gate: beta feedback collected and triaged.
 
 - [x] ~~Remaining Tier 1 and Tier 2 adapters from the Job sources table; Tier 3 as platform cards~~ Dropped: V1 promotes only Mercor and micro1 (owner's decision, 2026-10-01; see CLAUDE.md)
 - [x] Privacy policy, terms, affiliate disclosure
-- [ ] Analytics and the metrics listed below (not planned for now, owner's decision 2026-10-01; needs a cookie consent banner first)
+- [ ] Analytics and the metrics listed below (superseded 2026-10-02: cookieless first-party analytics, no banner, built in Newsletter N2; see Newsletter below)
 - [x] Sitemap (`/sitemap.xml`, listed in robots.txt) and Search Console (sitemap submitted 2026-10-02)
 - [ ] Fix what beta users reported
 
@@ -313,6 +313,36 @@ These figures come from third-party reviews; confirm them in each platform's das
 - [x] Launch sources: Mercor and micro1 only (owner's decision, 2026-10-01)
 - [x] Next.js on Netlify
 - [x] Sender domain for Resend: mail.airemoteworkdashboard.com (verified; SPF, DKIM and DMARC pass)
+
+## Newsletter: AI Remote Work Today
+
+Sister project (2026-10-02): a free weekday email newsletter on the market for human work in AI, drafted by AI agents and approved by the owner before every send. Its PRD, decisions, editorial docs, brand assets and full build plan (N0–N8) live in **`cw1960/airemoteworktoday`**. This repo owns the shared database, so the newsletter's dashboard-side tasks are tracked here; CLAUDE.md → "Newsletter" has the rules.
+
+**Done here**
+
+- [x] N0: PRD reviewed, six decisions made, build plan approved (PR #39; docs then moved to the newsletter repo)
+- [x] N1: Privacy and Cookie notices cover the newsletter (Beehiiv, open/click tracking, the AI provider); newsletter name and domain in `src/config/site.ts`
+
+**N2 — Signups from the site + cookieless analytics** (this repo)
+
+- [ ] Privacy policy: add the site's own signup form and `site_events`
+- [ ] Newsletter signup form (server action → Beehiiv subscriptions API, Zod-validated, UTM source passed on) on the dashboard, job pages and site navigation
+- [ ] `site_events` table (RLS, insert via function, admin read) for signups and CTA clicks; no cookies, no personal data
+- [ ] Playwright and axe coverage for the form; previews never write to Beehiiv
+
+Gate: real signups arrive in Beehiiv with their source recorded.
+
+**N3 — Newsletter data layer** (this repo)
+
+- [ ] Migration: mark platforms as site-listed or newsletter-only; add the PRD's missing job fields (company, specialty, discovered date, verification status); every site query, the sitemap and `match_jobs` only show site-listed platforms (tests prove the site is unchanged)
+- [ ] Re-check terms and robots.txt, then restore the Invisible, Welo Data and xAI adapters as newsletter-only sources
+- [ ] Vet more official job-board sources (Greenhouse, Lever, Ashby) toward 10–15 in total; record each check in this file before building its adapter
+- [ ] Editor's manual entry for hand-picked listings (owner-only admin form)
+- [ ] Deduplication in code: new / duplicate / updated / uncertain, with uncertain cases in a review list
+
+Gate: at least 5 sources land on schedule for a week, and the site looks exactly as before.
+
+**N4 onwards** happen in the newsletter repo. Any tables or SQL functions they need (token-gated functions for the workflow, The Numbers, sources and research notes, issues) ship here in a PR first.
 
 ## Sources
 

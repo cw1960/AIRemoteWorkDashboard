@@ -35,6 +35,19 @@ test.describe("legal pages", () => {
     await expect(page.getByText(/courts of Nuevo León/)).toBeVisible();
   });
 
+  test("cover the newsletter and its providers", async ({ page }) => {
+    await page.goto("/legal/privacy");
+    await expect(
+      page.getByText(/our daily newsletter, AI Remote Work Today/),
+    ).toBeVisible();
+    await expect(
+      page.getByText(/Beehiiv \(newsletter delivery and the newsletter/),
+    ).toBeVisible();
+    await expect(
+      page.getByText(/AI provider \(Anthropic\)[^.]*public information/),
+    ).toBeVisible();
+  });
+
   test("answer 404 for an unknown document", async ({ page }) => {
     const response = await page.goto("/legal/nope");
     expect(response?.status()).toBe(404);

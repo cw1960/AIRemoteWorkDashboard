@@ -11,6 +11,13 @@ a personalized dashboard. **The tracker is the product; the job feed is the
 hook.** Browsing works without an account; an account is needed to track and
 get alerts.
 
+**Sister project (2026-10-02): "AI Remote Work Today"**, a free weekday
+email newsletter about the market for human work in AI, drafted by AI agents
+and approved by the owner before every send. The newsletter is the primary
+product; the dashboard supports it. Its code, docs, decisions and build plan
+live in **`cw1960/airemoteworktoday`**; this repo keeps the shared database
+and the dashboard-side tasks (see "Newsletter" below).
+
 ## Working agreement
 
 - **One phase at a time.** Work only on the current phase of the build plan in
@@ -19,7 +26,8 @@ get alerts.
 - **Plan first.** Before writing code for a phase, present a short plan (files,
   migrations, decisions) and wait for an OK.
 - **Stop for human steps.** Anything needing an account, API key, DNS record or
-  dashboard click (GitHub, Netlify, Supabase, Resend) → stop and give exact
+  dashboard click (GitHub, Netlify, Supabase, Resend, Beehiiv, Claude
+  Console, domain registrar) → stop and give exact
   step-by-step instructions. Never guess values.
 - **Ask before adding any dependency** not implied by the stack below.
 - **Secrets** live in `.env.local` (gitignored). Every variable is documented
@@ -28,12 +36,17 @@ get alerts.
   "AI Remote Work Dashboard", domain `airemoteworkdashboard.com`, sender
   `mail.airemoteworkdashboard.com` (also the inbound domain for auto-capture),
   contact email, and the operator named in the legal pages (El Barrial Devs,
-  Santiago, Nuevo León, Mexico) with the legal pages' last-updated date. Locales live in `src/i18n/routing.ts`. Never hard-code
-  these elsewhere.
+  Santiago, Nuevo León, Mexico) with the legal pages' last-updated date.
+  The newsletter's name ("AI Remote Work Today") and domain go in the same
+  file when its first phase adds them. Locales live in `src/i18n/routing.ts`.
+  Never hard-code these elsewhere.
 - **Small, reviewable commits** with clear messages. Never rewrite pushed
   history.
-- Current phase: **Phase 6 — Dashboard extras**, with the Phase 7 launch
-  tasks in parallel (owner's call, 2026-10-02; see PLAN.md → Build plan).
+- Current phase: **Newsletter N1 — Publication setup**, run from the
+  newsletter repo; this repo's part (legal pages) is done. Next here is N2
+  (site signup form), after approval. The dashboard's open Phase 5–7 items
+  (beta invites, beta fixes, Lovable screens) continue alongside (see
+  PLAN.md → Build plan).
 
 ## Stack (fixed — do not substitute)
 
@@ -50,12 +63,56 @@ get alerts.
     the user's go-ahead. They must be additive and safe on live data.
   - Deploy previews share the production database, so preview-only features
     must not write test data to it.
-- **Resend** for all email: Auth SMTP, alerts, reminders, weekly recap
-  (React Email templates), and inbound receiving for email auto-capture.
+- **Resend** for all of the app's own email: Auth SMTP, alerts, reminders,
+  weekly recap (React Email templates), and inbound receiving for email
+  auto-capture.
+- **Beehiiv** (Pro plan) for the newsletter only: publication, landing page,
+  subscribers, sends, welcome sequence, referral program, email analytics.
+- **Claude API** (`@anthropic-ai/sdk`) for the newsletter agents, which live
+  in the separate newsletter repo `cw1960/airemoteworktoday` and run there on
+  a scheduled **GitHub Actions** workflow (see Newsletter below).
 - **GitHub** for source and CI (GitHub Actions must pass before merge).
 - **Lovable is for visual design only.** Do not invent final visual designs.
   Build clean, token-based components (colors, type, spacing, radii as CSS
   variables wired into the Tailwind theme) so Lovable designs drop in later.
+
+## Newsletter: AI Remote Work Today (decided 2026-10-02)
+
+The newsletter's rules, decisions and build plan are in
+`cw1960/airemoteworktoday` (`CLAUDE.md`, `PLAN.md`, `docs/`). What matters in
+this repo:
+
+1. **Two repos, one database.** This repo owns the shared Supabase
+   database: every migration, RLS policy and pgTAP test, the ingestion Edge
+   Functions (newsletter-only sources included, N3), `deploy.yml`, the
+   site's newsletter signup (N2) and the legal pages. Schema the newsletter
+   needs ships here in a PR first; the newsletter repo never runs
+   migrations. Its scheduled workflow reaches the database only through
+   token-gated SQL functions (the `private.invoke_reminders()` pattern,
+   token in Vault), never the service role key.
+2. **Newsletter-only job sources.** The site keeps its rules (referral
+   platforms only, Mercor and micro1 promoted). The newsletter may also use
+   sources stored with the other jobs but **never shown on the site** (feed,
+   job pages, sitemap, matching). They are fetched only from official
+   public job-board APIs (Greenhouse, Lever, Ashby) or sources whose
+   robots.txt **and** terms allow it, checked and recorded in PLAN.md before
+   an adapter is built; the scraping etiquette under Hard scope rules
+   applies unchanged. First candidates: the Invisible, Welo Data and xAI
+   adapters from the reverted PR #13 (re-check their terms first).
+   Platforms whose terms forbid scraping are never fetched; the editor adds
+   their public listings by hand. Competitor boards and OpenTrain AI stay
+   off-limits as job sources.
+3. **Analytics.** Cookieless and first-party. Beehiiv covers email stats;
+   the site records signups (with UTM source) and CTA clicks in Supabase
+   without cookies, third-party scripts or personal data, so no consent
+   banner is needed. Anything that sets cookies or loads a third-party
+   analytics script needs a consent banner first.
+4. **Legal.** The Privacy and Cookie notices cover the newsletter (Beehiiv,
+   open/click tracking, the AI provider). Keep them in step with what the
+   newsletter and the signup form collect. No user personal data is ever
+   sent to the AI provider.
+5. **Brand.** The newsletter's name and domain (`airemoteworktoday.com`)
+   live in `src/config/site.ts` → `newsletter`, like the dashboard's own.
 
 ## Quality bar
 
@@ -84,11 +141,13 @@ get alerts.
 - **Only platforms with a referral program get a fetcher** (owner's decision,
   2026-10-01: referrals are how the app earns). Build an adapter only after
   the platform's referral link format is confirmed and recorded in PLAN.md →
-  Monetization. Greenhouse/Lever adapters for Invisible, Welo Data and xAI
-  were built in PR #13 and reverted for this reason; restore them from git
-  history if those platforms add referral programs. Platform pages follow
-  the same rule: `/platforms/<slug>` is a 404 until the platform has a
-  `referral_url_template`.
+  Monetization. Exception: newsletter-only sources, which never appear on
+  the site (see Newsletter → Newsletter-only job sources). Greenhouse/Lever
+  adapters for Invisible, Welo Data and xAI were built in PR #13 and
+  reverted for this reason; restore them from git history if those
+  platforms add referral programs, or as newsletter-only sources. Platform
+  pages follow the same rule: `/platforms/<slug>` is a 404 until the
+  platform has a `referral_url_template`.
 - **V1 promotes only Mercor and micro1** (owner's decision, 2026-10-01).
   Vetted and excluded: Handshake AI, Outlier, Terac, Alignerr (terms forbid
   scraping), Turing (blocks bots), Mindrift (no listings or referral
@@ -182,8 +241,9 @@ Key rules:
 - Legal pages (`/legal/terms|privacy|cookies|affiliates`) and
   `/how-it-works` take their text from `messages/<locale>.json` (`Legal`,
   `HowItWorks`). Only essential cookies are used (sign-in, language,
-  `intro_dismissed`), so there is no cookie banner; adding analytics or ads
-  requires a consent banner first.
+  `intro_dismissed`), so there is no cookie banner; cookieless first-party
+  events are fine, but analytics or ads that set cookies or load
+  third-party scripts require a consent banner first.
 - `.github/workflows/deploy.yml` — the only way to production: manual
   "Run workflow" (dry run by default) pushes migrations, deploys functions,
   sets function secrets. `scripts/ingest-user-agent.mjs` builds the bot

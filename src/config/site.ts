@@ -21,6 +21,11 @@ export const siteConfig = {
    * is ignored by the inbound-email function.
    */
   inboundDomain: "mail.airemoteworkdashboard.com",
+  /** The daily newsletter, sent by Beehiiv from its own domain. */
+  newsletter: {
+    name: "AI Remote Work Today",
+    domain: "airemoteworktoday.com",
+  },
   /** Who runs the service, as named in the legal pages. */
   operator: {
     name: "El Barrial Devs",
