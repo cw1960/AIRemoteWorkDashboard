@@ -398,6 +398,11 @@ deno_version = 2
 # (works with both legacy JWT and new secret keys).
 verify_jwt = false
 
+[functions.inbound-email]
+# Called by Resend's webhook, which has no Supabase JWT; the function
+# verifies Resend's signature itself.
+verify_jwt = false
+
 # [edge_runtime.secrets]
 # secret_key = "env(SECRET_VALUE)"
 
