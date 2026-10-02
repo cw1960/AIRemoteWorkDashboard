@@ -190,7 +190,7 @@ Seven phases, each ending at a gate. Don't start a phase until the previous gate
 - [x] Create the GitHub repo with `supabase/migrations` and `supabase/functions` folders
 - [x] Connect Netlify to the repo with deploy previews on pull requests
 - [x] Create Supabase dev and prod projects (changed: prod only; local stack for dev)
-- [ ] Verify the Resend sending domain (SPF, DKIM, DMARC)
+- [x] Verify the Resend sending domain (SPF, DKIM, DMARC)
 - [ ] Set up the Resend receiving domain (`in.yourdomain.com`) and `email.received` webhook
 - [x] Write `CLAUDE.md` with the schema, stack rules and "no Pro features in V1"
 
@@ -210,53 +210,53 @@ Gate: real jobs land in the database on schedule.
 
 **Phase 3 — Feed**
 
-- [ ] Port Lovable components (Tailwind, shadcn/ui) into Next.js
-- [ ] Feed with URL-based filters: platform, domain, pay, language, country, posted date
-- [ ] Server-rendered job pages with JobPosting structured data
-- [ ] Server-rendered platform pages
-- [ ] Magic-link sign-in through Supabase Auth with Resend SMTP
-- [ ] `/go/<job-id>` redirect with click logging and referral codes
+- [x] Port Lovable components (Tailwind, shadcn/ui) into Next.js
+- [x] Feed with URL-based filters: platform, domain, pay, language, country, posted date
+- [x] Server-rendered job pages with JobPosting structured data
+- [x] Server-rendered platform pages
+- [x] Magic-link sign-in through Supabase Auth with Resend SMTP
+- [x] `/go/<job-id>` redirect with click logging and referral codes
 
 Gate: the feed works on a Netlify preview on a phone.
 
 **Phase 4 — Tracker + profile**
 
-- [ ] 60-second onboarding (domains, languages, country, rate, hours, platforms joined)
-- [ ] Kanban with six columns, drag-and-drop on desktop, swipe on mobile
-- [ ] Three card types: feed job, platform onboarding, manual
-- [ ] Card detail: dates, notes, stage history
-- [ ] "Track this" on every job
-- [ ] Welcome email, saved-search alerts, follow-up reminders
+- [x] 60-second onboarding (domains, languages, country, rate, hours, platforms joined)
+- [x] Kanban with six columns, drag-and-drop on desktop, swipe on mobile (changed: stage tabs and a Move menu on mobile)
+- [x] Three card types: feed job, platform onboarding, manual
+- [x] Card detail: dates, notes, stage history
+- [x] "Track this" on every job
+- [x] Welcome email, saved-search alerts, follow-up reminders
 
 Gate: test users have cards on their boards.
 
 **Phase 5 — Dashboard core**
 
-- [ ] `match_jobs(user_id)` function with scores and reason tags
-- [ ] Matched jobs zone, and match reasons on the feed
-- [ ] Platform Passport with reapply dates
-- [ ] Today panel: follow-ups, assessments due, new matches, closed jobs
-- [ ] Closed-job detection feeding the Today panel
+- [x] `match_jobs(user_id)` function with scores and reason tags
+- [x] Matched jobs zone, and match reasons on the feed
+- [x] Platform Passport with reapply dates
+- [x] Today panel: follow-ups, assessments due, new matches, closed jobs
+- [x] Closed-job detection feeding the Today panel
 - [ ] Invite 10 contractors as beta users
 
 Gate: beta users are active on the dashboard.
 
 **Phase 6 — Dashboard extras**
 
-- [ ] Pipeline stats: applications, response rate, days per stage, hourly value in play
+- [x] Pipeline stats: applications, response rate, days per stage, hourly value in play
 - [ ] Playbooks written for each launch platform
 - [ ] Email auto-capture: token addresses, webhook, sender and keyword rules, Needs review list
 - [ ] Weekly recap email
-- [ ] Polish: celebration on Offered, dark mode, empty states
+- [x] Polish: celebration on Offered, dark mode, empty states (dark mode: the app has a single dark theme)
 
 Gate: beta feedback collected and triaged.
 
 **Phase 7 — Launch**
 
-- [ ] Remaining Tier 1 and Tier 2 adapters from the Job sources table; Tier 3 as platform cards
-- [ ] Privacy policy, terms, affiliate disclosure
-- [ ] Analytics and the metrics listed below
-- [ ] Sitemap and search console
+- [x] ~~Remaining Tier 1 and Tier 2 adapters from the Job sources table; Tier 3 as platform cards~~ Dropped: V1 promotes only Mercor and micro1 (owner's decision, 2026-10-01; see CLAUDE.md)
+- [x] Privacy policy, terms, affiliate disclosure
+- [ ] Analytics and the metrics listed below (not planned for now, owner's decision 2026-10-01; needs a cookie consent banner first)
+- [x] Sitemap (`/sitemap.xml`, listed in robots.txt) and Search Console (owner's step)
 - [ ] Fix what beta users reported
 
 Gate: public launch.
@@ -309,10 +309,10 @@ These figures come from third-party reviews; confirm them in each platform's das
 - [x] Domain: airemoteworkdashboard.com (bought 2026-10-01, DNS on Netlify)
 - [x] Brand name: AI Remote Work Dashboard
 - [x] Contact email: 1960bcv@gmail.com
-- [ ] English only, or English + Spanish at launch
-- [ ] The 4–6 launch sources (suggested: Mercor, micro1, Alignerr, Outlier, DataAnnotation, Handshake AI)
-- [ ] Next.js on Netlify (recommended) or Vite + React straight from Lovable
-- [x] Sender domain for Resend: mail.airemoteworkdashboard.com (DNS records still to add)
+- [x] English only at launch (Spanish may follow; the app is translation-ready)
+- [x] Launch sources: Mercor and micro1 only (owner's decision, 2026-10-01)
+- [x] Next.js on Netlify
+- [x] Sender domain for Resend: mail.airemoteworkdashboard.com (verified; SPF, DKIM and DMARC pass)
 
 ## Sources
 
