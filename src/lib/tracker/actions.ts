@@ -335,7 +335,17 @@ export interface CardDetails {
   /** Job cards: when the listing closed. */
   closedAt: string | null;
   history: CardEvent[];
+  /** The platform's playbook, by stage (empty for manual cards). */
+  playbooks: Partial<Record<Stage, Playbook>>;
 }
+
+/** What usually comes next at a stage on a platform, and a checklist. */
+export interface Playbook {
+  nextStep: string;
+  checklist: string[];
+}
+
+const checklistSchema = z.array(z.string());
 
 export type DetailsResult =
   | { ok: true; details: CardDetails }
@@ -352,7 +362,7 @@ export async function getCardDetails(input: unknown): Promise<DetailsResult> {
   const { data, error } = await supabase
     .from("tracker_cards")
     .select(
-      "applied_at, next_action_at, notes, job:jobs(closed_at), events:card_events(from_stage, to_stage, source, at)",
+      "applied_at, next_action_at, notes, platform_id, job:jobs(closed_at, platform_id), events:card_events(from_stage, to_stage, source, at)",
     )
     .eq("user_id", user.id)
     .eq("id", parsed.data.id)
@@ -363,9 +373,29 @@ export async function getCardDetails(input: unknown): Promise<DetailsResult> {
     return { ok: false, error: "failed" };
   }
   if (!data) return { ok: false, error: "invalid" };
+
+  const platformId = data.job?.platform_id ?? data.platform_id;
+  const playbooks: Partial<Record<Stage, Playbook>> = {};
+  if (platformId) {
+    const { data: rows, error: playbookError } = await supabase
+      .from("playbooks")
+      .select("stage, next_step, checklist")
+      .eq("platform_id", platformId);
+    // Playbooks are extra help: without them the sheet still works.
+    if (playbookError) console.error("playbooks not loaded", playbookError);
+    for (const row of rows ?? []) {
+      const checklist = checklistSchema.safeParse(row.checklist);
+      playbooks[row.stage] = {
+        nextStep: row.next_step,
+        checklist: checklist.success ? checklist.data : [],
+      };
+    }
+  }
+
   return {
     ok: true,
     details: {
+      playbooks,
       appliedOn: toDateInput(data.applied_at),
       nextActionOn: toDateInput(data.next_action_at),
       notes: data.notes ?? "",

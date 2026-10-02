@@ -6,8 +6,10 @@ import {
   BriefcaseBusiness,
   Check,
   CircleAlert,
+  CircleCheck,
   ExternalLink,
   FileText,
+  Lightbulb,
   Mail,
   RotateCcw,
   Sparkles,
@@ -369,6 +371,7 @@ function Editor({
   }
 
   const next = STAGES[STAGES.indexOf(card.stage) + 1];
+  const playbook = details.playbooks[card.stage];
   const today = localToday(new Date());
 
   return (
@@ -494,6 +497,41 @@ function Editor({
             </p>
           )}
         </section>
+
+        {playbook && card.platformName && (
+          <section
+            aria-labelledby="details-playbook"
+            className="rounded-xl border border-primary/25 bg-primary/10 p-4"
+          >
+            <h3
+              id="details-playbook"
+              className="flex items-center gap-2 text-sm font-bold"
+            >
+              <Lightbulb className="size-4 text-primary" aria-hidden="true" />
+              {t("details.playbookTitle", { platform: card.platformName })}
+            </h3>
+            <p className="mt-2 text-sm">{playbook.nextStep}</p>
+            {playbook.checklist.length > 0 && (
+              <ul
+                aria-label={t("details.playbookChecklist")}
+                className="mt-3 grid gap-1.5 text-sm"
+              >
+                {playbook.checklist.map((item) => (
+                  <li key={item} className="flex gap-2">
+                    <CircleCheck
+                      className="mt-0.5 size-4 shrink-0 text-primary"
+                      aria-hidden="true"
+                    />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            )}
+            <p className="mt-3 text-xs text-muted-foreground">
+              {t("details.playbookSource", { platform: card.platformName })}
+            </p>
+          </section>
+        )}
 
         <section
           aria-labelledby="details-dates"
