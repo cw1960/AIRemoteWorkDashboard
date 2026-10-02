@@ -19,8 +19,8 @@ select tables_are(
 
 select is(
   (select count(*)::int from public.platforms),
-  13,
-  'the thirteen platforms are seeded'
+  14,
+  'the fourteen platforms are seeded'
 );
 
 select is(

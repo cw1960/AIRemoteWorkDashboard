@@ -230,6 +230,7 @@ export type Database = {
           id: string;
           languages: string[];
           last_seen_at: string;
+          newsletter_only: boolean;
           pay_max: number | null;
           pay_min: number | null;
           pay_unit: Database["public"]["Enums"]["pay_unit"] | null;
@@ -253,6 +254,7 @@ export type Database = {
           id?: string;
           languages?: string[];
           last_seen_at?: string;
+          newsletter_only?: boolean;
           pay_max?: number | null;
           pay_min?: number | null;
           pay_unit?: Database["public"]["Enums"]["pay_unit"] | null;
@@ -276,6 +278,7 @@ export type Database = {
           id?: string;
           languages?: string[];
           last_seen_at?: string;
+          newsletter_only?: boolean;
           pay_max?: number | null;
           pay_min?: number | null;
           pay_unit?: Database["public"]["Enums"]["pay_unit"] | null;
@@ -381,6 +384,7 @@ export type Database = {
           email_domains: string[];
           id: string;
           name: string;
+          newsletter_only: boolean;
           onboarding_notes: string | null;
           referral_url_template: string | null;
           site_url: string;
@@ -393,6 +397,7 @@ export type Database = {
           email_domains?: string[];
           id?: string;
           name: string;
+          newsletter_only?: boolean;
           onboarding_notes?: string | null;
           referral_url_template?: string | null;
           site_url: string;
@@ -405,6 +410,7 @@ export type Database = {
           email_domains?: string[];
           id?: string;
           name?: string;
+          newsletter_only?: boolean;
           onboarding_notes?: string | null;
           referral_url_template?: string | null;
           site_url?: string;

@@ -94,3 +94,27 @@ describe("micro1 source", () => {
     expect(calls).toHaveLength(2);
   });
 });
+
+describe("Greenhouse and Lever sources", () => {
+  it.each([
+    [
+      "invisible",
+      "https://boards-api.greenhouse.io/v1/boards/agency/jobs?content=true",
+    ],
+    ["xai", "https://boards-api.greenhouse.io/v1/boards/xai/jobs?content=true"],
+    ["welo-data", "https://api.lever.co/v0/postings/weloglobal?mode=json"],
+  ] as const)("%s reads its feed once", async (slug, url) => {
+    const body = slug === "welo-data" ? [] : { jobs: [] };
+    const { ctx, calls } = context(() => Response.json(body));
+    const result = await SOURCES[slug](ctx);
+
+    expect(result).toEqual({ jobs: [], skipped: 0, requests: 1 });
+    expect(calls.map((call) => call.url)).toEqual([url]);
+    expect(calls[0]?.init.headers).toMatchObject({ "User-Agent": USER_AGENT });
+  });
+
+  it("fails the run on an HTTP error", async () => {
+    const { ctx } = context(() => new Response("gone", { status: 404 }));
+    await expect(SOURCES.xai(ctx)).rejects.toThrow(SourceHttpError);
+  });
+});
