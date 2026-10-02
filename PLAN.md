@@ -325,10 +325,11 @@ Sister project (2026-10-02): a free weekday email newsletter on the market for h
 
 **N2 — Signups from the site + cookieless analytics** (this repo)
 
-- [ ] Privacy policy: add the site's own signup form and `site_events`
-- [ ] Newsletter signup form (server action → Beehiiv subscriptions API, Zod-validated, UTM source passed on) on the dashboard, job pages and site navigation
-- [ ] `site_events` table (RLS, insert via function, admin read) for signups and CTA clicks; no cookies, no personal data
-- [ ] Playwright and axe coverage for the form; previews never write to Beehiiv
+- [x] Privacy policy: add the site's own signup form and `site_events`
+- [x] Newsletter signup form (server action → Beehiiv subscriptions API, Zod-validated, UTM source passed on) in the footer of every page, on job pages and on the dashboard (email filled in for signed-in users)
+- [x] `site_events` table (RLS, insert via function, admin read) for signups; no cookies, no personal data (button-click counts left out, owner's call 2026-10-02)
+- [x] Playwright and axe coverage for the form; previews never write to Beehiiv
+- [ ] Owner: Beehiiv API key and publication id in Netlify (production only), migration deployed, one real signup tested
 
 Gate: real signups arrive in Beehiiv with their source recorded.
 

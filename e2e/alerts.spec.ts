@@ -73,7 +73,7 @@ test.describe("job alerts", () => {
     await getAlerts.click();
 
     const email = uniqueEmail(testInfo.project.name);
-    await page.getByLabel("Email").fill(email);
+    await page.getByLabel("Email", { exact: true }).fill(email);
     await page.getByRole("button", { name: "Email me a link" }).click();
     await page.goto(await magicLink(request, email));
     // New account: onboarding first, then back to the feed.

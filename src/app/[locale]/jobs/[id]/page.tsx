@@ -22,6 +22,7 @@ import {
   trackSignInHref,
 } from "@/components/jobs/job-card";
 import { AccountNav } from "@/components/account-nav";
+import { NewsletterSignup } from "@/components/newsletter-signup";
 import { SiteHeader } from "@/components/site-header";
 import { TrackButton } from "@/components/track-button";
 import { Badge } from "@/components/ui/badge";
@@ -278,6 +279,11 @@ export default async function JobPage({
               <ChevronRight className="size-4" aria-hidden="true" />
             </Link>
           </section>
+
+          <NewsletterSignup
+            source="job"
+            className="rounded-2xl border border-border p-5 glass-panel"
+          />
         </div>
 
         <Suspense

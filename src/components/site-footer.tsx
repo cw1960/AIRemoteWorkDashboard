@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 
+import { NewsletterSignup } from "@/components/newsletter-signup";
 import { siteConfig } from "@/config/site";
 import { Link } from "@/i18n/navigation";
 
@@ -11,12 +12,16 @@ const LINKS = [
   ["affiliates", "/legal/affiliates"],
 ] as const;
 
-/** Footer on every page: how it works, the legal pages and contact. */
+/**
+ * Footer on every page: the newsletter signup, how it works, the legal
+ * pages and contact.
+ */
 export async function SiteFooter() {
   const t = await getTranslations("Footer");
   return (
     <footer className="mt-auto border-t border-border">
       <div className="mx-auto flex max-w-[1400px] flex-col gap-3 px-4 py-6 text-sm sm:px-6 lg:px-8">
+        <NewsletterSignup source="footer" className="mb-3 max-w-xl" />
         <nav aria-label={t("label")}>
           <ul className="flex flex-wrap gap-x-5 gap-y-1">
             {LINKS.map(([key, href]) => (

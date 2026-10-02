@@ -12,9 +12,9 @@ select tables_are(
   array[
     'platforms', 'playbooks', 'jobs', 'ingest_runs', 'profiles',
     'platform_memberships', 'tracker_cards', 'card_events', 'saved_searches',
-    'email_prefs', 'inbound_emails', 'outbound_clicks'
+    'email_prefs', 'inbound_emails', 'outbound_clicks', 'site_events'
   ],
-  'public schema has exactly the twelve V1 tables'
+  'public schema has exactly the twelve V1 tables plus site_events'
 );
 
 select is(

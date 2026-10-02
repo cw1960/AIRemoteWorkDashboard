@@ -44,7 +44,7 @@ export async function signIn(
   next = "/",
 ): Promise<void> {
   await page.goto(`/sign-in?next=${encodeURIComponent(next)}`);
-  await page.getByLabel("Email").fill(email);
+  await page.getByLabel("Email", { exact: true }).fill(email);
   await page.getByRole("button", { name: "Email me a link" }).click();
   await expect(page.getByRole("status")).toContainText("Check your email");
   await page.goto(await magicLink(request, email));

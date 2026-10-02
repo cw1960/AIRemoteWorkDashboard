@@ -11,7 +11,7 @@ test.describe("sign-in", () => {
     const email = uniqueEmail(testInfo.project.name);
     await page.goto("/sign-in?next=/platforms/mercor");
 
-    await page.getByLabel("Email").fill(email);
+    await page.getByLabel("Email", { exact: true }).fill(email);
     await page.getByRole("button", { name: "Email me a link" }).click();
     await expect(page.getByRole("status")).toContainText("Check your email");
     await expect(page.getByRole("status")).toContainText(email);
@@ -46,7 +46,7 @@ test.describe("sign-in", () => {
 
   test("rejects an invalid email", async ({ page }) => {
     await page.goto("/sign-in");
-    await page.getByLabel("Email").fill("not-an-email");
+    await page.getByLabel("Email", { exact: true }).fill("not-an-email");
     await page.getByRole("button", { name: "Email me a link" }).click();
 
     await expect(page.locator("#sign-in-error")).toContainText(
