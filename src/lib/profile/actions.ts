@@ -7,12 +7,9 @@ import { getServerEnv } from "@/lib/env";
 import type { Database } from "@/lib/supabase/database.types";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
+import { saveMembership } from "./memberships";
 import { getListedPlatforms } from "./queries";
-import {
-  type OnboardingStep,
-  onboardingStepSchema,
-  stageForMembership,
-} from "./schema";
+import { type OnboardingStep, onboardingStepSchema } from "./schema";
 
 export type SaveResult =
   { ok: true } | { ok: false; error: "invalid" | "auth" | "failed" };
@@ -105,55 +102,14 @@ async function save(userId: string, step: OnboardingStep): Promise<void> {
   }
 }
 
-/**
- * Records the user's status on each listed platform, and gives every
- * platform they've joined an onboarding card on their board (once).
- */
+/** Records the user's status on each listed platform (see saveMembership). */
 async function savePlatforms(
   userId: string,
   statuses: Extract<OnboardingStep, { step: "platforms" }>["statuses"],
 ): Promise<void> {
-  const supabase = await createSupabaseServerClient();
   const platforms = await getListedPlatforms();
-
   for (const platform of platforms) {
     const status = statuses[platform.slug];
-    if (!status) continue;
-
-    // Users may only write these columns (RLS migration); user_id is
-    // filled in by default, so update-or-insert rather than upsert.
-    const { data: updated, error: updateError } = await supabase
-      .from("platform_memberships")
-      .update({ status })
-      .eq("user_id", userId)
-      .eq("platform_id", platform.id)
-      .select("id");
-    if (updateError) throw new Error(updateError.message);
-    if (updated.length === 0) {
-      const { error } = await supabase
-        .from("platform_memberships")
-        .insert({ platform_id: platform.id, status });
-      if (error) throw new Error(error.message);
-    }
-
-    const stage = stageForMembership(status);
-    if (!stage) continue;
-    const { data: existing, error: readError } = await supabase
-      .from("tracker_cards")
-      .select("id")
-      .eq("user_id", userId)
-      .eq("kind", "platform")
-      .eq("platform_id", platform.id)
-      .maybeSingle();
-    if (readError) throw new Error(readError.message);
-    if (existing) continue;
-
-    const { error: insertError } = await supabase.from("tracker_cards").insert({
-      kind: "platform",
-      platform_id: platform.id,
-      title: platform.name,
-      stage,
-    });
-    if (insertError) throw new Error(insertError.message);
+    if (status) await saveMembership(userId, platform, status);
   }
 }

@@ -631,5 +631,20 @@
     "profileTitle": "Tell us what you do",
     "profileBody": "Add your field and languages, and we'll pick the jobs that fit you.",
     "profileCta": "Add field and languages"
+  },
+  "Passport": {
+    "eyebrow": "Where you stand",
+    "title": "Platform Passport",
+    "subtitle": "Your status on each platform. Changes move its card on your board.",
+    "statusFor": "{platform} status",
+    "reapplyOn": "Can reapply on",
+    "reapplyFor": "{platform}: can reapply on",
+    "reapplyNow": "You can reapply now",
+    "join": "Join {platform}",
+    "openJobs": "{count, plural, =0 {No open jobs} one {# open job} other {# open jobs}}",
+    "saving": "Saving…",
+    "saved": "Saved",
+    "failed": "Couldn't save. Please try again.",
+    "empty": "No platforms to show yet."
   }
 }

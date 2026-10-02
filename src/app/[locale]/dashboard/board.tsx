@@ -63,6 +63,12 @@ const DRAG_TYPE = "application/x-tracker-card";
 export function Board({ initialCards }: { initialCards: BoardCardView[] }) {
   const t = useTranslations("Dashboard");
   const [cards, setCards] = useState(initialCards);
+  // Fresh server data (e.g. the Platform Passport moved a card) wins.
+  const [serverCards, setServerCards] = useState(initialCards);
+  if (initialCards !== serverCards) {
+    setServerCards(initialCards);
+    setCards(initialCards);
+  }
   const [activeStage, setActiveStage] = useState<Stage>(
     () => initialCards[0]?.stage ?? "saved",
   );
