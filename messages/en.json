@@ -616,5 +616,20 @@
         }
       }
     }
+  },
+  "Match": {
+    "eyebrow": "Picked for you",
+    "title": "Matched jobs",
+    "subtitle": "Open jobs that fit your profile, best first.",
+    "fitsYou": "Fits you:",
+    "reasonLanguages": "speaks {languages}",
+    "reasonPay": "meets your rate",
+    "reasonCountry": "open in {country}",
+    "seeAll": "See all jobs",
+    "emptyTitle": "No new matches right now",
+    "emptyBody": "We check for new jobs every 6 hours. Browse the feed in the meantime.",
+    "profileTitle": "Tell us what you do",
+    "profileBody": "Add your field and languages, and we'll pick the jobs that fit you.",
+    "profileCta": "Add field and languages"
   }
 }

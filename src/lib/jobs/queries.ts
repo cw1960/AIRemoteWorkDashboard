@@ -32,7 +32,7 @@ export type JobCardRow = Pick<
   | "posted_at"
 > & { platform: { slug: string; name: string } };
 
-const JOB_CARD_COLUMNS =
+export const JOB_CARD_COLUMNS =
   "id, title, summary, domain, tags, pay_min, pay_max, pay_unit, languages, countries, posted_at, platform:platforms!inner(slug, name)";
 
 /** `%` and `_` are wildcards in ILIKE; match them literally. */

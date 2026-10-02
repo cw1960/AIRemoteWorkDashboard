@@ -652,6 +652,17 @@ export type Database = {
         Args: { p_day: string; p_token: string; p_user_id: string };
         Returns: undefined;
       };
+      match_jobs: {
+        Args: { p_job_ids?: string[]; p_limit?: number; p_user_id?: string };
+        Returns: {
+          country_ok: string;
+          job_id: string;
+          matched_domain: string;
+          matched_languages: string[];
+          pay_ok: boolean;
+          score: number;
+        }[];
+      };
       set_app_url: { Args: { p_url: string }; Returns: undefined };
       set_email_prefs_by_token: {
         Args: {
