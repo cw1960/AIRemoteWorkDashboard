@@ -329,19 +329,27 @@ Sister project (2026-10-02): a free weekday email newsletter on the market for h
 - [x] Newsletter signup form (server action → Beehiiv subscriptions API, Zod-validated, UTM source passed on) in the footer of every page, on job pages and on the dashboard (email filled in for signed-in users)
 - [x] `site_events` table (RLS, insert via function, admin read) for signups; no cookies, no personal data (button-click counts left out, owner's call 2026-10-02)
 - [x] Playwright and axe coverage for the form; previews never write to Beehiiv
-- [ ] Owner: Beehiiv API key and publication id in Netlify (production only), migration deployed, one real signup tested
+- [x] Owner: Beehiiv API key and publication id in Netlify (production only), migration deployed, one real signup tested (2026-10-02)
 
 Gate: real signups arrive in Beehiiv with their source recorded.
 
 **N3 — Newsletter data layer** (this repo)
 
-- [ ] Migration: mark platforms as site-listed or newsletter-only; add the PRD's missing job fields (company, specialty, discovered date, verification status); every site query, the sitemap and `match_jobs` only show site-listed platforms (tests prove the site is unchanged)
-- [ ] Re-check terms and robots.txt, then restore the Invisible, Welo Data and xAI adapters as newsletter-only sources
+- [x] Migration: `platforms.newsletter_only` (copied onto each job by trigger); RLS hides newsletter-only jobs from site reads, and the security-definer functions (matching, weekly recap, alerts, `/go`) and tracker cards filter them too. Mercor and micro1 stay site-listed, so their jobs show on the site and feed the newsletter (pgTAP proves both). Of the PRD's job fields, company, specialty and discovered date are the platform, `domain` and `first_seen_at`; verification status comes with manual entry
+- [x] Re-check terms and robots.txt, then restore the Invisible, Welo Data and xAI adapters as newsletter-only sources (vetting below)
 - [ ] Vet more official job-board sources (Greenhouse, Lever, Ashby) toward 10–15 in total; record each check in this file before building its adapter
 - [ ] Editor's manual entry for hand-picked listings (owner-only admin form)
 - [ ] Deduplication in code: new / duplicate / updated / uncertain, with uncertain cases in a review list
 
 Gate: at least 5 sources land on schedule for a week, and the site looks exactly as before.
+
+**Newsletter-only source vetting** (checked by the owner, 2026-10-02). A source is built only if robots.txt allows the feed and the terms don't forbid automated access.
+
+| Source | Feed | robots.txt | Terms | Result |
+| --- | --- | --- | --- | --- |
+| Invisible | Greenhouse `boards-api.greenhouse.io/v1/boards/agency` | `Disallow: /embed/` only, feed allowed | invisibletech.ai has no terms page | Pass |
+| Welo Data | Lever `api.lever.co/v0/postings/weloglobal` | `Allow: /`, `Crawl-delay: 1` | welodata.ai has no terms page | Pass |
+| xAI | Greenhouse `boards-api.greenhouse.io/v1/boards/xai` | `Disallow: /embed/` only, feed allowed | No scraping, crawling or automated-access wording | Pass |
 
 **N4 onwards** happen in the newsletter repo. Any tables or SQL functions they need (token-gated functions for the workflow, The Numbers, sources and research notes, issues) ship here in a PR first.
 

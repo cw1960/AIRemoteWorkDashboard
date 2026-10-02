@@ -42,8 +42,8 @@ and the dashboard-side tasks (see "Newsletter" below).
   Never hard-code these elsewhere.
 - **Small, reviewable commits** with clear messages. Never rewrite pushed
   history.
-- Current phase: **Newsletter N2 — Site signups** (approved 2026-10-02;
-  N1 is done). The dashboard's open Phase 5–7 items (beta invites, beta
+- Current phase: **Newsletter N3 — Newsletter data layer** (approved
+  2026-10-02; N1 and N2 are done). The dashboard's open Phase 5–7 items (beta invites, beta
   fixes, Lovable screens) continue alongside (see PLAN.md → Build plan).
 
 ## Stack (fixed — do not substitute)
@@ -95,8 +95,11 @@ this repo:
    public job-board APIs (Greenhouse, Lever, Ashby) or sources whose
    robots.txt **and** terms allow it, checked and recorded in PLAN.md before
    an adapter is built; the scraping etiquette under Hard scope rules
-   applies unchanged. First candidates: the Invisible, Welo Data and xAI
-   adapters from the reverted PR #13 (re-check their terms first).
+   applies unchanged. A platform's `newsletter_only` flag (copied onto
+   its jobs) keeps its jobs off the site: RLS hides them from site reads,
+   and every security-definer function that reads jobs filters them
+   explicitly. Mercor and micro1 jobs are site jobs and also feed the
+   newsletter. Built and vetted (2026-10-02): Invisible, Welo Data, xAI.
    Platforms whose terms forbid scraping are never fetched; the editor adds
    their public listings by hand. Competitor boards and OpenTrain AI stay
    off-limits as job sources.
@@ -141,9 +144,9 @@ this repo:
   the platform's referral link format is confirmed and recorded in PLAN.md →
   Monetization. Exception: newsletter-only sources, which never appear on
   the site (see Newsletter → Newsletter-only job sources). Greenhouse/Lever
-  adapters for Invisible, Welo Data and xAI were built in PR #13 and
-  reverted for this reason; restore them from git history if those
-  platforms add referral programs, or as newsletter-only sources. Platform
+  adapters for Invisible, Welo Data and xAI (PR #13, reverted) are back as
+  newsletter-only sources; if one adds a referral program, clear its
+  `newsletter_only` flag to list it on the site. Platform
   pages follow the same rule: `/platforms/<slug>` is a 404 until the
   platform has a `referral_url_template`.
 - **V1 promotes only Mercor and micro1** (owner's decision, 2026-10-01).
@@ -175,7 +178,9 @@ this repo:
 
 ## Data model (12 tables, plus `site_events`)
 
-Public read: `platforms`, `playbooks`, `jobs`. Admin only: `ingest_runs`.
+Public read: `platforms`, `playbooks`, `jobs` (site jobs only:
+`newsletter_only` jobs are hidden from anon and users). Admin only:
+`ingest_runs`.
 Owner-only (RLS `user_id = auth.uid()`): everything user-owned.
 `outbound_clicks`: insert via function, admin read. `site_events` (newsletter
 N2): anonymous signup counts by source and campaign, insert via

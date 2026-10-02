@@ -134,11 +134,13 @@ jobs:
       - name: Run ingestion once
         if: ${{ !inputs.dry_run && inputs.run_ingest }}
         run: |
+          # Every platform with a schedule (cron job "ingest-<slug>").
           pnpm exec supabase db query --linked \
-            "select private.invoke_ingest('mercor'), private.invoke_ingest('micro1')"
+            "select private.invoke_ingest(substr(jobname, length('ingest-') + 1))
+             from cron.job where jobname like 'ingest-%'"
           echo "Waiting for the runs to finish…"
           sleep 60
           pnpm exec supabase db query --linked \
             "select p.slug, r.started_at, r.found, r.inserted, r.updated, r.closed, r.skipped, r.error
              from public.ingest_runs r join public.platforms p on p.id = r.platform_id
-             order by r.started_at desc limit 4"
+             order by r.started_at desc limit 10"
