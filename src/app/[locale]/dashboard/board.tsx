@@ -190,7 +190,7 @@ export function Board({
             {t("emptyBody")}
           </p>
           <Button asChild variant="editorial" size="touch" className="mt-5">
-            <Link href="/">{t("findJob")}</Link>
+            <Link href="/jobs">{t("findJob")}</Link>
           </Button>
         </div>
       ) : (

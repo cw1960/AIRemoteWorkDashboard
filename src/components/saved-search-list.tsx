@@ -80,7 +80,7 @@ export function SavedSearchList({ initial }: { initial: SavedSearchItem[] }) {
             size="touch"
             className="mt-4"
           >
-            <Link href="/">
+            <Link href="/jobs">
               <Search aria-hidden="true" />
               {t("browseJobs")}
             </Link>

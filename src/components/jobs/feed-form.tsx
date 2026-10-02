@@ -27,11 +27,14 @@ export function FeedForm({
   filters,
   options,
   activeCount,
+  basePath,
   children,
 }: {
   filters: FeedFilters;
   options: FilterOptions;
   activeCount: number;
+  /** Where the feed lives: "/" (public) or "/jobs" (signed in). */
+  basePath: "/" | "/jobs";
   children: ReactNode;
 }) {
   const t = useTranslations("Feed");
@@ -56,7 +59,7 @@ export function FeedForm({
 
   const clearAll = (
     <Button asChild variant="editorialLink" size="touch" className="px-2">
-      <Link href="/">{t("clearAll")}</Link>
+      <Link href={basePath}>{t("clearAll")}</Link>
     </Button>
   );
 

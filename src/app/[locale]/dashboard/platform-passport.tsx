@@ -147,7 +147,7 @@ function PassportTile({
           </Link>
         ) : (
           <Link
-            href={`/?platform=${entry.slug}`}
+            href={`/jobs?platform=${entry.slug}`}
             className="inline-flex min-h-11 items-center rounded text-sm font-semibold hover:underline"
           >
             {t("openJobs", { count: entry.openJobs })}

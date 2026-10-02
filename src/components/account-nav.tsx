@@ -1,4 +1,9 @@
-import { LayoutDashboard, LogOut, UserRound } from "lucide-react";
+import {
+  BriefcaseBusiness,
+  LayoutDashboard,
+  LogOut,
+  UserRound,
+} from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
 import { Button } from "@/components/ui/button";
@@ -34,6 +39,17 @@ export async function AccountNav() {
         <Link href="/dashboard">
           <LayoutDashboard aria-hidden="true" />
           <span className="sr-only sm:not-sr-only">{t("dashboard")}</span>
+        </Link>
+      </Button>
+      <Button
+        asChild
+        variant="editorialOutline"
+        size="touch"
+        className="px-3 sm:px-5"
+      >
+        <Link href="/jobs">
+          <BriefcaseBusiness aria-hidden="true" />
+          <span className="sr-only sm:not-sr-only">{t("allJobs")}</span>
         </Link>
       </Button>
       <Button

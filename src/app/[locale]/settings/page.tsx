@@ -52,7 +52,7 @@ export default async function SettingsPage() {
       id: search.id,
       description: describeSearch(search.filters, search.platformNames, labels),
       frequency: search.frequency,
-      href: query ? `/?${query}` : "/",
+      href: query ? `/jobs?${query}` : "/jobs",
     };
   });
 
