@@ -42,8 +42,8 @@ The newsletter is the primary product; the dashboard supports it. Spec:
   Never hard-code these elsewhere.
 - **Small, reviewable commits** with clear messages. Never rewrite pushed
   history.
-- Current phase: **Newsletter N0 — Planning** (PRD saved, decisions
-  recorded, build plan proposed; next is N1 once the owner approves). The
+- Current phase: **Newsletter N1 — Publication setup** (plan approved
+  2026-10-02; see PLAN.md → Newsletter build plan). The
   dashboard's open Phase 5–7 items (beta invites, beta fixes, Lovable
   screens) continue alongside (see PLAN.md → Build plan).
 
@@ -146,8 +146,9 @@ The owner's answers to the six open questions. They override
    banner first. The privacy policy is updated to name Beehiiv and the AI
    provider before the first signup form ships.
 5. **Brand and domain.** Two names. The newsletter is **AI Remote Work
-   Today** on its own domain (to buy; `airemoteworktoday.com` if
-   available), which hosts the Beehiiv web hub and newsletter sending. The
+   Today** on its own domain, `airemoteworkdaily.com` (bought 2026-10-02;
+   the owner keeps the "Today" name with this domain), which hosts the
+   Beehiiv web hub and newsletter sending. The
    dashboard keeps its name, domain and email setup, and the two cross-link.
    Both live in `src/config/site.ts`.
 6. **People.** The owner (Chris) is the editor and approves every issue;
