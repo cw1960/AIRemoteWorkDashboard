@@ -328,6 +328,7 @@ Next project (2026-10-02). A free daily email newsletter on the market for human
 | Analytics | Cookieless, first-party: Beehiiv for email stats, a small Supabase events table for site signups (with UTM source) and CTA clicks. No consent banner needed; privacy policy updated to name Beehiiv and the AI provider. |
 | Brand and domain | Two names: newsletter "AI Remote Work Today" on its own domain, airemoteworktoday.com (owned), for the Beehiiv hub and sending; dashboard keeps its name and domain. Cross-linked; both in `src/config/site.ts`. |
 | Amir | The owner (Chris) is the editor and approves every issue. Amir shares his existing article automation (tools, prompts, sample outputs); it is saved under `docs/` and adapted into the Writer. No production access for Amir unless the owner decides otherwise. |
+| Repos | Newsletter code (agents, prompts, scheduled workflow, editorial docs, brand) in `cw1960/airemoteworktoday`. This repo keeps the shared database (migrations, RLS, pgTAP), ingestion Edge Functions and the site's signup form; newsletter schema ships here first. The newsletter workflow uses token-gated SQL functions, not the service role key. (Owner, 2026-10-02.) |
 
 ### Newsletter build plan
 

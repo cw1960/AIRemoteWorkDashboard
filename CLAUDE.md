@@ -67,9 +67,9 @@ The newsletter is the primary product; the dashboard supports it. Spec:
   auto-capture.
 - **Beehiiv** (Pro plan) for the newsletter only: publication, landing page,
   subscribers, sends, welcome sequence, referral program, email analytics.
-- **Claude API** (`@anthropic-ai/sdk`, added in the newsletter phase that
-  first needs it) for the newsletter agents, run by a scheduled **GitHub
-  Actions** workflow on `main` (see Newsletter below).
+- **Claude API** (`@anthropic-ai/sdk`) for the newsletter agents, which live
+  in the separate newsletter repo `cw1960/airemoteworktoday` and run there on
+  a scheduled **GitHub Actions** workflow (see Newsletter below).
 - **GitHub** for source and CI (GitHub Actions must pass before merge).
 - **Lovable is for visual design only.** Do not invent final visual designs.
   Build clean, token-based components (colors, type, spacing, radii as CSS
@@ -104,8 +104,9 @@ The owner's answers to the six open questions. They override
    `support@airemoteworktoday.com`. The domain's DNS is in Netlify; the
    setup values for every Beehiiv setting are in
    `docs/newsletter/beehiiv-setup.md`.
-3. **AI agents.** Claude API, called from TypeScript in this repo, run by a
-   daily scheduled GitHub Actions workflow on `main` only (never from CI,
+3. **AI agents.** Claude API, called from TypeScript in the newsletter repo
+   (see 7), run by a daily scheduled GitHub Actions workflow on its `main`
+   only (never from CI,
    previews or local runs against production; Edge Functions' time limits
    are too short for research). Its secrets are GitHub Actions secrets.
    - Plain code, not an LLM, wherever the job is mechanical: fetching, pay
@@ -162,6 +163,17 @@ The owner's answers to the six open questions. They override
    outputs), which is saved under `docs/` and adapted into the Writer, not
    kept as a separate system. Amir gets no access to production services
    unless the owner decides otherwise.
+7. **Two repos, one database** (owner, 2026-10-02). Newsletter code lives
+   in **`cw1960/airemoteworktoday`**: the agents, prompts, the scheduled
+   workflow, the editorial docs (PRD, style guide, structure, Beehiiv setup)
+   and the brand assets. **This repo keeps the shared database**: every
+   migration, RLS policy and pgTAP test, the ingestion Edge Functions
+   (newsletter-only sources included, N3) and the deploy workflow, plus the
+   site's newsletter signup (N2). Schema the newsletter needs ships here in
+   a PR first and reaches production through `deploy.yml`; the newsletter
+   repo never runs migrations. The newsletter workflow reaches the database
+   through token-gated SQL functions (the `private.invoke_reminders()`
+   pattern, token in Vault), not the service role key.
 
 ## Quality bar
 
