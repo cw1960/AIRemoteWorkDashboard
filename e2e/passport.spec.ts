@@ -18,16 +18,27 @@ async function newUserOnDashboard(
   ).toBeVisible();
 }
 
-/** The visible board tile for a platform, in a stage's column (or tab). */
+/** The visible board tiles for Mercor, in a stage's column (or tab). */
 async function boardTile(page: Page, project: string, stage: string) {
-  // An empty board has no stage tabs on mobile.
-  const tab = page.getByRole("tab", { name: new RegExp(stage) });
-  if (project === "mobile" && (await tab.count()) > 0) await tab.click();
+  if (project === "mobile") {
+    // An empty board has no stage tabs on mobile.
+    const tab = page.getByRole("tab", { name: new RegExp(stage) });
+    if ((await tab.count()) > 0) await tab.click();
+  }
   return page
     .getByRole("region", { name: "Pipeline" })
     .getByRole("article")
     .filter({ hasText: "Mercor" })
     .filter({ visible: true });
+}
+
+/** Waits until Mercor's card shows in a stage's column (or tab). */
+async function expectCardIn(page: Page, project: string, stage: string) {
+  await expect(async () => {
+    await expect(await boardTile(page, project, stage)).toHaveCount(1, {
+      timeout: 1000,
+    });
+  }).toPass();
 }
 
 test.describe("platform passport", () => {
@@ -51,7 +62,7 @@ test.describe("platform passport", () => {
     await mercor.getByLabel("Mercor status").selectOption("applied");
     await expect(mercor.getByText("Saved")).toBeVisible();
     await expect(mercor.getByRole("link", { name: /open job/ })).toBeVisible();
-    await expect(await boardTile(page, project, "Applied")).toHaveCount(1);
+    await expectCardIn(page, project, "Applied");
 
     // Rejected, with a reapply date: the card follows.
     await mercor.getByLabel("Mercor status").selectOption("rejected");
@@ -59,7 +70,7 @@ test.describe("platform passport", () => {
     await mercor.getByLabel("Can reapply on").fill("2020-01-15");
     await expect(mercor.getByText("Saved")).toBeVisible();
     await expect(mercor.getByText("You can reapply now")).toBeVisible();
-    await expect(await boardTile(page, project, "Rejected")).toHaveCount(1);
+    await expectCardIn(page, project, "Rejected");
 
     const results = await new AxeBuilder({ page })
       .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
@@ -70,6 +81,6 @@ test.describe("platform passport", () => {
     await page.reload();
     await expect(mercor.getByLabel("Mercor status")).toHaveValue("rejected");
     await expect(mercor.getByLabel("Can reapply on")).toHaveValue("2020-01-15");
-    await expect(await boardTile(page, project, "Rejected")).toHaveCount(1);
+    await expectCardIn(page, project, "Rejected");
   });
 });
