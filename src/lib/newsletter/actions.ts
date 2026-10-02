@@ -10,8 +10,7 @@ import { createBeehiivSubscription } from "./beehiiv";
 import { type SignupInput, signupSchema } from "./signup";
 
 export type SignupResult =
-  | { ok: true }
-  | { ok: false; reason: "invalid" | "failed" };
+  { ok: true } | { ok: false; reason: "invalid" | "failed" };
 
 /**
  * Subscribes an email to the newsletter from a form on this site, then
