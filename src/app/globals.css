@@ -98,6 +98,22 @@
   }
 }
 
+/* Offer celebration (see dashboard/celebration.tsx). */
+@utility confetti {
+  animation: confetti-fall 1800ms ease-in forwards;
+}
+
+@keyframes confetti-fall {
+  from {
+    opacity: 1;
+    transform: translateY(-1rem);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(80vh) rotate(540deg);
+  }
+}
+
 /* Respect reduced-motion preferences globally (WCAG 2.3.3). */
 @media (prefers-reduced-motion: reduce) {
   *,
