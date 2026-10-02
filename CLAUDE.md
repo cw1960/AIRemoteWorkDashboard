@@ -32,7 +32,8 @@ get alerts.
   these elsewhere.
 - **Small, reviewable commits** with clear messages. Never rewrite pushed
   history.
-- Current phase: **Phase 4 — Tracker + profile** (see PLAN.md → Build plan).
+- Current phase: **Phase 6 — Dashboard extras**, with the Phase 7 launch
+  tasks in parallel (owner's call, 2026-10-02; see PLAN.md → Build plan).
 
 ## Stack (fixed — do not substitute)
 
@@ -187,6 +188,8 @@ Key rules:
   "Run workflow" (dry run by default) pushes migrations, deploys functions,
   sets function secrets. `scripts/ingest-user-agent.mjs` builds the bot
   User-Agent from `siteConfig`.
+- `src/app/sitemap.ts` — `/sitemap.xml`: public pages, listed platforms and
+  open jobs (hourly). `robots.ts` lists it in production only.
 - `e2e/` — Playwright (mobile + desktop, axe checks). `tests/` and
   `src/**/*.test.ts` — Vitest.
 
