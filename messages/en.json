@@ -370,6 +370,18 @@
       "intro": "These jobs are new since your last alert. Open one to see the details and apply.",
       "count": "{count, plural, one {# new job} other {# new jobs}}",
       "seeAll": "See all {count} new jobs"
+    },
+    "reasonRecap": "You're getting this because weekly recaps are on in your {name} email settings.",
+    "recap": {
+      "subject": "Your week: {applied, plural, one {# application} other {# applications}}, {responses, plural, one {# response} other {# responses}}",
+      "preview": "Your week on your board, and {matches, plural, =0 {what's next} one {a job that fits you} other {# jobs that fit you}}.",
+      "heading": "Your week",
+      "intro": "Here's how the last 7 days went on your board.",
+      "applied": "{count, plural, one {Application} other {Applications}}",
+      "responses": "{count, plural, one {Response} other {Responses}}",
+      "moves": "{count, plural, one {Stage change} other {Stage changes}}",
+      "matchesHeading": "Top matches for you",
+      "cta": "Open my dashboard"
     }
   },
   "EmailSettings": {

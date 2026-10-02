@@ -2,6 +2,7 @@ import { render } from "react-email";
 import { describe, expect, it } from "vitest";
 
 import { JobAlertEmail } from "./job-alert";
+import { RecapEmail } from "./recap";
 import { ReminderEmail } from "./reminder";
 import { WelcomeEmail } from "./welcome";
 
@@ -104,5 +105,42 @@ describe("email templates", () => {
     expect(html).toContain('href="https://example.com/jobs/1"');
     expect(html).toContain("See all 12 new jobs");
     expect(html.match(/See all/g)).toHaveLength(1);
+  });
+
+  it("renders the recap's numbers and matches, without an empty matches block", async () => {
+    const props = {
+      lang: "en",
+      brand: "Brand",
+      preview: "Preview",
+      heading: "Your week",
+      intro: "Intro",
+      stats: [
+        { value: "3", label: "Applications" },
+        { value: "1", label: "Response" },
+      ],
+      matchesHeading: "Top matches for you",
+      cta: "Open my dashboard",
+      dashboardUrl: "https://example.com/dashboard",
+      footer,
+    };
+    const html = await render(
+      <RecapEmail
+        {...props}
+        matches={[
+          {
+            title: "Contract Lawyer",
+            detail: "Mercor · $40–50 / hr",
+            url: "https://example.com/jobs/1",
+          },
+        ]}
+      />,
+    );
+    expect(html).toContain("Applications");
+    expect(html).toContain("Top matches for you");
+    expect(html).toContain('href="https://example.com/jobs/1"');
+
+    const empty = await render(<RecapEmail {...props} matches={[]} />);
+    expect(empty).not.toContain("Top matches for you");
+    expect(empty).toContain('href="https://example.com/dashboard"');
   });
 });
