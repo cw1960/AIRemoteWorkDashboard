@@ -36,7 +36,9 @@ test.describe("email auto-capture", () => {
     await page.goto("/settings");
     const section = page.getByRole("region", { name: "Track by email" });
     await expect(
-      section.getByText(`track+${inbound_token}@in.airemoteworkdashboard.com`),
+      section.getByText(
+        `track+${inbound_token}@mail.airemoteworkdashboard.com`,
+      ),
     ).toBeVisible();
 
     await context.grantPermissions(["clipboard-read", "clipboard-write"]);

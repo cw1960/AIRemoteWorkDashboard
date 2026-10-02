@@ -15,8 +15,12 @@ export const siteConfig = {
   senderDomain: "mail.airemoteworkdashboard.com",
   /** From address for the app's emails (on the sending subdomain). */
   senderAddress: "hello@mail.airemoteworkdashboard.com",
-  /** Resend receiving subdomain for email auto-capture. */
-  inboundDomain: "in.airemoteworkdashboard.com",
+  /**
+   * Receiving domain for email auto-capture (track+<token>@…): the sending
+   * subdomain, with receiving enabled in Resend. Other mail to it (replies)
+   * is ignored by the inbound-email function.
+   */
+  inboundDomain: "mail.airemoteworkdashboard.com",
   /** Who runs the service, as named in the legal pages. */
   operator: {
     name: "El Barrial Devs",
