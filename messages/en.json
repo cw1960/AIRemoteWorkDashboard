@@ -315,7 +315,10 @@
       "deleteBody": "Notes, dates and stage history will be removed. This can't be undone.",
       "keep": "Keep card",
       "confirmDelete": "Delete",
-      "deleteFailed": "Couldn't delete the card. Please try again."
+      "deleteFailed": "Couldn't delete the card. Please try again.",
+      "playbookTitle": "What usually comes next on {platform}",
+      "playbookChecklist": "Checklist",
+      "playbookSource": "Based on {platform}'s public help pages. Their steps can change."
     },
     "emailSettings": "Email settings",
     "movedOffered": "Moved “{title}” to Offered. Congratulations!",
