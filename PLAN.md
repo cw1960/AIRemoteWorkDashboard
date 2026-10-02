@@ -326,7 +326,7 @@ Next project (2026-10-02). A free daily email newsletter on the market for human
 | Beehiiv vs Resend | Beehiiv for the newsletter, Pro plan from day one (posting by API needs Pro; the current workspace is on Launch). Resend stays for every app email. Separate sending domains. |
 | LLM agents | Claude API from TypeScript in this repo, run by a daily scheduled GitHub Actions workflow on `main`. Plain code for fetching, pay parsing, deduplication, link checks and statistics; Sonnet 5.5 for scouting, research and job picks; Haiku 4.5 for edge-case parsing; Opus 5.5 for the Writer and QA. Budget roughly $2–4/day (~$60–120/month) with a Console spend limit. Strict sourcing rules (every claim maps to a stored source). No user personal data goes to the LLM. |
 | Analytics | Cookieless, first-party: Beehiiv for email stats, a small Supabase events table for site signups (with UTM source) and CTA clicks. No consent banner needed; privacy policy updated to name Beehiiv and the AI provider. |
-| Brand and domain | Two names: newsletter "AI Remote Work Today" on its own domain, airemoteworkdaily.com (bought 2026-10-02; the owner keeps the "Today" name with it), for the Beehiiv hub and sending; dashboard keeps its name and domain. Cross-linked; both in `src/config/site.ts`. |
+| Brand and domain | Two names: newsletter "AI Remote Work Today" on its own domain, airemoteworktoday.com (owned), for the Beehiiv hub and sending; dashboard keeps its name and domain. Cross-linked; both in `src/config/site.ts`. |
 | Amir | The owner (Chris) is the editor and approves every issue. Amir shares his existing article automation (tools, prompts, sample outputs); it is saved under `docs/` and adapted into the Writer. No production access for Amir unless the owner decides otherwise. |
 
 ### Newsletter build plan
@@ -343,7 +343,7 @@ Gate: plan approved.
 
 **N1 — Publication setup** (mostly owner steps; I give exact instructions for each)
 
-- [x] Buy the newsletter domain: `airemoteworkdaily.com` (2026-10-02)
+- [x] Newsletter domain: `airemoteworktoday.com` (already owned)
 - [ ] Beehiiv: decide new workspace vs a third publication in the existing "PrediGana Diario" workspace (plan, billing and the subscriber cap are per workspace); upgrade to Pro; create the publication; connect the custom domain for the web hub and sending (DNS records)
 - [ ] Landing page and visual identity in Beehiiv (Lovable for any brand assets, same rule as the app)
 - [ ] Claude Console: account, API key for the newsletter workflow, monthly spend limit

@@ -146,9 +146,8 @@ The owner's answers to the six open questions. They override
    banner first. The privacy policy is updated to name Beehiiv and the AI
    provider before the first signup form ships.
 5. **Brand and domain.** Two names. The newsletter is **AI Remote Work
-   Today** on its own domain, `airemoteworkdaily.com` (bought 2026-10-02;
-   the owner keeps the "Today" name with this domain), which hosts the
-   Beehiiv web hub and newsletter sending. The
+   Today** on its own domain, `airemoteworktoday.com` (owned by the owner),
+   which hosts the Beehiiv web hub and newsletter sending. The
    dashboard keeps its name, domain and email setup, and the two cross-link.
    Both live in `src/config/site.ts`.
 6. **People.** The owner (Chris) is the editor and approves every issue;
