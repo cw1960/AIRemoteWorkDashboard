@@ -456,8 +456,10 @@ export type Database = {
           domains: string[];
           hours_per_week: number | null;
           languages: string[];
+          last_dashboard_at: string | null;
           locale: string;
           onboarded_at: string | null;
+          previous_dashboard_at: string | null;
           skills: string[];
           target_rate: number | null;
           updated_at: string;
@@ -470,8 +472,10 @@ export type Database = {
           domains?: string[];
           hours_per_week?: number | null;
           languages?: string[];
+          last_dashboard_at?: string | null;
           locale?: string;
           onboarded_at?: string | null;
+          previous_dashboard_at?: string | null;
           skills?: string[];
           target_rate?: number | null;
           updated_at?: string;
@@ -484,8 +488,10 @@ export type Database = {
           domains?: string[];
           hours_per_week?: number | null;
           languages?: string[];
+          last_dashboard_at?: string | null;
           locale?: string;
           onboarded_at?: string | null;
+          previous_dashboard_at?: string | null;
           skills?: string[];
           target_rate?: number | null;
           updated_at?: string;
@@ -599,6 +605,7 @@ export type Database = {
           unsubscribe_token: string;
         }[];
       };
+      dashboard_visit: { Args: Record<PropertyKey, never>; Returns: string };
       due_job_alerts: {
         Args: { p_now: string; p_token: string };
         Returns: {

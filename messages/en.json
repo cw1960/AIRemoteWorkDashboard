@@ -631,5 +631,41 @@
     "profileTitle": "Tell us what you do",
     "profileBody": "Add your field and languages, and we'll pick the jobs that fit you.",
     "profileCta": "Add field and languages"
+  },
+  "Passport": {
+    "eyebrow": "Where you stand",
+    "title": "Platform Passport",
+    "subtitle": "Your status on each platform. Changes move its card on your board.",
+    "statusFor": "{platform} status",
+    "reapplyOn": "Can reapply on",
+    "reapplyFor": "{platform}: can reapply on",
+    "reapplyNow": "You can reapply now",
+    "join": "Join {platform}",
+    "openJobs": "{count, plural, =0 {No open jobs} one {# open job} other {# open jobs}}",
+    "saving": "Saving…",
+    "saved": "Saved",
+    "failed": "Couldn't save. Please try again.",
+    "empty": "No platforms to show yet."
+  },
+  "Today": {
+    "title": "Today",
+    "subtitle": "What needs you now, most urgent first.",
+    "overdue": "Follow up on {title}",
+    "overdueNote": "Was due {date}",
+    "dueToday": "Follow up on {title}",
+    "dueTodayNote": "Due today",
+    "reapply": "You can reapply to {platform}",
+    "reapplyNote": "Your waiting period is over.",
+    "reapplyAction": "Reapply",
+    "assessment": "Finish your assessment: {title}",
+    "assessmentNote": "Assessments often have a deadline.",
+    "closed": "{title} is no longer listed",
+    "closedNote": "Applied already? Keep it. If not, you can remove it.",
+    "newMatches": "{count, plural, one {# new matched job} other {# new matched jobs}} since your last visit",
+    "newMatchesAction": "See matches",
+    "open": "Open",
+    "openCard": "Open {title}",
+    "emptyTitle": "You're all caught up",
+    "emptyBody": "Follow-ups, assessments and new matches will show up here."
   }
 }

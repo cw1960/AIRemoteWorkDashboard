@@ -30,7 +30,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { Link } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import { addManualCard, moveCard } from "@/lib/tracker/actions";
 import type { BoardCard } from "@/lib/tracker/queries";
 import { type Stage, STAGES } from "@/lib/tracker/stages";
@@ -60,9 +60,22 @@ const DRAG_TYPE = "application/x-tracker-card";
  * (everywhere, keyboard included). Moves show at once and roll back if the
  * server refuses them. A card's title opens its details sheet.
  */
-export function Board({ initialCards }: { initialCards: BoardCardView[] }) {
+export function Board({
+  initialCards,
+  openCardId = null,
+}: {
+  initialCards: BoardCardView[];
+  /** A card to open on arrival (the Today panel links to `?card=`). */
+  openCardId?: string | null;
+}) {
   const t = useTranslations("Dashboard");
   const [cards, setCards] = useState(initialCards);
+  // Fresh server data (e.g. the Platform Passport moved a card) wins.
+  const [serverCards, setServerCards] = useState(initialCards);
+  if (initialCards !== serverCards) {
+    setServerCards(initialCards);
+    setCards(initialCards);
+  }
   const [activeStage, setActiveStage] = useState<Stage>(
     () => initialCards[0]?.stage ?? "saved",
   );
@@ -70,7 +83,18 @@ export function Board({ initialCards }: { initialCards: BoardCardView[] }) {
     text: "",
     error: false,
   });
-  const [openId, setOpenId] = useState<string | null>(null);
+  const [openId, setOpenId] = useState<string | null>(openCardId);
+  const [requestedId, setRequestedId] = useState(openCardId);
+  if (openCardId !== requestedId) {
+    setRequestedId(openCardId);
+    setOpenId(openCardId);
+  }
+  const router = useRouter();
+  /** Closes the sheet, dropping `?card=` so a reload doesn't reopen it. */
+  function closeCard() {
+    setOpenId(null);
+    if (openCardId) router.replace("/dashboard", { scroll: false });
+  }
 
   async function move(id: string, stage: Stage): Promise<boolean> {
     const card = cards.find((c) => c.id === id);
@@ -219,9 +243,7 @@ export function Board({ initialCards }: { initialCards: BoardCardView[] }) {
 
       <CardDetailsSheet
         card={cards.find((c) => c.id === openId) ?? null}
-        onClose={() => {
-          setOpenId(null);
-        }}
+        onClose={closeCard}
         onMove={move}
         onPatch={(id, patch) => {
           setCards((current) =>
@@ -229,7 +251,7 @@ export function Board({ initialCards }: { initialCards: BoardCardView[] }) {
           );
         }}
         onDeleted={(card) => {
-          setOpenId(null);
+          closeCard();
           setCards((current) => current.filter((c) => c.id !== card.id));
           setStatus({
             text: t("deleted", { title: card.title }),
