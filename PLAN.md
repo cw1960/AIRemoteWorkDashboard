@@ -351,13 +351,16 @@ Gate: plan approved.
 - [ ] Editorial style guide (`docs/newsletter/style-guide.md`, drafted 2026-10-02, waiting for owner's edits): voice, terminology, compensation and availability language, sourcing rules, banned hype, uncertainty flags, formatting. I draft from the PRD; the owner edits
 - [ ] Newsletter structure doc (`docs/newsletter/structure.md`, drafted 2026-10-02, waiting for owner's edits): the four sections, item fields, CTA, disclosures
 - [ ] Amir's automation saved under `docs/newsletter/amir-automation/` and reviewed: what it does, what to keep for the Writer
-- [ ] Add the newsletter name, domain and Beehiiv URLs to `src/config/site.ts`
+- [x] Owner's details (2026-10-02): postal address PO Box 101, Madisonville, KY 42431; reply-to support@airemoteworktoday.com; weekdays except US federal holidays; DNS in Netlify
+- [ ] Owner: airemoteworktoday.com added to Netlify DNS, Beehiiv's records added, and a mail service for support@ (see `beehiiv-setup.md` §2)
+- [x] Privacy and Cookie notices cover the newsletter (Beehiiv, open/click tracking, the AI provider); moved here from N2 so the Beehiiv site never collects signups without it (owner, 2026-10-02)
+- [x] Newsletter name and domain in `src/config/site.ts`
 
 Gate: Beehiiv publication live on its domain with the landing page; style guide approved.
 
 **N2 — Signups from the site + cookieless analytics**
 
-- [ ] Privacy policy: name Beehiiv and the AI provider; bump the legal pages' date
+- [ ] Privacy policy: add the site's own signup form and `site_events` (Beehiiv and the AI provider are already covered, N1)
 - [ ] Newsletter signup form (server action → Beehiiv subscriptions API, Zod-validated, UTM source passed on) on the dashboard, job pages and site navigation
 - [ ] `site_events` table (RLS, insert via function, admin read) for signups and CTA clicks; no cookies, no personal data
 - [ ] Playwright and axe coverage for the form; previews never write to Beehiiv

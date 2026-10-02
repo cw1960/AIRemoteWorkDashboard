@@ -99,6 +99,11 @@ The owner's answers to the six open questions. They override
    one** so approved issues reach Beehiiv by API and welcome automations are
    available. Resend keeps every app email. The two send from different
    domains so neither affects the other's deliverability.
+   Issues go out on weekdays at 07:00 America/Monterrey, except US federal
+   holidays, from `briefing@mail.airemoteworktoday.com` with reply-to
+   `support@airemoteworktoday.com`. The domain's DNS is in Netlify; the
+   setup values for every Beehiiv setting are in
+   `docs/newsletter/beehiiv-setup.md`.
 3. **AI agents.** Claude API, called from TypeScript in this repo, run by a
    daily scheduled GitHub Actions workflow on `main` only (never from CI,
    previews or local runs against production; Edge Functions' time limits
@@ -143,8 +148,9 @@ The owner's answers to the six open questions. They override
    alongside `outbound_clicks`, with no cookies, no third-party script and
    no personal data, so no consent banner is needed. Anything that sets
    cookies or loads a third-party analytics script still needs a consent
-   banner first. The privacy policy is updated to name Beehiiv and the AI
-   provider before the first signup form ships.
+   banner first. The Privacy and Cookie notices already cover the
+   newsletter, Beehiiv and the AI provider (N1); keep them in step with
+   what the newsletter collects.
 5. **Brand and domain.** Two names. The newsletter is **AI Remote Work
    Today** on its own domain, `airemoteworktoday.com` (owned by the owner),
    which hosts the Beehiiv web hub and newsletter sending. The

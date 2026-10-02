@@ -577,27 +577,27 @@
       "privacy": {
         "metaTitle": "Privacy Notice",
         "title": "Privacy Notice",
-        "intro": "This notice explains what personal data {name} collects, why, and the choices you have. {operator}, of {location}, is responsible for your data.",
+        "intro": "This notice explains what personal data {name} and our daily newsletter, {newsletter}, collect, why, and the choices you have. {operator}, of {location}, is responsible for your data.",
         "sections": {
           "collect": {
             "heading": "1. What we collect",
-            "body": "If you only browse, we don't ask for any personal data.\n\nIf you create an account, we keep: your email address; the profile answers you choose to give (field of work, skills, languages, country, availability and target pay); your tracker cards, notes, dates and stage history; your platform statuses; your saved searches; and your email preferences.\n\nIf you forward emails to your private tracking address, our email provider (Resend) receives them and we read them once to update your board. We keep only the sender's domain and the subject line, never the email itself.\n\nWhen you click Apply, we record which job was clicked and when (and your account, if you're signed in), so we can measure referrals. Our hosting providers also keep standard technical logs, such as IP addresses, for security."
+            "body": "If you only browse, we don't ask for any personal data.\n\nIf you create an account, we keep: your email address; the profile answers you choose to give (field of work, skills, languages, country, availability and target pay); your tracker cards, notes, dates and stage history; your platform statuses; your saved searches; and your email preferences.\n\nIf you forward emails to your private tracking address, our email provider (Resend) receives them and we read them once to update your board. We keep only the sender's domain and the subject line, never the email itself.\n\nWhen you click Apply, we record which job was clicked and when (and your account, if you're signed in), so we can measure referrals. Our hosting providers also keep standard technical logs, such as IP addresses, for security.\n\nIf you subscribe to {newsletter}, we keep your email address, when you subscribed, and where you signed up (for example, the page or link you came from). Our newsletter provider records whether each issue is delivered and whether you open it or click its links, so we can see which parts readers find useful."
           },
           "use": {
             "heading": "2. Why we use it",
-            "body": "We use your data to provide the Service: to sign you in, show your board, send the emails you ask for (sign-in links, the welcome email, follow-up reminders and job alerts), match jobs to your profile, keep the Service secure, and understand how referral links are used. We don't sell your data, and we don't use it for advertising.\n\nWe rely on providing the Service you requested (contract) and our legitimate interest in running and securing it. Where the law requires consent, for example for optional emails, you can withdraw it at any time in Email settings."
+            "body": "We use your data to provide the Service: to sign you in, show your board, send the emails you ask for (sign-in links, the welcome email, follow-up reminders, job alerts and the newsletter), match jobs to your profile, keep the Service secure, and understand how referral links are used and which parts of the newsletter readers find useful. We don't sell your data, and we don't use it for advertising.\n\nWe rely on providing the Service you requested (contract) and our legitimate interest in running and securing it. Where the law requires consent, for example for optional emails and the newsletter, you can withdraw it at any time in Email settings or with the unsubscribe link at the bottom of every newsletter."
           },
           "share": {
             "heading": "3. Who we share it with",
-            "body": "We use a small number of service providers who process data on our behalf: Supabase (database and sign-in), Netlify (website hosting) and Resend (email delivery). They may process data in the United States or other countries, under contracts and safeguards that protect it.\n\nWhen you apply through our links, the platform (for example Mercor or micro1) receives our referral code. It doesn't receive your data from us. Anything you give a platform is covered by its own privacy policy."
+            "body": "We use a small number of service providers who process data on our behalf: Supabase (database and sign-in), Netlify (website hosting), Resend (email delivery) and Beehiiv (newsletter delivery and the newsletter website at {newsletterDomain}). They may process data in the United States or other countries, under contracts and safeguards that protect it.\n\nWhen you apply through our links, the platform (for example Mercor or micro1) receives our referral code. It doesn't receive your data from us. Anything you give a platform is covered by its own privacy policy.\n\nWe use an AI provider (Anthropic) to help research and draft the newsletter from public information, such as job listings and news. It never receives your personal data."
           },
           "keep": {
             "heading": "4. How long we keep it",
-            "body": "We keep your account data for as long as your account exists. If you ask us to delete your account, we delete your personal data within 30 days, apart from anything we must keep by law. Click records not linked to an account may be kept for statistics."
+            "body": "We keep your account data for as long as your account exists. If you ask us to delete your account, we delete your personal data within 30 days, apart from anything we must keep by law. Click records not linked to an account may be kept for statistics.\n\nWe keep your newsletter subscription until you unsubscribe. After that we stop emailing you, but we may keep your email address on a do-not-send list so we never email you again by mistake."
           },
           "rights": {
             "heading": "5. Your rights",
-            "body": "Depending on where you live, including under the EU and UK GDPR and Mexico's personal data protection law (your ARCO rights), you can ask to access, correct or delete your data, object to or restrict its use, or receive a copy. You can stop optional emails at any time in Email settings. To make a request, email us at {email}. You can also complain to your local data protection authority."
+            "body": "Depending on where you live, including under the EU and UK GDPR and Mexico's personal data protection law (your ARCO rights), you can ask to access, correct or delete your data, object to or restrict its use, or receive a copy. You can stop optional emails at any time in Email settings, and unsubscribe from the newsletter with the link in every issue. To make a request, email us at {email}. You can also complain to your local data protection authority."
           },
           "security": {
             "heading": "6. Security",
@@ -609,7 +609,7 @@
           },
           "changes": {
             "heading": "8. Changes",
-            "body": "We may update this notice. We'll change the date at the top, and for important changes we'll let account holders know by email."
+            "body": "We may update this notice. We'll change the date at the top, and for important changes we'll let account holders and newsletter subscribers know by email."
           }
         }
       },
@@ -624,7 +624,7 @@
           },
           "third": {
             "heading": "2. Third-party cookies",
-            "body": "We don't place third-party cookies. When you follow a link to a job platform, that platform's own cookie policy applies on its site."
+            "body": "We don't place third-party cookies. When you follow a link to a job platform, that platform's own cookie policy applies on its site.\n\nOur newsletter's website, {newsletterDomain}, is hosted by Beehiiv, which may set its own cookies there. Beehiiv's cookie policy applies on that site."
           },
           "control": {
             "heading": "3. Your choices",

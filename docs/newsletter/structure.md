@@ -21,6 +21,10 @@ Format is expected to change once we see what readers open and click
 
 Target: about 4 minutes to read (700–900 words).
 
+**Schedule**: weekdays at 07:00 America/Monterrey (13:00 UTC), except US
+federal holidays (owner, 2026-10-02). The pipeline drafts nothing on those
+days.
+
 ## Subject line and preview text
 
 - Subject: 40–60 characters, the most useful item in the issue.

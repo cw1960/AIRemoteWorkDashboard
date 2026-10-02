@@ -14,6 +14,8 @@ const values = {
   location: `${siteConfig.operator.city}, ${siteConfig.operator.region}, ${siteConfig.operator.country}`,
   region: siteConfig.operator.region,
   email: siteConfig.supportEmail,
+  newsletter: siteConfig.newsletter.name,
+  newsletterDomain: siteConfig.newsletter.domain,
 };
 
 export function generateStaticParams() {
