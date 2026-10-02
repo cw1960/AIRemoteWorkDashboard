@@ -5,7 +5,8 @@ name: Deploy to production
 # (the default) it only lists the migrations it would apply.
 #
 # Repository secrets:  SUPABASE_ACCESS_TOKEN, SUPABASE_DB_PASSWORD (required);
-#                      RESEND_API_KEY, ALERT_EMAIL (optional, failure alerts).
+#                      RESEND_API_KEY, ALERT_EMAIL (optional, failure alerts);
+#                      RESEND_WEBHOOK_SECRET (optional, email auto-capture).
 # The bot's User-Agent comes from src/config/site.ts.
 
 on:
@@ -66,6 +67,13 @@ jobs:
           echo "User-Agent: $ua"
           echo "value=$ua" >> "$GITHUB_OUTPUT"
 
+      - name: Read the inbound email domain
+        id: inbound
+        run: |
+          domain="$(node scripts/inbound-domain.mjs)"
+          echo "Inbound domain: $domain"
+          echo "value=$domain" >> "$GITHUB_OUTPUT"
+
       - name: Link the Supabase project
         run: pnpm exec supabase link --project-ref "$SUPABASE_PROJECT_REF"
 
@@ -80,18 +88,34 @@ jobs:
         if: ${{ !inputs.dry_run }}
         run: pnpm exec supabase functions deploy ingest --project-ref "$SUPABASE_PROJECT_REF"
 
+      - name: Deploy the inbound-email function
+        if: ${{ !inputs.dry_run }}
+        run: pnpm exec supabase functions deploy inbound-email --project-ref "$SUPABASE_PROJECT_REF"
+
       - name: Set function secrets
         if: ${{ !inputs.dry_run }}
         env:
           INGEST_USER_AGENT: ${{ steps.ua.outputs.value }}
+          INBOUND_DOMAIN: ${{ steps.inbound.outputs.value }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
+          RESEND_WEBHOOK_SECRET: ${{ secrets.RESEND_WEBHOOK_SECRET }}
         run: |
-          args=("INGEST_USER_AGENT=$INGEST_USER_AGENT")
-          if [ -n "$RESEND_API_KEY" ] && [ -n "$ALERT_EMAIL" ]; then
-            args+=("RESEND_API_KEY=$RESEND_API_KEY" "ALERT_EMAIL=$ALERT_EMAIL")
+          args=("INGEST_USER_AGENT=$INGEST_USER_AGENT" "INBOUND_DOMAIN=$INBOUND_DOMAIN")
+          if [ -n "$RESEND_API_KEY" ]; then
+            args+=("RESEND_API_KEY=$RESEND_API_KEY")
           else
-            echo "::warning::RESEND_API_KEY or ALERT_EMAIL not set: failed runs will not send an alert email."
+            echo "::warning::RESEND_API_KEY not set: no ingest failure alerts, and auto-capture reads only subjects."
+          fi
+          if [ -n "$ALERT_EMAIL" ]; then
+            args+=("ALERT_EMAIL=$ALERT_EMAIL")
+          else
+            echo "::warning::ALERT_EMAIL not set: failed ingest runs will not send an alert email."
+          fi
+          if [ -n "$RESEND_WEBHOOK_SECRET" ]; then
+            args+=("RESEND_WEBHOOK_SECRET=$RESEND_WEBHOOK_SECRET")
+          else
+            echo "::warning::RESEND_WEBHOOK_SECRET not set: email auto-capture refuses every delivery."
           fi
           pnpm exec supabase secrets set --project-ref "$SUPABASE_PROJECT_REF" "${args[@]}"
 
