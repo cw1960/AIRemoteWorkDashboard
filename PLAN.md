@@ -255,7 +255,7 @@ Gate: beta feedback collected and triaged.
 
 - [x] ~~Remaining Tier 1 and Tier 2 adapters from the Job sources table; Tier 3 as platform cards~~ Dropped: V1 promotes only Mercor and micro1 (owner's decision, 2026-10-01; see CLAUDE.md)
 - [x] Privacy policy, terms, affiliate disclosure
-- [ ] Analytics and the metrics listed below (not planned for now, owner's decision 2026-10-01; needs a cookie consent banner first)
+- [ ] Analytics and the metrics listed below (superseded 2026-10-02: cookieless first-party analytics, no banner, built in Newsletter N2; see Newsletter below)
 - [x] Sitemap (`/sitemap.xml`, listed in robots.txt) and Search Console (sitemap submitted 2026-10-02)
 - [ ] Fix what beta users reported
 
@@ -313,6 +313,109 @@ These figures come from third-party reviews; confirm them in each platform's das
 - [x] Launch sources: Mercor and micro1 only (owner's decision, 2026-10-01)
 - [x] Next.js on Netlify
 - [x] Sender domain for Resend: mail.airemoteworkdashboard.com (verified; SPF, DKIM and DMARC pass)
+
+## Newsletter: AI Remote Work Today
+
+Next project (2026-10-02). A free daily email newsletter on the market for human work in AI, built on this platform, with AI agents doing the gathering, research and drafting and the owner approving every issue. The newsletter is the primary product; the dashboard supports it. Full PRD: `docs/newsletter-prd.md`. The decisions below override the PRD; CLAUDE.md → "Newsletter" has the operating rules.
+
+### Decisions (owner, 2026-10-02)
+
+| Question | Decision |
+| --- | --- |
+| More job sources | Newsletter-only sources, hidden from the site. Automated fetching only from official job-board APIs (Greenhouse, Lever, Ashby) or sources whose robots.txt and terms allow it, each vetted first. Platforms whose terms forbid scraping are never fetched; the editor can add their public listings by hand. Ask those platforms for permission in parallel. The site's referral-only rule is unchanged. |
+| Beehiiv vs Resend | Beehiiv for the newsletter, Pro plan from day one (posting by API needs Pro; the current workspace is on Launch). Resend stays for every app email. Separate sending domains. |
+| LLM agents | Claude API from TypeScript in this repo, run by a daily scheduled GitHub Actions workflow on `main`. Plain code for fetching, pay parsing, deduplication, link checks and statistics; Sonnet 5.5 for scouting, research and job picks; Haiku 4.5 for edge-case parsing; Opus 5.5 for the Writer and QA. Budget roughly $2–4/day (~$60–120/month) with a Console spend limit. Strict sourcing rules (every claim maps to a stored source). No user personal data goes to the LLM. |
+| Analytics | Cookieless, first-party: Beehiiv for email stats, a small Supabase events table for site signups (with UTM source) and CTA clicks. No consent banner needed; privacy policy updated to name Beehiiv and the AI provider. |
+| Brand and domain | Two names: newsletter "AI Remote Work Today" on its own new domain (Beehiiv hub and sending); dashboard keeps its name and domain. Cross-linked; both in `src/config/site.ts`. |
+| Amir | The owner (Chris) is the editor and approves every issue. Amir shares his existing article automation (tools, prompts, sample outputs); it is saved under `docs/` and adapted into the Writer. No production access for Amir unless the owner decides otherwise. |
+
+### Newsletter build plan
+
+Same way of working as the dashboard: one phase at a time, a short plan before any code, the owner approves each PR, and each phase stops at its gate. Phases are ordered so subscribers can start signing up early while the content pipeline is built, and so every agent is proven on real runs before the next one depends on it. Agents write to tables the owner reviews; nothing sends without approval.
+
+**N0 — Planning** (this PR)
+
+- [x] Save the PRD as `docs/newsletter-prd.md`
+- [x] Decide the six open questions; record them here and in CLAUDE.md
+- [ ] Owner approves this build plan
+
+Gate: plan approved.
+
+**N1 — Publication setup** (mostly owner steps; I give exact instructions for each)
+
+- [ ] Buy the newsletter domain (`airemoteworktoday.com` if available)
+- [ ] Beehiiv: decide new workspace vs a third publication in the existing "PrediGana Diario" workspace (plan, billing and the subscriber cap are per workspace); upgrade to Pro; create the publication; connect the custom domain for the web hub and sending (DNS records)
+- [ ] Landing page and visual identity in Beehiiv (Lovable for any brand assets, same rule as the app)
+- [ ] Claude Console: account, API key for the newsletter workflow, monthly spend limit
+- [ ] Editorial style guide (`docs/newsletter/style-guide.md`): voice, terminology, compensation and availability language, sourcing rules, banned hype, uncertainty flags, formatting. I draft from the PRD; the owner edits
+- [ ] Newsletter structure doc (`docs/newsletter/structure.md`): the four sections, item fields, CTA, disclosures
+- [ ] Amir's automation saved under `docs/newsletter/amir-automation/` and reviewed: what it does, what to keep for the Writer
+- [ ] Add the newsletter name, domain and Beehiiv URLs to `src/config/site.ts`
+
+Gate: Beehiiv publication live on its domain with the landing page; style guide approved.
+
+**N2 — Signups from the site + cookieless analytics**
+
+- [ ] Privacy policy: name Beehiiv and the AI provider; bump the legal pages' date
+- [ ] Newsletter signup form (server action → Beehiiv subscriptions API, Zod-validated, UTM source passed on) on the dashboard, job pages and site navigation
+- [ ] `site_events` table (RLS, insert via function, admin read) for signups and CTA clicks; no cookies, no personal data
+- [ ] Playwright and axe coverage for the form; previews never write to Beehiiv
+
+Gate: real signups arrive in Beehiiv with their source recorded.
+
+**N3 — Newsletter data layer**
+
+- [ ] Migration: mark platforms as site-listed or newsletter-only; add the PRD's missing job fields (company, specialty, discovered date, verification status); every site query, the sitemap and `match_jobs` only show site-listed platforms (tests prove the site is unchanged)
+- [ ] Re-check terms and robots.txt, then restore the Invisible, Welo Data and xAI adapters as newsletter-only sources
+- [ ] Vet more official job-board sources (Greenhouse, Lever, Ashby) toward 10–15 in total; record each check in this file before building its adapter
+- [ ] Editor's manual entry for hand-picked listings (owner-only admin form)
+- [ ] Deduplication in code: new / duplicate / updated / uncertain, with uncertain cases in a review list
+
+Gate: at least 5 sources land on schedule for a week, and the site looks exactly as before.
+
+**N4 — Job picks and The Numbers**
+
+- [ ] Add `@anthropic-ai/sdk` (asked first, per the dependency rule) and the scheduled `newsletter-daily` GitHub Actions workflow (dry run first; production database only from `main`)
+- [ ] The Numbers: SQL functions for new jobs today, highest advertised rate, most active specialties, fastest-growing category
+- [ ] Job Intelligence agent: ranks the day's candidates into a shortlist with reasons and caveats, stored for review
+- [ ] Usage and cost logged per run
+
+Gate: a week of daily shortlists and numbers the owner judges useful; cost within budget.
+
+**N5 — News and research**
+
+- [ ] `sources` and research-notes tables
+- [ ] News Scout (web search) finds candidate developments
+- [ ] Research agent: primary source, corroboration, facts, uncertainty, announcement vs real opportunity, saved as notes with sources
+
+Gate: a week of research notes that pass the sourcing rules on the owner's spot checks.
+
+**N6 — Writer, QA, review and publishing** (first issues)
+
+- [ ] Writer agent, with Amir's automation's useful parts and the style guide built in
+- [ ] Editorial QA: claims map to sources, numbers match the SQL, links return 2xx, no hype or guarantees, structure; unresolved flags block "ready for review"
+- [ ] Owner-only review page in the app: read, edit, approve or reject each issue
+- [ ] On approval, the issue goes to Beehiiv by API (Create Post) and is scheduled; never before approval
+- [ ] "Written with AI, reviewed by an editor" and affiliate disclosures in the template
+
+Gate: five issues produced, approved and sent to a test segment.
+
+**N7 — Launch and subscriber relationship**
+
+- [ ] Five-email welcome sequence in Beehiiv (I draft, owner sets it up)
+- [ ] Share line in every issue; Beehiiv's referral program switched on, no rewards yet
+- [ ] Daily publishing begins
+
+Gate: two weeks of consistent daily issues, with open and click rates tracked.
+
+**N8 — Distribution drafts**
+
+- [ ] LinkedIn, X and Reddit drafts and short-video scripts generated from each approved issue, shown on the review page; never posted automatically
+- [ ] Standard CTA for every channel: "Get AI Remote Work Today free every day."
+
+Gate: the owner uses the drafts for two weeks and judges them worth keeping.
+
+**Later, only once readers show demand** (PRD §27): programmatic SEO pages (start with a few high-value categories), subscriber segmentation, an editorial performance dashboard, the sponsorship sheet and other monetization readiness.
 
 ## Sources
 

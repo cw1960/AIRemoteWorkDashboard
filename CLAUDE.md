@@ -11,6 +11,13 @@ a personalized dashboard. **The tracker is the product; the job feed is the
 hook.** Browsing works without an account; an account is needed to track and
 get alerts.
 
+**Next project (2026-10-02): "AI Remote Work Today"**, a free daily email
+newsletter about the market for human work in AI, built on this platform with
+AI agents doing the research and drafting and a human approving every issue.
+The newsletter is the primary product; the dashboard supports it. Spec:
+`docs/newsletter-prd.md`; decisions that override it are below under
+"Newsletter: AI Remote Work Today"; build plan in PLAN.md → Newsletter.
+
 ## Working agreement
 
 - **One phase at a time.** Work only on the current phase of the build plan in
@@ -19,7 +26,8 @@ get alerts.
 - **Plan first.** Before writing code for a phase, present a short plan (files,
   migrations, decisions) and wait for an OK.
 - **Stop for human steps.** Anything needing an account, API key, DNS record or
-  dashboard click (GitHub, Netlify, Supabase, Resend) → stop and give exact
+  dashboard click (GitHub, Netlify, Supabase, Resend, Beehiiv, Claude
+  Console, domain registrar) → stop and give exact
   step-by-step instructions. Never guess values.
 - **Ask before adding any dependency** not implied by the stack below.
 - **Secrets** live in `.env.local` (gitignored). Every variable is documented
@@ -28,12 +36,16 @@ get alerts.
   "AI Remote Work Dashboard", domain `airemoteworkdashboard.com`, sender
   `mail.airemoteworkdashboard.com` (also the inbound domain for auto-capture),
   contact email, and the operator named in the legal pages (El Barrial Devs,
-  Santiago, Nuevo León, Mexico) with the legal pages' last-updated date. Locales live in `src/i18n/routing.ts`. Never hard-code
-  these elsewhere.
+  Santiago, Nuevo León, Mexico) with the legal pages' last-updated date.
+  The newsletter's name ("AI Remote Work Today") and domain go in the same
+  file when its first phase adds them. Locales live in `src/i18n/routing.ts`.
+  Never hard-code these elsewhere.
 - **Small, reviewable commits** with clear messages. Never rewrite pushed
   history.
-- Current phase: **Phase 6 — Dashboard extras**, with the Phase 7 launch
-  tasks in parallel (owner's call, 2026-10-02; see PLAN.md → Build plan).
+- Current phase: **Newsletter N0 — Planning** (PRD saved, decisions
+  recorded, build plan proposed; next is N1 once the owner approves). The
+  dashboard's open Phase 5–7 items (beta invites, beta fixes, Lovable
+  screens) continue alongside (see PLAN.md → Build plan).
 
 ## Stack (fixed — do not substitute)
 
@@ -50,12 +62,100 @@ get alerts.
     the user's go-ahead. They must be additive and safe on live data.
   - Deploy previews share the production database, so preview-only features
     must not write test data to it.
-- **Resend** for all email: Auth SMTP, alerts, reminders, weekly recap
-  (React Email templates), and inbound receiving for email auto-capture.
+- **Resend** for all of the app's own email: Auth SMTP, alerts, reminders,
+  weekly recap (React Email templates), and inbound receiving for email
+  auto-capture.
+- **Beehiiv** (Pro plan) for the newsletter only: publication, landing page,
+  subscribers, sends, welcome sequence, referral program, email analytics.
+- **Claude API** (`@anthropic-ai/sdk`, added in the newsletter phase that
+  first needs it) for the newsletter agents, run by a scheduled **GitHub
+  Actions** workflow on `main` (see Newsletter below).
 - **GitHub** for source and CI (GitHub Actions must pass before merge).
 - **Lovable is for visual design only.** Do not invent final visual designs.
   Build clean, token-based components (colors, type, spacing, radii as CSS
   variables wired into the Tailwind theme) so Lovable designs drop in later.
+
+## Newsletter: AI Remote Work Today (decided 2026-10-02)
+
+The owner's answers to the six open questions. They override
+`docs/newsletter-prd.md` where the two differ.
+
+1. **Job sources.** The site keeps its rules (referral platforms only,
+   Mercor and micro1 promoted). The newsletter may also use
+   **newsletter-only sources**, stored with the other jobs but never shown
+   on the site (feed, job pages, sitemap, matching):
+   - Automated fetching only from official public job-board APIs
+     (Greenhouse, Lever, Ashby) or sources whose robots.txt **and** terms
+     allow it, checked and recorded in PLAN.md before an adapter is built.
+     The scraping etiquette under Hard scope rules applies unchanged. First
+     candidates: the Invisible, Welo Data and xAI adapters from the reverted
+     PR #13 (re-check their terms first).
+   - Platforms whose terms forbid scraping (Outlier, Alignerr, Terac,
+     Handshake AI, Turing) are **never fetched**. They appear only as
+     listings the editor adds by hand from a public page, or in news items.
+     Asking those platforms for permission is a parallel owner task.
+   - Competitor boards and OpenTrain AI stay off-limits as job sources.
+2. **Email tool.** Beehiiv sends the newsletter, on the **Pro plan from day
+   one** so approved issues reach Beehiiv by API and welcome automations are
+   available. Resend keeps every app email. The two send from different
+   domains so neither affects the other's deliverability.
+3. **AI agents.** Claude API, called from TypeScript in this repo, run by a
+   daily scheduled GitHub Actions workflow on `main` only (never from CI,
+   previews or local runs against production; Edge Functions' time limits
+   are too short for research). Its secrets are GitHub Actions secrets.
+   - Plain code, not an LLM, wherever the job is mechanical: fetching, pay
+     parsing (Normalizer), duplicate matching (Deduplicator), link checks,
+     and every number in "The Numbers" (SQL). An LLM only handles
+     what code can't (unparseable pay text, uncertain duplicates).
+   - Models: Sonnet 5.5 for the News Scout, Research and Job Intelligence
+     agents (web search), Haiku 4.5 for edge-case parsing, Opus 5.5 for the
+     Writer and Editorial QA. Budget: roughly $2–4/day (~$60–120/month,
+     including web search at $10 per 1,000 searches), with a monthly spend
+     limit set in the Claude Console. Measure real usage in the first week
+     and report it.
+   - No user personal data (profiles, emails, tracker cards) is ever sent to
+     the LLM. Agents read only public job data and the open web.
+   - **Sourcing rules (non-negotiable):**
+     - Every factual claim in a draft maps to a stored source (URL,
+       publisher, date fetched, the supporting excerpt). The Writer gets
+       only structured research notes and job records, and may state nothing
+       that isn't in them.
+     - Claims about a company need a primary source (its own site, blog,
+       listing or filing). Press coverage alone is labelled "reported by
+       <outlet>".
+     - Pay, availability, qualifications, dates, statistics, URLs and quotes
+       are copied from data, never generated. Pay is always "advertised at…",
+       never implied income. Availability uses the PRD's labels (currently
+       listed / recently announced / recruiting campaign / potentially
+       closed / historical example).
+     - Quotes are verbatim, short and attributed. Summarise and link; never
+       republish articles.
+     - Every link must be in the sources table and return 2xx when QA runs.
+       Jobs we hold link through `/go/<job-id>`, with the affiliate
+       disclosure in every issue.
+     - Anything uncertain is flagged in the draft. An issue can't be marked
+       ready for review while flags remain.
+     - Each issue says it is researched and drafted with AI and reviewed by
+       an editor.
+4. **Analytics.** Cookieless and first-party. Beehiiv provides email
+   opens, clicks, subscriber source and referrals. The site records a few
+   events (newsletter signup with its UTM source, CTA clicks) in Supabase
+   alongside `outbound_clicks`, with no cookies, no third-party script and
+   no personal data, so no consent banner is needed. Anything that sets
+   cookies or loads a third-party analytics script still needs a consent
+   banner first. The privacy policy is updated to name Beehiiv and the AI
+   provider before the first signup form ships.
+5. **Brand and domain.** Two names. The newsletter is **AI Remote Work
+   Today** on its own domain (to buy; `airemoteworktoday.com` if
+   available), which hosts the Beehiiv web hub and newsletter sending. The
+   dashboard keeps its name, domain and email setup, and the two cross-link.
+   Both live in `src/config/site.ts`.
+6. **People.** The owner (Chris) is the editor and approves every issue;
+   nothing is published without that approval (no autonomous publishing).
+   Amir shares his existing article automation (tools, prompts, 2–3 sample
+   outputs), which is saved under `docs/` and adapted into the Writer, not
+   kept as a separate system. Amir gets no access to production services
+   unless the owner decides otherwise.
 
 ## Quality bar
 
@@ -84,9 +184,11 @@ get alerts.
 - **Only platforms with a referral program get a fetcher** (owner's decision,
   2026-10-01: referrals are how the app earns). Build an adapter only after
   the platform's referral link format is confirmed and recorded in PLAN.md →
-  Monetization. Greenhouse/Lever adapters for Invisible, Welo Data and xAI
-  were built in PR #13 and reverted for this reason; restore them from git
-  history if those platforms add referral programs. Platform pages follow
+  Monetization. Exception: newsletter-only sources, which never appear on
+  the site (see Newsletter → Job sources). Greenhouse/Lever adapters for
+  Invisible, Welo Data and xAI were built in PR #13 and reverted for this
+  reason; restore them from git history if those platforms add referral
+  programs, or as newsletter-only sources. Platform pages follow
   the same rule: `/platforms/<slug>` is a 404 until the platform has a
   `referral_url_template`.
 - **V1 promotes only Mercor and micro1** (owner's decision, 2026-10-01).
@@ -182,8 +284,9 @@ Key rules:
 - Legal pages (`/legal/terms|privacy|cookies|affiliates`) and
   `/how-it-works` take their text from `messages/<locale>.json` (`Legal`,
   `HowItWorks`). Only essential cookies are used (sign-in, language,
-  `intro_dismissed`), so there is no cookie banner; adding analytics or ads
-  requires a consent banner first.
+  `intro_dismissed`), so there is no cookie banner; cookieless first-party
+  events are fine, but analytics or ads that set cookies or load
+  third-party scripts require a consent banner first.
 - `.github/workflows/deploy.yml` — the only way to production: manual
   "Run workflow" (dry run by default) pushes migrations, deploys functions,
   sets function secrets. `scripts/ingest-user-agent.mjs` builds the bot
