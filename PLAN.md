@@ -245,7 +245,7 @@ Gate: beta users are active on the dashboard.
 
 - [x] Pipeline stats: applications, response rate, days per stage, hourly value in play
 - [ ] Playbooks written for each launch platform
-- [ ] Email auto-capture: token addresses, webhook, sender and keyword rules, Needs review list
+- [x] Email auto-capture: token addresses, webhook, sender and keyword rules, Needs review list (live once the Resend receiving domain and webhook are set up)
 - [ ] Weekly recap email
 - [x] Polish: celebration on Offered, dark mode, empty states (dark mode: the app has a single dark theme)
 
