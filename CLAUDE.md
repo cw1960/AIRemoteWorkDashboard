@@ -11,12 +11,12 @@ a personalized dashboard. **The tracker is the product; the job feed is the
 hook.** Browsing works without an account; an account is needed to track and
 get alerts.
 
-**Next project (2026-10-02): "AI Remote Work Today"**, a free daily email
-newsletter about the market for human work in AI, built on this platform with
-AI agents doing the research and drafting and a human approving every issue.
-The newsletter is the primary product; the dashboard supports it. Spec:
-`docs/newsletter-prd.md`; decisions that override it are below under
-"Newsletter: AI Remote Work Today"; build plan in PLAN.md → Newsletter.
+**Sister project (2026-10-02): "AI Remote Work Today"**, a free weekday
+email newsletter about the market for human work in AI, drafted by AI agents
+and approved by the owner before every send. The newsletter is the primary
+product; the dashboard supports it. Its code, docs, decisions and build plan
+live in **`cw1960/airemoteworktoday`**; this repo keeps the shared database
+and the dashboard-side tasks (see "Newsletter" below).
 
 ## Working agreement
 
@@ -42,10 +42,11 @@ The newsletter is the primary product; the dashboard supports it. Spec:
   Never hard-code these elsewhere.
 - **Small, reviewable commits** with clear messages. Never rewrite pushed
   history.
-- Current phase: **Newsletter N1 — Publication setup** (plan approved
-  2026-10-02; see PLAN.md → Newsletter build plan). The
-  dashboard's open Phase 5–7 items (beta invites, beta fixes, Lovable
-  screens) continue alongside (see PLAN.md → Build plan).
+- Current phase: **Newsletter N1 — Publication setup**, run from the
+  newsletter repo; this repo's part (legal pages) is done. Next here is N2
+  (site signup form), after approval. The dashboard's open Phase 5–7 items
+  (beta invites, beta fixes, Lovable screens) continue alongside (see
+  PLAN.md → Build plan).
 
 ## Stack (fixed — do not substitute)
 
@@ -77,103 +78,41 @@ The newsletter is the primary product; the dashboard supports it. Spec:
 
 ## Newsletter: AI Remote Work Today (decided 2026-10-02)
 
-The owner's answers to the six open questions. They override
-`docs/newsletter-prd.md` where the two differ.
+The newsletter's rules, decisions and build plan are in
+`cw1960/airemoteworktoday` (`CLAUDE.md`, `PLAN.md`, `docs/`). What matters in
+this repo:
 
-1. **Job sources.** The site keeps its rules (referral platforms only,
-   Mercor and micro1 promoted). The newsletter may also use
-   **newsletter-only sources**, stored with the other jobs but never shown
-   on the site (feed, job pages, sitemap, matching):
-   - Automated fetching only from official public job-board APIs
-     (Greenhouse, Lever, Ashby) or sources whose robots.txt **and** terms
-     allow it, checked and recorded in PLAN.md before an adapter is built.
-     The scraping etiquette under Hard scope rules applies unchanged. First
-     candidates: the Invisible, Welo Data and xAI adapters from the reverted
-     PR #13 (re-check their terms first).
-   - Platforms whose terms forbid scraping (Outlier, Alignerr, Terac,
-     Handshake AI, Turing) are **never fetched**. They appear only as
-     listings the editor adds by hand from a public page, or in news items.
-     Asking those platforms for permission is a parallel owner task.
-   - Competitor boards and OpenTrain AI stay off-limits as job sources.
-2. **Email tool.** Beehiiv sends the newsletter, on the **Pro plan from day
-   one** so approved issues reach Beehiiv by API and welcome automations are
-   available. Resend keeps every app email. The two send from different
-   domains so neither affects the other's deliverability.
-   Issues go out on weekdays at 07:00 America/Monterrey, except US federal
-   holidays, from `briefing@mail.airemoteworktoday.com` with reply-to
-   `support@airemoteworktoday.com`. The domain's DNS is in Netlify; the
-   setup values for every Beehiiv setting are in
-   `docs/newsletter/beehiiv-setup.md`.
-3. **AI agents.** Claude API, called from TypeScript in the newsletter repo
-   (see 7), run by a daily scheduled GitHub Actions workflow on its `main`
-   only (never from CI,
-   previews or local runs against production; Edge Functions' time limits
-   are too short for research). Its secrets are GitHub Actions secrets.
-   - Plain code, not an LLM, wherever the job is mechanical: fetching, pay
-     parsing (Normalizer), duplicate matching (Deduplicator), link checks,
-     and every number in "The Numbers" (SQL). An LLM only handles
-     what code can't (unparseable pay text, uncertain duplicates).
-   - Models: Sonnet 5.5 for the News Scout, Research and Job Intelligence
-     agents (web search), Haiku 4.5 for edge-case parsing, Opus 5.5 for the
-     Writer and Editorial QA. Budget: roughly $2–4/day (~$60–120/month,
-     including web search at $10 per 1,000 searches), with a monthly spend
-     limit set in the Claude Console. Measure real usage in the first week
-     and report it.
-   - No user personal data (profiles, emails, tracker cards) is ever sent to
-     the LLM. Agents read only public job data and the open web.
-   - **Sourcing rules (non-negotiable):**
-     - Every factual claim in a draft maps to a stored source (URL,
-       publisher, date fetched, the supporting excerpt). The Writer gets
-       only structured research notes and job records, and may state nothing
-       that isn't in them.
-     - Claims about a company need a primary source (its own site, blog,
-       listing or filing). Press coverage alone is labelled "reported by
-       <outlet>".
-     - Pay, availability, qualifications, dates, statistics, URLs and quotes
-       are copied from data, never generated. Pay is always "advertised at…",
-       never implied income. Availability uses the PRD's labels (currently
-       listed / recently announced / recruiting campaign / potentially
-       closed / historical example).
-     - Quotes are verbatim, short and attributed. Summarise and link; never
-       republish articles.
-     - Every link must be in the sources table and return 2xx when QA runs.
-       Jobs we hold link through `/go/<job-id>`, with the affiliate
-       disclosure in every issue.
-     - Anything uncertain is flagged in the draft. An issue can't be marked
-       ready for review while flags remain.
-     - Each issue says it is researched and drafted with AI and reviewed by
-       an editor.
-4. **Analytics.** Cookieless and first-party. Beehiiv provides email
-   opens, clicks, subscriber source and referrals. The site records a few
-   events (newsletter signup with its UTM source, CTA clicks) in Supabase
-   alongside `outbound_clicks`, with no cookies, no third-party script and
-   no personal data, so no consent banner is needed. Anything that sets
-   cookies or loads a third-party analytics script still needs a consent
-   banner first. The Privacy and Cookie notices already cover the
-   newsletter, Beehiiv and the AI provider (N1); keep them in step with
-   what the newsletter collects.
-5. **Brand and domain.** Two names. The newsletter is **AI Remote Work
-   Today** on its own domain, `airemoteworktoday.com` (owned by the owner),
-   which hosts the Beehiiv web hub and newsletter sending. The
-   dashboard keeps its name, domain and email setup, and the two cross-link.
-   Both live in `src/config/site.ts`.
-6. **People.** The owner (Chris) is the editor and approves every issue;
-   nothing is published without that approval (no autonomous publishing).
-   Amir shares his existing article automation (tools, prompts, 2–3 sample
-   outputs), which is saved under `docs/` and adapted into the Writer, not
-   kept as a separate system. Amir gets no access to production services
-   unless the owner decides otherwise.
-7. **Two repos, one database** (owner, 2026-10-02). Newsletter code lives
-   in **`cw1960/airemoteworktoday`**: the agents, prompts, the scheduled
-   workflow, the editorial docs (PRD, style guide, structure, Beehiiv setup)
-   and the brand assets. **This repo keeps the shared database**: every
-   migration, RLS policy and pgTAP test, the ingestion Edge Functions
-   (newsletter-only sources included, N3) and the deploy workflow, plus the
-   site's newsletter signup (N2). Schema the newsletter needs ships here in
-   a PR first and reaches production through `deploy.yml`; the newsletter
-   repo never runs migrations. The newsletter workflow reaches the database
-   through token-gated SQL functions (the `private.invoke_reminders()`
-   pattern, token in Vault), not the service role key.
+1. **Two repos, one database.** This repo owns the shared Supabase
+   database: every migration, RLS policy and pgTAP test, the ingestion Edge
+   Functions (newsletter-only sources included, N3), `deploy.yml`, the
+   site's newsletter signup (N2) and the legal pages. Schema the newsletter
+   needs ships here in a PR first; the newsletter repo never runs
+   migrations. Its scheduled workflow reaches the database only through
+   token-gated SQL functions (the `private.invoke_reminders()` pattern,
+   token in Vault), never the service role key.
+2. **Newsletter-only job sources.** The site keeps its rules (referral
+   platforms only, Mercor and micro1 promoted). The newsletter may also use
+   sources stored with the other jobs but **never shown on the site** (feed,
+   job pages, sitemap, matching). They are fetched only from official
+   public job-board APIs (Greenhouse, Lever, Ashby) or sources whose
+   robots.txt **and** terms allow it, checked and recorded in PLAN.md before
+   an adapter is built; the scraping etiquette under Hard scope rules
+   applies unchanged. First candidates: the Invisible, Welo Data and xAI
+   adapters from the reverted PR #13 (re-check their terms first).
+   Platforms whose terms forbid scraping are never fetched; the editor adds
+   their public listings by hand. Competitor boards and OpenTrain AI stay
+   off-limits as job sources.
+3. **Analytics.** Cookieless and first-party. Beehiiv covers email stats;
+   the site records signups (with UTM source) and CTA clicks in Supabase
+   without cookies, third-party scripts or personal data, so no consent
+   banner is needed. Anything that sets cookies or loads a third-party
+   analytics script needs a consent banner first.
+4. **Legal.** The Privacy and Cookie notices cover the newsletter (Beehiiv,
+   open/click tracking, the AI provider). Keep them in step with what the
+   newsletter and the signup form collect. No user personal data is ever
+   sent to the AI provider.
+5. **Brand.** The newsletter's name and domain (`airemoteworktoday.com`)
+   live in `src/config/site.ts` → `newsletter`, like the dashboard's own.
 
 ## Quality bar
 
@@ -203,12 +142,12 @@ The owner's answers to the six open questions. They override
   2026-10-01: referrals are how the app earns). Build an adapter only after
   the platform's referral link format is confirmed and recorded in PLAN.md →
   Monetization. Exception: newsletter-only sources, which never appear on
-  the site (see Newsletter → Job sources). Greenhouse/Lever adapters for
-  Invisible, Welo Data and xAI were built in PR #13 and reverted for this
-  reason; restore them from git history if those platforms add referral
-  programs, or as newsletter-only sources. Platform pages follow
-  the same rule: `/platforms/<slug>` is a 404 until the platform has a
-  `referral_url_template`.
+  the site (see Newsletter → Newsletter-only job sources). Greenhouse/Lever
+  adapters for Invisible, Welo Data and xAI were built in PR #13 and
+  reverted for this reason; restore them from git history if those
+  platforms add referral programs, or as newsletter-only sources. Platform
+  pages follow the same rule: `/platforms/<slug>` is a 404 until the
+  platform has a `referral_url_template`.
 - **V1 promotes only Mercor and micro1** (owner's decision, 2026-10-01).
   Vetted and excluded: Handshake AI, Outlier, Terac, Alignerr (terms forbid
   scraping), Turing (blocks bots), Mindrift (no listings or referral

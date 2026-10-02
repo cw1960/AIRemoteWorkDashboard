@@ -316,59 +316,23 @@ These figures come from third-party reviews; confirm them in each platform's das
 
 ## Newsletter: AI Remote Work Today
 
-Next project (2026-10-02). A free daily email newsletter on the market for human work in AI, built on this platform, with AI agents doing the gathering, research and drafting and the owner approving every issue. The newsletter is the primary product; the dashboard supports it. Full PRD: `docs/newsletter-prd.md`. The decisions below override the PRD; CLAUDE.md → "Newsletter" has the operating rules.
+Sister project (2026-10-02): a free weekday email newsletter on the market for human work in AI, drafted by AI agents and approved by the owner before every send. Its PRD, decisions, editorial docs, brand assets and full build plan (N0–N8) live in **`cw1960/airemoteworktoday`**. This repo owns the shared database, so the newsletter's dashboard-side tasks are tracked here; CLAUDE.md → "Newsletter" has the rules.
 
-### Decisions (owner, 2026-10-02)
+**Done here**
 
-| Question | Decision |
-| --- | --- |
-| More job sources | Newsletter-only sources, hidden from the site. Automated fetching only from official job-board APIs (Greenhouse, Lever, Ashby) or sources whose robots.txt and terms allow it, each vetted first. Platforms whose terms forbid scraping are never fetched; the editor can add their public listings by hand. Ask those platforms for permission in parallel. The site's referral-only rule is unchanged. |
-| Beehiiv vs Resend | Beehiiv for the newsletter, Pro plan from day one (posting by API needs Pro; the current workspace is on Launch). Resend stays for every app email. Separate sending domains. |
-| LLM agents | Claude API from TypeScript in this repo, run by a daily scheduled GitHub Actions workflow on `main`. Plain code for fetching, pay parsing, deduplication, link checks and statistics; Sonnet 5.5 for scouting, research and job picks; Haiku 4.5 for edge-case parsing; Opus 5.5 for the Writer and QA. Budget roughly $2–4/day (~$60–120/month) with a Console spend limit. Strict sourcing rules (every claim maps to a stored source). No user personal data goes to the LLM. |
-| Analytics | Cookieless, first-party: Beehiiv for email stats, a small Supabase events table for site signups (with UTM source) and CTA clicks. No consent banner needed; privacy policy updated to name Beehiiv and the AI provider. |
-| Brand and domain | Two names: newsletter "AI Remote Work Today" on its own domain, airemoteworktoday.com (owned), for the Beehiiv hub and sending; dashboard keeps its name and domain. Cross-linked; both in `src/config/site.ts`. |
-| Amir | The owner (Chris) is the editor and approves every issue. Amir shares his existing article automation (tools, prompts, sample outputs); it is saved under `docs/` and adapted into the Writer. No production access for Amir unless the owner decides otherwise. |
-| Repos | Newsletter code (agents, prompts, scheduled workflow, editorial docs, brand) in `cw1960/airemoteworktoday`. This repo keeps the shared database (migrations, RLS, pgTAP), ingestion Edge Functions and the site's signup form; newsletter schema ships here first. The newsletter workflow uses token-gated SQL functions, not the service role key. (Owner, 2026-10-02.) |
+- [x] N0: PRD reviewed, six decisions made, build plan approved (PR #39; docs then moved to the newsletter repo)
+- [x] N1: Privacy and Cookie notices cover the newsletter (Beehiiv, open/click tracking, the AI provider); newsletter name and domain in `src/config/site.ts`
 
-### Newsletter build plan
+**N2 — Signups from the site + cookieless analytics** (this repo)
 
-Same way of working as the dashboard: one phase at a time, a short plan before any code, the owner approves each PR, and each phase stops at its gate. Phases are ordered so subscribers can start signing up early while the content pipeline is built, and so every agent is proven on real runs before the next one depends on it. Agents write to tables the owner reviews; nothing sends without approval.
-
-**N0 — Planning** (this PR)
-
-- [x] Save the PRD as `docs/newsletter-prd.md`
-- [x] Decide the six open questions; record them here and in CLAUDE.md
-- [x] Owner approves this build plan (2026-10-02)
-
-Gate: plan approved.
-
-**N1 — Publication setup** (mostly owner steps; I give exact instructions for each)
-
-- [x] Newsletter domain: `airemoteworktoday.com` (already owned)
-- [ ] Beehiiv: fresh workspace on Pro (owner deletes "PrediGana Diario", 2026-10-02); create the publication; connect airemoteworktoday.com for the web hub and `mail.airemoteworktoday.com` for sending (DNS records, DMARC)
-- [x] Visual identity drafted from the site's tokens: logo, email banner and thumbnail in `docs/newsletter/brand/` (owner's request, 2026-10-02)
-- [ ] Beehiiv set up from `docs/newsletter/beehiiv-setup.md` (every setting's value; owner supplies postal address, reply-to and send days)
-- [ ] Claude Console: account, API key for the newsletter workflow, monthly spend limit
-- [ ] Editorial style guide (`docs/newsletter/style-guide.md`, drafted 2026-10-02, waiting for owner's edits): voice, terminology, compensation and availability language, sourcing rules, banned hype, uncertainty flags, formatting. I draft from the PRD; the owner edits
-- [ ] Newsletter structure doc (`docs/newsletter/structure.md`, drafted 2026-10-02, waiting for owner's edits): the four sections, item fields, CTA, disclosures
-- [ ] Amir's automation saved under `docs/newsletter/amir-automation/` and reviewed: what it does, what to keep for the Writer
-- [x] Owner's details (2026-10-02): postal address PO Box 101, Madisonville, KY 42431; reply-to support@airemoteworktoday.com; weekdays except US federal holidays; DNS in Netlify
-- [ ] Owner: airemoteworktoday.com added to Netlify DNS, Beehiiv's records added, and a mail service for support@ (see `beehiiv-setup.md` §2)
-- [x] Privacy and Cookie notices cover the newsletter (Beehiiv, open/click tracking, the AI provider); moved here from N2 so the Beehiiv site never collects signups without it (owner, 2026-10-02)
-- [x] Newsletter name and domain in `src/config/site.ts`
-
-Gate: Beehiiv publication live on its domain with the landing page; style guide approved.
-
-**N2 — Signups from the site + cookieless analytics**
-
-- [ ] Privacy policy: add the site's own signup form and `site_events` (Beehiiv and the AI provider are already covered, N1)
+- [ ] Privacy policy: add the site's own signup form and `site_events`
 - [ ] Newsletter signup form (server action → Beehiiv subscriptions API, Zod-validated, UTM source passed on) on the dashboard, job pages and site navigation
 - [ ] `site_events` table (RLS, insert via function, admin read) for signups and CTA clicks; no cookies, no personal data
 - [ ] Playwright and axe coverage for the form; previews never write to Beehiiv
 
 Gate: real signups arrive in Beehiiv with their source recorded.
 
-**N3 — Newsletter data layer**
+**N3 — Newsletter data layer** (this repo)
 
 - [ ] Migration: mark platforms as site-listed or newsletter-only; add the PRD's missing job fields (company, specialty, discovered date, verification status); every site query, the sitemap and `match_jobs` only show site-listed platforms (tests prove the site is unchanged)
 - [ ] Re-check terms and robots.txt, then restore the Invisible, Welo Data and xAI adapters as newsletter-only sources
@@ -378,49 +342,7 @@ Gate: real signups arrive in Beehiiv with their source recorded.
 
 Gate: at least 5 sources land on schedule for a week, and the site looks exactly as before.
 
-**N4 — Job picks and The Numbers**
-
-- [ ] Add `@anthropic-ai/sdk` (asked first, per the dependency rule) and the scheduled `newsletter-daily` GitHub Actions workflow (dry run first; production database only from `main`)
-- [ ] The Numbers: SQL functions for new jobs today, highest advertised rate, most active specialties, fastest-growing category
-- [ ] Job Intelligence agent: ranks the day's candidates into a shortlist with reasons and caveats, stored for review
-- [ ] Usage and cost logged per run
-
-Gate: a week of daily shortlists and numbers the owner judges useful; cost within budget.
-
-**N5 — News and research**
-
-- [ ] `sources` and research-notes tables
-- [ ] News Scout (web search) finds candidate developments
-- [ ] Research agent: primary source, corroboration, facts, uncertainty, announcement vs real opportunity, saved as notes with sources
-
-Gate: a week of research notes that pass the sourcing rules on the owner's spot checks.
-
-**N6 — Writer, QA, review and publishing** (first issues)
-
-- [ ] Writer agent, with Amir's automation's useful parts and the style guide built in
-- [ ] Editorial QA: claims map to sources, numbers match the SQL, links return 2xx, no hype or guarantees, structure; unresolved flags block "ready for review"
-- [ ] Owner-only review page in the app: read, edit, approve or reject each issue
-- [ ] On approval, the issue goes to Beehiiv by API (Create Post) and is scheduled; never before approval
-- [ ] "Written with AI, reviewed by an editor" and affiliate disclosures in the template
-
-Gate: five issues produced, approved and sent to a test segment.
-
-**N7 — Launch and subscriber relationship**
-
-- [ ] Five-email welcome sequence in Beehiiv (I draft, owner sets it up)
-- [ ] Share line in every issue; Beehiiv's referral program switched on, no rewards yet
-- [ ] Daily publishing begins
-
-Gate: two weeks of consistent daily issues, with open and click rates tracked.
-
-**N8 — Distribution drafts**
-
-- [ ] LinkedIn, X and Reddit drafts and short-video scripts generated from each approved issue, shown on the review page; never posted automatically
-- [ ] Standard CTA for every channel: "Get AI Remote Work Today free every day."
-
-Gate: the owner uses the drafts for two weeks and judges them worth keeping.
-
-**Later, only once readers show demand** (PRD §27): programmatic SEO pages (start with a few high-value categories), subscriber segmentation, an editorial performance dashboard, the sponsorship sheet and other monetization readiness.
+**N4 onwards** happen in the newsletter repo. Any tables or SQL functions they need (token-gated functions for the workflow, The Numbers, sources and research notes, issues) ship here in a PR first.
 
 ## Sources
 
