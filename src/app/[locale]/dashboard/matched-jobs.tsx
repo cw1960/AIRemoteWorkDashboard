@@ -32,7 +32,7 @@ export async function MatchedJobs({
         </div>
         {matches.length > 0 && (
           <Button asChild variant="editorialLink" size="touch" className="px-0">
-            <Link href="/">
+            <Link href="/jobs">
               {t("seeAll")}
               <ArrowRight aria-hidden="true" />
             </Link>
@@ -61,7 +61,7 @@ export async function MatchedJobs({
             copy={t("emptyBody")}
             action={
               <Button asChild variant="editorial" size="touch">
-                <Link href="/">{t("seeAll")}</Link>
+                <Link href="/jobs">{t("seeAll")}</Link>
               </Button>
             }
           />

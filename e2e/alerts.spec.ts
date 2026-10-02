@@ -30,7 +30,7 @@ test.describe("job alerts", () => {
     await expect(page.getByRole("link", { name: /Alerts on/ })).toBeVisible();
 
     // The same search (in any sort order) is recognised as saved.
-    await page.goto("/?domain=law");
+    await page.goto("/jobs?domain=law");
     await page.getByRole("link", { name: /Alerts on/ }).click();
     await expect(page).toHaveURL(/\/settings$/);
 
@@ -49,7 +49,7 @@ test.describe("job alerts", () => {
     await expect(frequency).toHaveValue("daily");
     await expect(item.getByRole("link", { name: "See jobs" })).toHaveAttribute(
       "href",
-      "/?domain=law",
+      "/jobs?domain=law",
     );
 
     await item.getByRole("button", { name: "Delete saved search Law" }).click();
