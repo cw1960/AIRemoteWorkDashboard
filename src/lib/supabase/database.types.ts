@@ -77,6 +77,7 @@ export type Database = {
           alerts_on: boolean;
           created_at: string;
           inbound_token: string;
+          last_recap_on: string | null;
           last_reminder_on: string | null;
           recap_on: boolean;
           reminders_on: boolean;
@@ -89,6 +90,7 @@ export type Database = {
           alerts_on?: boolean;
           created_at?: string;
           inbound_token?: string;
+          last_recap_on?: string | null;
           last_reminder_on?: string | null;
           recap_on?: boolean;
           reminders_on?: boolean;
@@ -101,6 +103,7 @@ export type Database = {
           alerts_on?: boolean;
           created_at?: string;
           inbound_token?: string;
+          last_recap_on?: string | null;
           last_reminder_on?: string | null;
           recap_on?: boolean;
           reminders_on?: boolean;
@@ -621,6 +624,19 @@ export type Database = {
           user_id: string;
         }[];
       };
+      due_recaps: {
+        Args: { p_day: string; p_token: string };
+        Returns: {
+          applied: number;
+          email: string;
+          locale: string;
+          matches: Json;
+          moves: number;
+          responses: number;
+          unsubscribe_token: string;
+          user_id: string;
+        }[];
+      };
       due_reminders: {
         Args: { p_day: string; p_token: string };
         Returns: {
@@ -653,6 +669,10 @@ export type Database = {
       log_outbound_click: { Args: { p_job_id: string }; Returns: boolean };
       mark_job_alerts_sent: {
         Args: { p_at: string; p_search_ids: string[]; p_token: string };
+        Returns: undefined;
+      };
+      mark_recap_sent: {
+        Args: { p_day: string; p_token: string; p_user_id: string };
         Returns: undefined;
       };
       mark_reminder_sent: {
