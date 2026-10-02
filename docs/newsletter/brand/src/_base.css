@@ -1,0 +1,59 @@
+/* Shared by the brand artboards. Values copied from src/styles/tokens.css
+   (the website's "indigo glass" theme) so the newsletter matches the site. */
+:root {
+  --foreground: oklch(0.94 0.008 280);
+  --muted-foreground: oklch(0.68 0.015 280);
+  --primary-foreground: oklch(0.98 0.004 280);
+  --gradient-primary: linear-gradient(
+    120deg,
+    oklch(0.6 0.15 272),
+    oklch(0.55 0.12 258)
+  );
+  --gradient-page: linear-gradient(
+    90deg,
+    oklch(0.33 0.05 355) 0%,
+    oklch(0.17 0.015 330) 45%,
+    oklch(0.08 0.006 300) 100%
+  );
+  --border: oklch(0.9 0.01 280 / 9%);
+}
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+body {
+  font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  color: var(--foreground);
+  overflow: hidden;
+}
+/* The site's brand tile: gradient square with a bold initial. The dot marks
+   the daily edition and is what sets the newsletter's mark apart. */
+.tile {
+  position: relative;
+  display: grid;
+  place-items: center;
+  background: var(--gradient-primary);
+  color: var(--primary-foreground);
+  font-weight: 800;
+  line-height: 1;
+}
+.tile .dot {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--primary-foreground);
+}
+.gradient-text {
+  background: linear-gradient(
+    120deg,
+    oklch(0.72 0.14 272),
+    oklch(0.68 0.12 250)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}

@@ -344,11 +344,12 @@ Gate: plan approved.
 **N1 — Publication setup** (mostly owner steps; I give exact instructions for each)
 
 - [x] Newsletter domain: `airemoteworktoday.com` (already owned)
-- [ ] Beehiiv: decide new workspace vs a third publication in the existing "PrediGana Diario" workspace (plan, billing and the subscriber cap are per workspace); upgrade to Pro; create the publication; connect the custom domain for the web hub and sending (DNS records)
-- [ ] Landing page and visual identity in Beehiiv (Lovable for any brand assets, same rule as the app)
+- [ ] Beehiiv: fresh workspace on Pro (owner deletes "PrediGana Diario", 2026-10-02); create the publication; connect airemoteworktoday.com for the web hub and `mail.airemoteworktoday.com` for sending (DNS records, DMARC)
+- [x] Visual identity drafted from the site's tokens: logo, email banner and thumbnail in `docs/newsletter/brand/` (owner's request, 2026-10-02)
+- [ ] Beehiiv set up from `docs/newsletter/beehiiv-setup.md` (every setting's value; owner supplies postal address, reply-to and send days)
 - [ ] Claude Console: account, API key for the newsletter workflow, monthly spend limit
-- [ ] Editorial style guide (`docs/newsletter/style-guide.md`): voice, terminology, compensation and availability language, sourcing rules, banned hype, uncertainty flags, formatting. I draft from the PRD; the owner edits
-- [ ] Newsletter structure doc (`docs/newsletter/structure.md`): the four sections, item fields, CTA, disclosures
+- [ ] Editorial style guide (`docs/newsletter/style-guide.md`, drafted 2026-10-02, waiting for owner's edits): voice, terminology, compensation and availability language, sourcing rules, banned hype, uncertainty flags, formatting. I draft from the PRD; the owner edits
+- [ ] Newsletter structure doc (`docs/newsletter/structure.md`, drafted 2026-10-02, waiting for owner's edits): the four sections, item fields, CTA, disclosures
 - [ ] Amir's automation saved under `docs/newsletter/amir-automation/` and reviewed: what it does, what to keep for the Writer
 - [ ] Add the newsletter name, domain and Beehiiv URLs to `src/config/site.ts`
 

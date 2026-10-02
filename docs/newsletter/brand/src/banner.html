@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Email banner 1500×500</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;800&display=block"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="_base.css" />
+    <style>
+      /* Shown at about 600px wide in email, so text is large here. */
+      body {
+        width: 1500px;
+        height: 500px;
+        background: var(--gradient-page);
+        display: flex;
+        align-items: center;
+        gap: 56px;
+        padding: 0 110px;
+      }
+      .tile {
+        width: 200px;
+        height: 200px;
+        border-radius: 44px;
+        font-size: 118px;
+        flex: none;
+      }
+      .tile .dot {
+        width: 22px;
+        height: 22px;
+        top: 44px;
+        right: 44px;
+      }
+      h1 {
+        font-size: 92px;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        line-height: 1.02;
+      }
+      p {
+        margin-top: 22px;
+        font-size: 36px;
+        font-weight: 500;
+        color: var(--muted-foreground);
+        line-height: 1.3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="tile"><span>A</span><i class="dot"></i></div>
+    <div>
+      <h1>AI Remote Work <span class="gradient-text">Today</span></h1>
+      <p>The daily briefing on the market for human work in AI</p>
+    </div>
+  </body>
+</html>
