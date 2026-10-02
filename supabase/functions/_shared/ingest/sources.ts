@@ -25,6 +25,10 @@ import {
   micro1PageRequest,
   parseMicro1Page,
 } from "./micro1.ts";
+import {
+  parseRemoExpertsOpportunities,
+  REMOEXPERTS_OPPORTUNITIES_URL,
+} from "./remoexperts.ts";
 
 export interface FetchContext {
   fetch: typeof fetch;
@@ -121,6 +125,16 @@ function lever(config: LeverSite) {
   };
 }
 
+async function fetchRemoExperts(ctx: FetchContext): Promise<SourceResult> {
+  const response = await request(ctx, REMOEXPERTS_OPPORTUNITIES_URL, {
+    headers: { Accept: "application/json" },
+  });
+  return {
+    ...parseRemoExpertsOpportunities(await response.json()),
+    requests: 1,
+  };
+}
+
 /** Platforms with an adapter, keyed by `platforms.slug`. */
 export const SOURCES = {
   mercor: fetchMercor,
@@ -128,6 +142,7 @@ export const SOURCES = {
   invisible: greenhouse(GREENHOUSE_BOARDS.invisible),
   "welo-data": lever(LEVER_SITES["welo-data"]),
   xai: greenhouse(GREENHOUSE_BOARDS.xai),
+  remoexperts: fetchRemoExperts,
 } as const satisfies Record<
   string,
   (ctx: FetchContext) => Promise<SourceResult>
