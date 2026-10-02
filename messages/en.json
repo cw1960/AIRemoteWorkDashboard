@@ -581,7 +581,7 @@
         "sections": {
           "collect": {
             "heading": "1. What we collect",
-            "body": "If you only browse, we don't ask for any personal data.\n\nIf you create an account, we keep: your email address; the profile answers you choose to give (field of work, skills, languages, country, availability and target pay); your tracker cards, notes, dates and stage history; your platform statuses; your saved searches; and your email preferences.\n\nWhen you click Apply, we record which job was clicked and when (and your account, if you're signed in), so we can measure referrals. Our hosting providers also keep standard technical logs, such as IP addresses, for security."
+            "body": "If you only browse, we don't ask for any personal data.\n\nIf you create an account, we keep: your email address; the profile answers you choose to give (field of work, skills, languages, country, availability and target pay); your tracker cards, notes, dates and stage history; your platform statuses; your saved searches; and your email preferences.\n\nIf you forward emails to your private tracking address, our email provider (Resend) receives them and we read them once to update your board. We keep only the sender's domain and the subject line, never the email itself.\n\nWhen you click Apply, we record which job was clicked and when (and your account, if you're signed in), so we can measure referrals. Our hosting providers also keep standard technical logs, such as IP addresses, for security."
           },
           "use": {
             "heading": "2. Why we use it",
@@ -699,5 +699,31 @@
     "openCard": "Open {title}",
     "emptyTitle": "You're all caught up",
     "emptyBody": "Follow-ups, assessments and new matches will show up here."
+  },
+  "Inbound": {
+    "heading": "Track by email",
+    "intro": "Forward application emails from Mercor or micro1 to your private address and we'll update your board.",
+    "copy": "Copy address",
+    "copied": "Copied",
+    "copyFailed": "Couldn't copy. Select the address and copy it yourself.",
+    "howTitle": "How it works",
+    "how1": "Forward a confirmation, interview invite, offer or rejection to this address.",
+    "how2": "When we're sure which card and stage it is, the card moves (or a card is created).",
+    "how3": "When we're not sure, it waits for you under \"Forwarded emails\" on your dashboard.",
+    "tip": "Tip: set a filter in your email to forward messages from mercor.com or micro1.ai automatically.",
+    "privacy": "We keep only the sender's domain and the subject line, never the email itself. Keep this address private: anyone who has it can forward emails to your board.",
+    "reviewTitle": "Forwarded emails",
+    "reviewIntro": "We weren't sure where these go. Choose a card and stage, or ignore them.",
+    "from": "From {domain} · {date}",
+    "noSubject": "(no subject)",
+    "card": "Card",
+    "newCard": "New {platform} card",
+    "chooseCard": "Choose a card",
+    "stage": "Stage",
+    "add": "Add to board",
+    "ignore": "Ignore",
+    "added": "Added to your board.",
+    "ignored": "Ignored.",
+    "failed": "Couldn't save. Please try again."
   }
 }

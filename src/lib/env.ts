@@ -36,6 +36,11 @@ export function getSiteUrl(): URL {
 const serverSchema = z.object({
   /** Unset (previews, local, CI): emails are skipped, not sent. */
   RESEND_API_KEY: z.string().startsWith("re_").optional(),
+  /** "true" once Resend receiving is set up: shows forwarding addresses. */
+  INBOUND_EMAIL_ENABLED: z
+    .enum(["true", "false"])
+    .default("false")
+    .transform((value) => value === "true"),
 });
 
 export type ServerEnv = z.infer<typeof serverSchema>;
@@ -43,5 +48,9 @@ export type ServerEnv = z.infer<typeof serverSchema>;
 /** Server-only env vars. Never call from client components. */
 export function getServerEnv(): ServerEnv {
   const key = process.env.RESEND_API_KEY;
-  return serverSchema.parse({ RESEND_API_KEY: key === "" ? undefined : key });
+  const inbound = process.env.INBOUND_EMAIL_ENABLED;
+  return serverSchema.parse({
+    RESEND_API_KEY: key === "" ? undefined : key,
+    INBOUND_EMAIL_ENABLED: inbound === "" ? undefined : inbound,
+  });
 }

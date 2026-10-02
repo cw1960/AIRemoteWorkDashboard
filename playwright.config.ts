@@ -23,6 +23,8 @@ export default defineConfig({
   webServer: {
     // Tests run against the production build (`pnpm build` first).
     command: `pnpm start --port ${port}`,
+    // Email auto-capture is on in tests, so Settings shows the address.
+    env: { INBOUND_EMAIL_ENABLED: "true" },
     url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 60_000,

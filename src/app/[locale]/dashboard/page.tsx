@@ -14,6 +14,7 @@ import {
   getMatchedJobs,
   profileCanMatch,
 } from "@/lib/matching/queries";
+import { getEmailsToReview } from "@/lib/inbound/queries";
 import { getPassport, type PassportEntry } from "@/lib/passport/queries";
 import { needsOnboarding } from "@/lib/profile/queries";
 import { buildTodayItems, type TodayItem } from "@/lib/today/items";
@@ -31,6 +32,7 @@ import {
 } from "@/lib/tracker/stats";
 
 import { Board, type BoardCardView } from "./board";
+import { EmailReview } from "./email-review";
 import { MatchedJobs } from "./matched-jobs";
 import { PipelineStats } from "./pipeline-stats";
 import { PlatformPassport } from "./platform-passport";
@@ -68,6 +70,7 @@ export default async function DashboardPage({
     passport,
     lastVisit,
     history,
+    toReview,
   ] = await Promise.all([
     getTranslations("Dashboard"),
     getTranslations("Job"),
@@ -78,6 +81,7 @@ export default async function DashboardPage({
     getPassport(),
     recordDashboardVisit(),
     getStageHistory(),
+    getEmailsToReview(),
   ]);
   const {
     items: todayItems,
@@ -141,6 +145,13 @@ export default async function DashboardPage({
         )}
 
         <TodayPanel items={todayItems} />
+
+        {toReview.length > 0 && (
+          <EmailReview
+            emails={toReview}
+            cards={views.map((card) => ({ id: card.id, title: card.title }))}
+          />
+        )}
 
         <PlatformPassport entries={passport} today={day} />
 

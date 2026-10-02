@@ -690,6 +690,24 @@ export type Database = {
           score: number;
         }[];
       };
+      record_inbound_email: {
+        Args: {
+          p_from: string;
+          p_platform: string;
+          p_stage: Database["public"]["Enums"]["card_stage"];
+          p_subject: string;
+          p_token: string;
+        };
+        Returns: string;
+      };
+      resolve_inbound_email: {
+        Args: {
+          p_card_id?: string;
+          p_email_id: string;
+          p_stage: Database["public"]["Enums"]["card_stage"];
+        };
+        Returns: string;
+      };
       set_app_url: { Args: { p_url: string }; Returns: undefined };
       set_email_prefs_by_token: {
         Args: {

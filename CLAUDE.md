@@ -188,6 +188,12 @@ Key rules:
   "Run workflow" (dry run by default) pushes migrations, deploys functions,
   sets function secrets. `scripts/ingest-user-agent.mjs` builds the bot
   User-Agent from `siteConfig`.
+- Email auto-capture: `supabase/functions/inbound-email/` (Resend
+  `email.received` webhook, Svix signature check) with pure rules in
+  `supabase/functions/_shared/inbound/`; `record_inbound_email()` moves or
+  creates the card, or files the email under "Needs review"
+  (`src/app/[locale]/dashboard/email-review.tsx`). Settings shows the
+  forwarding address only when `INBOUND_EMAIL_ENABLED=true`.
 - `src/app/sitemap.ts` — `/sitemap.xml`: public pages, listed platforms and
   open jobs (hourly). `robots.ts` lists it in production only.
 - `e2e/` — Playwright (mobile + desktop, axe checks). `tests/` and
