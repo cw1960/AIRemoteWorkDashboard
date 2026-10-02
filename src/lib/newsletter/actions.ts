@@ -50,7 +50,8 @@ export async function subscribeToNewsletter(
 
 /** A failed count never fails the signup itself. */
 async function logSignup(signup: SignupInput): Promise<void> {
-  const { error } = await createSupabaseAnonClient().rpc("log_site_event", {
+  const supabase = createSupabaseAnonClient();
+  const { error } = await supabase.rpc("log_site_event", {
     p_event: "newsletter_signup",
     p_source: signup.source,
     // The function stores an empty tag as null.
