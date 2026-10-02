@@ -22,9 +22,9 @@ select results_eq(
 );
 
 select public.ingest_jobs('xai', now() - interval '1 minute',
-  '[{"external_id": "x-1", "title": "AI Tutor", "domain": "law", "url": "https://example.com/x-1"}]');
+  '[{"external_id": "x-1", "title": "Zebrafish AI Tutor", "domain": "law", "url": "https://example.com/x-1"}]');
 select public.ingest_jobs('mercor', now() - interval '1 minute',
-  '[{"external_id": "m-1", "title": "Law Expert", "domain": "law", "url": "https://example.com/m-1"}]');
+  '[{"external_id": "m-1", "title": "Zebrafish Law Expert", "domain": "law", "url": "https://example.com/m-1"}]');
 
 create temporary table ids (slug text, id uuid) on commit drop;
 insert into ids
@@ -40,7 +40,7 @@ select results_eq(
 );
 
 insert into public.saved_searches (user_id, filters, created_at)
-values ('00000000-0000-0000-0000-0000000000a1', '{"domains": ["law"]}', now() - interval '1 day');
+values ('00000000-0000-0000-0000-0000000000a1', '{"q": "Zebrafish"}', now() - interval '1 day');
 
 create temporary table t (token text) on commit drop;
 insert into t select decrypted_secret from vault.decrypted_secrets where name = 'cron_token';
@@ -95,13 +95,13 @@ select results_eq(
   'matching suggests site jobs only'
 );
 select throws_ok(
-  $$ insert into public.tracker_cards (user_id, kind, job_id, title)
-     values ('00000000-0000-0000-0000-0000000000a1', 'job', (select id from ids where slug = 'xai'), 'AI Tutor') $$,
+  $$ insert into public.tracker_cards (kind, job_id, title)
+     values ('job', (select id from ids where slug = 'xai'), 'AI Tutor') $$,
   'P0002', null, 'a newsletter-only job cannot be tracked'
 );
 select lives_ok(
-  $$ insert into public.tracker_cards (user_id, kind, job_id, title)
-     values ('00000000-0000-0000-0000-0000000000a1', 'job', (select id from ids where slug = 'mercor'), 'Law Expert') $$,
+  $$ insert into public.tracker_cards (kind, job_id, title)
+     values ('job', (select id from ids where slug = 'mercor'), 'Law Expert') $$,
   'Mercor jobs can be tracked'
 );
 
