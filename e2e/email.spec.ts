@@ -104,16 +104,20 @@ test.describe("unsubscribe links", () => {
   });
 });
 
-test.describe("reminders cron route", () => {
-  test("refuses calls without the cron token", async ({ request }) => {
-    const none = await request.post("/api/cron/reminders", {
-      data: { day: "2026-10-05" },
+test.describe("email cron routes", () => {
+  for (const route of ["reminders", "recap"]) {
+    test(`${route} refuses calls without the cron token`, async ({
+      request,
+    }) => {
+      const none = await request.post(`/api/cron/${route}`, {
+        data: { day: "2026-10-05" },
+      });
+      expect(none.status()).toBe(401);
+      const wrong = await request.post(`/api/cron/${route}`, {
+        data: { day: "2026-10-05" },
+        headers: { "x-cron-token": "0".repeat(64) },
+      });
+      expect(wrong.status()).toBe(401);
     });
-    expect(none.status()).toBe(401);
-    const wrong = await request.post("/api/cron/reminders", {
-      data: { day: "2026-10-05" },
-      headers: { "x-cron-token": "0".repeat(64) },
-    });
-    expect(wrong.status()).toBe(401);
-  });
+  }
 });

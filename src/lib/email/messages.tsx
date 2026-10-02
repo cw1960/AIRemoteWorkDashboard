@@ -6,6 +6,7 @@ import { render } from "react-email";
 
 import { siteConfig } from "@/config/site";
 import { type AlertSearch, JobAlertEmail } from "@/emails/job-alert";
+import { RecapEmail } from "@/emails/recap";
 import { ReminderEmail } from "@/emails/reminder";
 import { WelcomeEmail } from "@/emails/welcome";
 import { routing } from "@/i18n/routing";
@@ -46,7 +47,7 @@ export function oneClickUnsubscribeUrl(token: string, list: EmailList): string {
 async function footer(
   locale: Locale,
   unsubscribeToken: string,
-  reasonKey: "reasonWelcome" | "reasonReminder" | "reasonAlert",
+  reasonKey: "reasonWelcome" | "reasonReminder" | "reasonAlert" | "reasonRecap",
 ) {
   const t = await getTranslations({ locale, namespace: "Emails" });
   return {
@@ -211,5 +212,76 @@ export async function jobAlertEmail(input: {
     html: await render(element),
     text: await render(element, { plainText: true }),
     unsubscribeUrl: oneClickUnsubscribeUrl(input.unsubscribeToken, "alerts"),
+  };
+}
+
+export interface RecapInput {
+  applied: number;
+  responses: number;
+  moves: number;
+  matches: {
+    id: string;
+    title: string;
+    platform: string;
+    pay_min: number | null;
+    pay_max: number | null;
+    pay_unit: string | null;
+  }[];
+}
+
+export async function recapEmail(input: {
+  to: string;
+  locale: string | null;
+  unsubscribeToken: string;
+  recap: RecapInput;
+}): Promise<OutgoingEmail> {
+  const locale = emailLocale(input.locale);
+  const [t, tJob] = await Promise.all([
+    getTranslations({ locale, namespace: "Emails.recap" }),
+    getTranslations({ locale, namespace: "Job" }),
+  ]);
+  const { applied, responses, moves, matches } = input.recap;
+  const element = (
+    <RecapEmail
+      lang={locale}
+      brand={siteConfig.name}
+      preview={t("preview", { matches: matches.length })}
+      heading={t("heading")}
+      intro={t("intro")}
+      stats={[
+        { value: String(applied), label: t("applied", { count: applied }) },
+        {
+          value: String(responses),
+          label: t("responses", { count: responses }),
+        },
+        { value: String(moves), label: t("moves", { count: moves }) },
+      ]}
+      matchesHeading={t("matchesHeading")}
+      matches={matches.map((job) => {
+        const amount = formatPayAmount(job.pay_min, job.pay_max, locale);
+        return {
+          title: job.title,
+          detail: [
+            job.platform,
+            amount
+              ? tJob("pay", { amount, unit: job.pay_unit ?? "other" })
+              : null,
+          ]
+            .filter(Boolean)
+            .join(" · "),
+          url: appUrl(`/jobs/${job.id}`, locale),
+        };
+      })}
+      cta={t("cta")}
+      dashboardUrl={appUrl("/dashboard", locale)}
+      footer={await footer(locale, input.unsubscribeToken, "reasonRecap")}
+    />
+  );
+  return {
+    to: input.to,
+    subject: t("subject", { applied, responses }),
+    html: await render(element),
+    text: await render(element, { plainText: true }),
+    unsubscribeUrl: oneClickUnsubscribeUrl(input.unsubscribeToken, "recap"),
   };
 }
