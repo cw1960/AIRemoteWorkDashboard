@@ -191,7 +191,7 @@ Seven phases, each ending at a gate. Don't start a phase until the previous gate
 - [x] Connect Netlify to the repo with deploy previews on pull requests
 - [x] Create Supabase dev and prod projects (changed: prod only; local stack for dev)
 - [x] Verify the Resend sending domain (SPF, DKIM, DMARC)
-- [ ] Set up the Resend receiving domain (`in.yourdomain.com`) and `email.received` webhook
+- [ ] Set up the Resend receiving domain and `email.received` webhook (receiving enabled and verified on `mail.airemoteworkdashboard.com`, owner 2026-10-02; webhook pending)
 - [x] Write `CLAUDE.md` with the schema, stack rules and "no Pro features in V1"
 
 Gate: an empty Next.js page deploys from `main`.

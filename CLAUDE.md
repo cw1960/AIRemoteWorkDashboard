@@ -26,7 +26,7 @@ get alerts.
   in `.env.example`. No secrets in client code or in git.
 - **Brand and domain live in one config file** (`src/config/site.ts`): name
   "AI Remote Work Dashboard", domain `airemoteworkdashboard.com`, sender
-  `mail.airemoteworkdashboard.com`, inbound `in.airemoteworkdashboard.com`,
+  `mail.airemoteworkdashboard.com` (also the inbound domain for auto-capture),
   contact email, and the operator named in the legal pages (El Barrial Devs,
   Santiago, Nuevo León, Mexico) with the legal pages' last-updated date. Locales live in `src/i18n/routing.ts`. Never hard-code
   these elsewhere.
@@ -146,7 +146,7 @@ Key rules:
   score and reason tags; feed and dashboard share it. Ineligible jobs hidden.
 - Dashboard zones: Today panel, Platform Passport, Matched jobs, Pipeline
   (Kanban, six columns, three card kinds). Rules-based, no AI.
-- Email auto-capture: `track+<token>@in.yourdomain.com` → Resend
+- Email auto-capture: `track+<token>@mail.airemoteworkdashboard.com` → Resend
   `email.received` webhook → Edge Function verifies signature → rules match
   sender domain + keywords → confident match creates/moves a card, otherwise
   "Needs review".
