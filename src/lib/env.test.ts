@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 
 import { siteConfig } from "@/config/site";
 
-import { getPublicEnv, getSiteUrl } from "./env";
+import { getPublicEnv, getServerEnv, getSiteUrl } from "./env";
 
 describe("getPublicEnv", () => {
   it("returns validated public variables", () => {
@@ -51,5 +51,14 @@ describe("getSiteUrl", () => {
   it("rejects a malformed URL", () => {
     vi.stubEnv("NEXT_PUBLIC_SITE_URL", "nope");
     expect(() => getSiteUrl()).toThrow();
+  });
+});
+
+describe("getServerEnv", () => {
+  it("keeps the forwarding address hidden unless turned on", () => {
+    vi.stubEnv("INBOUND_EMAIL_ENABLED", "");
+    expect(getServerEnv().INBOUND_EMAIL_ENABLED).toBe(false);
+    vi.stubEnv("INBOUND_EMAIL_ENABLED", "true");
+    expect(getServerEnv().INBOUND_EMAIL_ENABLED).toBe(true);
   });
 });

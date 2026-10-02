@@ -40,7 +40,9 @@ jobs:
 
       # The feed reads jobs at request time: build and test against a local
       # Supabase stack seeded with supabase/seed.sql (sample jobs only). Mailpit
-      # stays on: the sign-in test reads its magic link from there.
+      # stays on: the sign-in test reads its magic link from there. The local
+      # stack's service role key (a fixed demo key, not a secret) lets tests
+      # play the inbound-email function; the app itself never reads it.
       - name: Start local Supabase (API and seeded database)
         run: >
           pnpm exec supabase start
@@ -48,9 +50,10 @@ jobs:
       - name: Point the app at local Supabase
         run: >
           pnpm exec supabase status -o env
-          | grep -E '^(API_URL|ANON_KEY)='
+          | grep -E '^(API_URL|ANON_KEY|SERVICE_ROLE_KEY)='
           | sed -e 's/^API_URL=/NEXT_PUBLIC_SUPABASE_URL=/'
           -e 's/^ANON_KEY=/NEXT_PUBLIC_SUPABASE_ANON_KEY=/'
+          -e 's/^SERVICE_ROLE_KEY=/E2E_SUPABASE_SERVICE_ROLE_KEY=/'
           | tr -d '"' >> "$GITHUB_ENV"
 
       - run: pnpm build

@@ -57,7 +57,11 @@ export async function signIn(
 export async function ownEmailPrefs(
   page: Page,
   request: APIRequestContext,
-): Promise<{ unsubscribe_token: string; reminders_on: boolean }> {
+): Promise<{
+  unsubscribe_token: string;
+  reminders_on: boolean;
+  inbound_token: string;
+}> {
   const cookies = await page.context().cookies();
   const raw = cookies
     .filter((c) => /^sb-.+-auth-token(\.\d+)?$/.test(c.name))
@@ -70,7 +74,7 @@ export async function ownEmailPrefs(
   const { access_token } = JSON.parse(json) as { access_token: string };
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "http://127.0.0.1:54321";
   const response = await request.get(
-    `${url}/rest/v1/email_prefs?select=unsubscribe_token,reminders_on`,
+    `${url}/rest/v1/email_prefs?select=unsubscribe_token,reminders_on,inbound_token`,
     {
       headers: {
         apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "",
@@ -81,8 +85,43 @@ export async function ownEmailPrefs(
   const rows = (await response.json()) as {
     unsubscribe_token: string;
     reminders_on: boolean;
+    inbound_token: string;
   }[];
   const row = rows[0];
   if (!row) throw new Error("no email_prefs row");
   return row;
+}
+
+/**
+ * Records a forwarded email the way the inbound-email function does
+ * (record_inbound_email with the service role). Uses the local stack's
+ * service role key, which CI passes as E2E_SUPABASE_SERVICE_ROLE_KEY.
+ */
+export async function recordInboundEmail(
+  request: APIRequestContext,
+  email: {
+    token: string;
+    from: string;
+    subject: string;
+    platform: string | null;
+    stage: string | null;
+  },
+): Promise<string> {
+  const key = process.env.E2E_SUPABASE_SERVICE_ROLE_KEY ?? "";
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "http://127.0.0.1:54321";
+  const response = await request.post(
+    `${url}/rest/v1/rpc/record_inbound_email`,
+    {
+      headers: { apikey: key, Authorization: `Bearer ${key}` },
+      data: {
+        p_token: email.token,
+        p_from: email.from,
+        p_subject: email.subject,
+        p_platform: email.platform,
+        p_stage: email.stage,
+      },
+    },
+  );
+  expect(response.ok()).toBe(true);
+  return (await response.json()) as string;
 }
