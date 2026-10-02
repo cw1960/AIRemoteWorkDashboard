@@ -30,6 +30,11 @@ export default function Loading() {
           ))}
         </div>
         <Skeleton className="mt-12 h-7 w-32" />
+        <div className="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
+          {[0, 1, 2, 3].map((i) => (
+            <Skeleton key={i} className="h-24 rounded-2xl" />
+          ))}
+        </div>
         <div className="mt-5 grid grid-cols-1 gap-3 lg:grid-cols-6">
           {[0, 1, 2, 3, 4, 5].map((i) => (
             <Skeleton

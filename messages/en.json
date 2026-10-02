@@ -317,7 +317,22 @@
       "confirmDelete": "Delete",
       "deleteFailed": "Couldn't delete the card. Please try again."
     },
-    "emailSettings": "Email settings"
+    "emailSettings": "Email settings",
+    "movedOffered": "Moved “{title}” to Offered. Congratulations!",
+    "stats": {
+      "label": "Pipeline stats",
+      "appliedThisWeek": "Applied this week",
+      "responseRate": "Response rate",
+      "responseRateValue": "{rate}%",
+      "responseRateNote": "{responded} of {applied} heard back",
+      "noData": "—",
+      "noApplications": "No applications yet",
+      "daysPerStage": "Days per stage",
+      "days": "{stage}: {days, plural, one {# day} other {# days}}",
+      "noMoves": "Move a card to start the clock",
+      "hourlyInPlay": "Hourly value in play",
+      "hourlyNote": "{jobs, plural, =0 {No hourly jobs in progress} one {Across # job in progress} other {Across # jobs in progress}}"
+    }
   },
   "Track": {
     "trackThis": "Track this",

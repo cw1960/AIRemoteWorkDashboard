@@ -9,7 +9,12 @@ import {
   Sparkles,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { type SubmitEvent, useState, useTransition } from "react";
+import {
+  type ReactNode,
+  type SubmitEvent,
+  useState,
+  useTransition,
+} from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -38,6 +43,7 @@ import { STAGE_STYLES } from "@/lib/tracker/stage-styles";
 import { cn } from "@/lib/utils";
 
 import { CardDetailsSheet } from "./card-details";
+import { Celebration } from "./celebration";
 
 /** A card plus labels resolved on the server (dates, pay). */
 export interface BoardCardView extends BoardCard {
@@ -63,8 +69,11 @@ const DRAG_TYPE = "application/x-tracker-card";
 export function Board({
   initialCards,
   openCardId = null,
+  stats,
 }: {
   initialCards: BoardCardView[];
+  /** The stats line under the heading (rendered on the server). */
+  stats?: ReactNode;
   /** A card to open on arrival (the Today panel links to `?card=`). */
   openCardId?: string | null;
 }) {
@@ -72,13 +81,20 @@ export function Board({
   const [cards, setCards] = useState(initialCards);
   // Fresh server data (e.g. the Platform Passport moved a card) wins.
   const [serverCards, setServerCards] = useState(initialCards);
-  if (initialCards !== serverCards) {
-    setServerCards(initialCards);
-    setCards(initialCards);
-  }
+
   const [activeStage, setActiveStage] = useState<Stage>(
     () => initialCards[0]?.stage ?? "saved",
   );
+  if (initialCards !== serverCards) {
+    setServerCards(initialCards);
+    setCards(initialCards);
+    // Phones show one column: if it's empty now, show one with cards.
+    const first = initialCards[0];
+    if (first && !initialCards.some((c) => c.stage === activeStage)) {
+      setActiveStage(first.stage);
+    }
+  }
+  const [celebration, setCelebration] = useState(0);
   const [status, setStatus] = useState<{ text: string; error: boolean }>({
     text: "",
     error: false,
@@ -109,9 +125,13 @@ export function Board({
     const result = await moveCard({ id, stage }).catch(() => null);
     if (result?.ok) {
       setStatus({
-        text: t("moved", { title: card.title, stage: t(`stages.${stage}`) }),
+        text:
+          stage === "offered"
+            ? t("movedOffered", { title: card.title })
+            : t("moved", { title: card.title, stage: t(`stages.${stage}`) }),
         error: false,
       });
+      if (stage === "offered") setCelebration((n) => n + 1);
       return true;
     }
     update(card.stage, card.position);
@@ -146,6 +166,9 @@ export function Board({
           }}
         />
       </div>
+
+      {stats}
+      {celebration > 0 && <Celebration key={celebration} />}
 
       <p
         role={status.error ? "alert" : "status"}

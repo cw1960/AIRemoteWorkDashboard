@@ -19,10 +19,20 @@ import { needsOnboarding } from "@/lib/profile/queries";
 import { buildTodayItems, type TodayItem } from "@/lib/today/items";
 import { recordDashboardVisit } from "@/lib/today/queries";
 import { dueView } from "@/lib/tracker/dates";
-import { type BoardCard, getBoard } from "@/lib/tracker/queries";
+import {
+  type BoardCard,
+  getBoard,
+  getStageHistory,
+} from "@/lib/tracker/queries";
+import {
+  computeStats,
+  type PipelineStats as Stats,
+  type StatsEvent,
+} from "@/lib/tracker/stats";
 
 import { Board, type BoardCardView } from "./board";
 import { MatchedJobs } from "./matched-jobs";
+import { PipelineStats } from "./pipeline-stats";
 import { PlatformPassport } from "./platform-passport";
 import { TodayPanel } from "./today-panel";
 
@@ -48,22 +58,32 @@ export default async function DashboardPage({
     return null;
   }
 
-  const [t, tJob, cards, onboarding, matches, canMatch, passport, lastVisit] =
-    await Promise.all([
-      getTranslations("Dashboard"),
-      getTranslations("Job"),
-      getBoard(),
-      needsOnboarding(user.id),
-      getMatchedJobs(6),
-      profileCanMatch(),
-      getPassport(),
-      recordDashboardVisit(),
-    ]);
-  const { items: todayItems, day } = await todayView(
-    cards ?? [],
+  const [
+    t,
+    tJob,
+    cards,
+    onboarding,
+    matches,
+    canMatch,
     passport,
     lastVisit,
-  );
+    history,
+  ] = await Promise.all([
+    getTranslations("Dashboard"),
+    getTranslations("Job"),
+    getBoard(),
+    needsOnboarding(user.id),
+    getMatchedJobs(6),
+    profileCanMatch(),
+    getPassport(),
+    recordDashboardVisit(),
+    getStageHistory(),
+  ]);
+  const {
+    items: todayItems,
+    day,
+    stats,
+  } = await timeViews(cards ?? [], passport, lastVisit, history);
   const openCard = z.uuid().safeParse(params.card);
   const views = boardViews(cards ?? [], locale, (amount, unit) =>
     tJob("pay", { amount, unit }),
@@ -129,23 +149,29 @@ export default async function DashboardPage({
         <Board
           initialCards={views}
           openCardId={openCard.success ? openCard.data : null}
+          stats={views.length > 0 ? <PipelineStats stats={stats} /> : undefined}
         />
       </main>
     </>
   );
 }
 
-/** The Today panel's items, and today (UTC) as "YYYY-MM-DD". */
-async function todayView(
+/**
+ * What depends on the time: the Today panel's items, today (UTC) as
+ * "YYYY-MM-DD" and the Pipeline's stats.
+ */
+async function timeViews(
   cards: BoardCard[],
   passport: PassportEntry[],
   lastVisit: string | null,
-): Promise<{ items: TodayItem[]; day: string }> {
+  history: StatsEvent[],
+): Promise<{ items: TodayItem[]; day: string; stats: Stats }> {
   const now = Date.now();
   const newMatches = lastVisit ? await countNewMatches(lastVisit) : 0;
   return {
     items: buildTodayItems({ cards, passport, newMatches, now }),
     day: new Date(now).toISOString().slice(0, 10),
+    stats: computeStats(cards, history, now),
   };
 }
 

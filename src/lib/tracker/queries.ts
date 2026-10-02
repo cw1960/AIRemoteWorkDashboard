@@ -4,6 +4,7 @@ import { getSessionUser } from "@/lib/auth/session";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 import type { CardKind, Stage } from "./stages";
+import type { StatsEvent } from "./stats";
 
 /** One card on the board, with what its tile shows. */
 export interface BoardCard {
@@ -108,4 +109,22 @@ export async function trackedLookup(
   if (!user) return () => null;
   const tracked = await getTrackedJobIds(jobIds);
   return (jobId) => tracked.has(jobId);
+}
+
+/** The signed-in user's stage history, oldest first, for the stats line. */
+export async function getStageHistory(): Promise<StatsEvent[]> {
+  const user = await getSessionUser();
+  if (!user) return [];
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase
+    .from("card_events")
+    .select("card_id, to_stage, at")
+    .eq("user_id", user.id)
+    .order("at");
+  if (error) throw new Error(error.message);
+  return data.map((event) => ({
+    cardId: event.card_id,
+    toStage: event.to_stage,
+    at: event.at,
+  }));
 }
