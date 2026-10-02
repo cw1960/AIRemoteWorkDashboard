@@ -45,6 +45,8 @@ test.describe("card details", () => {
 
     let sheet = await openCard(page, "Acme direct");
     await expect(sheet.getByText("Added to Saved")).toBeVisible();
+    // Manual cards have no platform, so no playbook.
+    await expect(sheet.getByText(/What usually comes next/)).toHaveCount(0);
 
     await sheet.getByLabel("Notes").fill("Recruiter: Ana");
     await expect(sheet.getByRole("status")).toHaveText("Saved");
@@ -188,6 +190,17 @@ test.describe("card details", () => {
 
     const sheet = await openCard(page, "French Translator");
     await expect(sheet.getByText("$20–30 / hr")).toBeVisible();
+
+    // The platform's playbook follows the card's stage.
+    const playbook = sheet.getByRole("region", {
+      name: "What usually comes next on micro1",
+    });
+    await expect(playbook).toContainText("Apply on micro1's jobs portal");
+    await sheet.getByRole("button", { name: "Move to Applied" }).click();
+    await expect(playbook).toContainText("AI interview with Zara");
+    await expect(
+      playbook.getByRole("list", { name: "Checklist" }).getByRole("listitem"),
+    ).toHaveCount(2);
     await expect(sheet.getByText("Still open")).toBeVisible();
     await expect(sheet.getByLabel("Card title")).toHaveCount(0);
     await sheet.getByRole("link", { name: "View job page" }).click();
