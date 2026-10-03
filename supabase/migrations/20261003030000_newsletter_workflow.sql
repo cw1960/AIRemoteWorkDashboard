@@ -388,13 +388,14 @@ end;
 $$;
 
 -- Token-gated, so the workflow calls them with the public (anon) key and no
--- service role key. Signed-in users get nothing.
-revoke all on function public.newsletter_numbers(text, timestamptz, timestamptz) from public;
-revoke all on function public.newsletter_candidates(text, timestamptz) from public;
-revoke all on function public.newsletter_start_run(text, text, date) from public;
-revoke all on function public.newsletter_finish_run(text, uuid, text, integer, integer, integer, numeric, text) from public;
-revoke all on function public.newsletter_save_shortlist(text, uuid, jsonb) from public;
-revoke all on function public.newsletter_save_drafts(text, uuid, jsonb) from public;
+-- service role key. Signed-in users get nothing (Supabase grants them new
+-- functions by default, so they are revoked by name).
+revoke all on function public.newsletter_numbers(text, timestamptz, timestamptz) from public, authenticated;
+revoke all on function public.newsletter_candidates(text, timestamptz) from public, authenticated;
+revoke all on function public.newsletter_start_run(text, text, date) from public, authenticated;
+revoke all on function public.newsletter_finish_run(text, uuid, text, integer, integer, integer, numeric, text) from public, authenticated;
+revoke all on function public.newsletter_save_shortlist(text, uuid, jsonb) from public, authenticated;
+revoke all on function public.newsletter_save_drafts(text, uuid, jsonb) from public, authenticated;
 
 grant execute on function public.newsletter_numbers(text, timestamptz, timestamptz) to anon, service_role;
 grant execute on function public.newsletter_candidates(text, timestamptz) to anon, service_role;
