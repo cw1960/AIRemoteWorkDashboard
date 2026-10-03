@@ -7,6 +7,7 @@ const SECTIONS = [
   { key: "overview", href: "/admin" },
   { key: "users", href: "/admin/users" },
   { key: "listings", href: "/admin/listings" },
+  { key: "newsletter", href: "/admin/newsletter" },
 ] as const;
 
 type Section = (typeof SECTIONS)[number]["key"];

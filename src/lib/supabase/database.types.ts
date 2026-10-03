@@ -711,6 +711,46 @@ export type Database = {
           slug: string;
         }[];
       };
+      admin_newsletter_cost: {
+        Args: Record<PropertyKey, never>;
+        Returns: Json;
+      };
+      admin_newsletter_drafts: {
+        Args: { p_run_id: string };
+        Returns: {
+          body: string;
+          channel: string;
+          emailed_at: string | null;
+          id: string;
+        }[];
+      };
+      admin_newsletter_runs: {
+        Args: { p_limit?: number };
+        Returns: {
+          cost_usd: number;
+          drafts: number;
+          error: string | null;
+          id: string;
+          issue_date: string;
+          kind: string;
+          shortlisted: number;
+          started_at: string;
+          status: string;
+          web_searches: number;
+        }[];
+      };
+      admin_newsletter_shortlist: {
+        Args: { p_run_id: string };
+        Returns: {
+          caveats: string | null;
+          job_id: string;
+          platform: string;
+          rank: number;
+          reason: string;
+          title: string;
+          url: string;
+        }[];
+      };
       admin_platforms: {
         Args: Record<PropertyKey, never>;
         Returns: { id: string; name: string; slug: string }[];
@@ -852,6 +892,20 @@ export type Database = {
       mark_reminder_sent: {
         Args: { p_day: string; p_token: string; p_user_id: string };
         Returns: undefined;
+      };
+      newsletter_mark_drafts_emailed: {
+        Args: { p_ids: string[]; p_token: string };
+        Returns: undefined;
+      };
+      newsletter_unsent_drafts: {
+        Args: { p_run_id: string; p_token: string };
+        Returns: {
+          body: string;
+          channel: string;
+          id: string;
+          issue_date: string;
+          kind: string;
+        }[];
       };
       match_jobs: {
         Args: { p_job_ids?: string[]; p_limit?: number; p_user_id?: string };

@@ -25,6 +25,15 @@ export const siteConfig = {
   newsletter: {
     name: "AI Remote Work Today",
     domain: "airemoteworktoday.com",
+    /**
+     * Who gets the social drafts by email (newsletter repo's
+     * docs/distribution.md): LinkedIn drafts go to Amir, who posts them;
+     * everything else to the owner. Both are admins (private.admins).
+     */
+    draftsTo: {
+      linkedin: "hasheminia.amir@gmail.com",
+      other: "1960bcv@gmail.com",
+    },
   },
   /** Who runs the service, as named in the legal pages. */
   operator: {

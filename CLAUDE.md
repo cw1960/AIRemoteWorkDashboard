@@ -262,7 +262,9 @@ Key rules:
   User-Agent from `siteConfig`.
 - Admin area `/admin` (404 for non-admins; header "Admin" link for
   admins): Overview (site figures, newsletter signups, job source health),
-  Users (accounts with email, searchable) and Listings. Admins are emails
+  Users (accounts with email, searchable), Listings and Newsletter (the
+  workflow's runs and model spend, job picks, social drafts with Copy
+  buttons). Admins are emails
   in `private.admins`: the owner and Amir (owner's decision, 2026-10-03;
   the Privacy Notice says the operator and one administrator can see
   account emails). Every `admin_*` SQL function checks
@@ -273,6 +275,12 @@ Key rules:
   schema, duplicate rules, server actions). Hand-picked jobs have
   `source = 'manual'`, are always newsletter-only and are never closed by
   ingestion.
+- Newsletter drafts by email (N4): the newsletter workflow POSTs a run id
+  to `/api/newsletter/notify` with its token (`x-newsletter-token`); the
+  route reads unsent drafts through token-gated SQL and emails them through
+  Resend, LinkedIn drafts to Amir and the rest to the owner
+  (`siteConfig.newsletter.draftsTo`; grouping in
+  `src/lib/newsletter/drafts.ts`).
 - Newsletter signup (N2): `src/components/newsletter-signup.tsx` in the
   footer, on job pages and on the dashboard; `src/lib/newsletter/` holds the
   Zod schema, the Beehiiv API call and the server action, which also counts

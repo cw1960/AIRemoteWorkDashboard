@@ -6,12 +6,14 @@ import { render } from "react-email";
 
 import { siteConfig } from "@/config/site";
 import { type AlertSearch, JobAlertEmail } from "@/emails/job-alert";
+import { NewsletterDraftsEmail } from "@/emails/newsletter-drafts";
 import { RecapEmail } from "@/emails/recap";
 import { ReminderEmail } from "@/emails/reminder";
 import { WelcomeEmail } from "@/emails/welcome";
 import { routing } from "@/i18n/routing";
 import { getSiteUrl } from "@/lib/env";
 import { formatPayAmount } from "@/lib/jobs/format";
+import type { Channel } from "@/lib/newsletter/drafts";
 import { type Stage, STAGES } from "@/lib/tracker/stages";
 
 import type { EmailList } from "./prefs";
@@ -283,5 +285,51 @@ export async function recapEmail(input: {
     html: await render(element),
     text: await render(element, { plainText: true }),
     unsubscribeUrl: oneClickUnsubscribeUrl(input.unsubscribeToken, "recap"),
+  };
+}
+
+export async function newsletterDraftsEmail(input: {
+  to: string;
+  kind: "daily" | "weekly";
+  /** The issue date the drafts belong to (YYYY-MM-DD). */
+  issueDate: string;
+  drafts: { channel: Channel; body: string }[];
+}): Promise<OutgoingEmail> {
+  const locale = routing.defaultLocale;
+  const [t, tEmails, tChannels] = await Promise.all([
+    getTranslations({ locale, namespace: "Emails.newsletterDrafts" }),
+    getTranslations({ locale, namespace: "Emails" }),
+    getTranslations({ locale, namespace: "NewsletterChannels" }),
+  ]);
+  const date = new Intl.DateTimeFormat(locale, {
+    dateStyle: "full",
+    timeZone: "UTC",
+  }).format(new Date(`${input.issueDate}T00:00:00Z`));
+  const count = input.drafts.length;
+  const element = (
+    <NewsletterDraftsEmail
+      lang={locale}
+      brand={siteConfig.newsletter.name}
+      preview={t("preview", { count })}
+      heading={t("heading", { kind: input.kind })}
+      intro={t("intro", { date })}
+      drafts={input.drafts.map((draft) => ({
+        label: tChannels(draft.channel),
+        body: draft.body,
+      }))}
+      cta={t("cta")}
+      adminUrl={appUrl("/admin/newsletter", locale)}
+      footer={{
+        reason: tEmails("reasonNewsletterDrafts", {
+          newsletter: siteConfig.newsletter.name,
+        }),
+      }}
+    />
+  );
+  return {
+    to: input.to,
+    subject: t("subject", { kind: input.kind, date }),
+    html: await render(element),
+    text: await render(element, { plainText: true }),
   };
 }
