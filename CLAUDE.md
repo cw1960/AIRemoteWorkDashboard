@@ -255,12 +255,19 @@ Key rules:
   "Run workflow" (dry run by default) pushes migrations, deploys functions,
   sets function secrets. `scripts/ingest-user-agent.mjs` builds the bot
   User-Agent from `siteConfig`.
-- Hand-picked listings (N3): owner-only `/admin/listings`
-  (`src/app/[locale]/admin/listings/`, 404 for everyone else) and
-  `src/lib/listings/` (form schema, duplicate rules, server actions). Admins
-  are emails in `private.admins`; every `admin_*` SQL function checks
-  `private.is_admin()`. Hand-picked jobs have `source = 'manual'`, are
-  always newsletter-only and are never closed by ingestion.
+- Admin area `/admin` (404 for non-admins; header "Admin" link for
+  admins): Overview (site figures, newsletter signups, job source health),
+  Users (accounts with email, searchable) and Listings. Admins are emails
+  in `private.admins`: the owner and Amir (owner's decision, 2026-10-03;
+  the Privacy Notice says the operator and one administrator can see
+  account emails). Every `admin_*` SQL function checks
+  `private.is_admin()`; the area is read-only apart from listings.
+  Queries in `src/lib/admin/`.
+- Hand-picked listings (N3): `/admin/listings`
+  (`src/app/[locale]/admin/listings/`) and `src/lib/listings/` (form
+  schema, duplicate rules, server actions). Hand-picked jobs have
+  `source = 'manual'`, are always newsletter-only and are never closed by
+  ingestion.
 - Newsletter signup (N2): `src/components/newsletter-signup.tsx` in the
   footer, on job pages and on the dashboard; `src/lib/newsletter/` holds the
   Zod schema, the Beehiiv API call and the server action, which also counts
