@@ -169,7 +169,8 @@
       "alerts": "Get emailed new jobs that match your searches"
     },
     "consent": "By continuing you agree to our <terms>Terms of Use</terms> and <privacy>Privacy Notice</privacy>.",
-    "allJobs": "All jobs"
+    "allJobs": "All jobs",
+    "admin": "Admin"
   },
   "Onboarding": {
     "metaTitle": "Set up your profile",
