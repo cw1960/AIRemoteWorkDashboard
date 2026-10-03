@@ -50,7 +50,7 @@ describe("listingSchema", () => {
           payMin: "40",
           payMax: "62,5",
           payUnit: "hour",
-          countries: "us, mx;US ca",
+          countries: "United States, mexico; US\nCA",
           postedAt: "2026-10-01",
           verifiedAt: "2026-10-03",
         }),
@@ -71,11 +71,35 @@ describe("listingSchema", () => {
     ).toMatchObject({ platformId: null, platformName: "Atlas" });
   });
 
+  it("reads country names, aliases and codes", () => {
+    expect(
+      listingSchema.parse(
+        form({ countries: "United Kingdom, UK, Côte d’Ivoire, de" }),
+      ).countries,
+    ).toEqual(["CI", "DE", "GB"]);
+    expect(
+      listingSchema.parse(form({ countries: "Anywhere" })).countries,
+    ).toEqual([]);
+  });
+
+  it("reports the country names it doesn't recognise", () => {
+    const result = listingSchema.safeParse(
+      form({ countries: "Mexico, Atlantis, Narnia" }),
+    );
+    expect(result.success).toBe(false);
+    expect(result.error?.issues[0]).toMatchObject({
+      path: ["countries"],
+      params: { unknown: ["Atlantis", "Narnia"] },
+    });
+  });
+
   it("names the fields that are wrong", () => {
     expect(failingFields(form({ platformId: "" }))).toEqual(["platformName"]);
     expect(failingFields(form({ url: "http://example.com" }))).toEqual(["url"]);
     expect(failingFields(form({ title: " " }))).toEqual(["title"]);
-    expect(failingFields(form({ countries: "USA" }))).toEqual(["countries"]);
+    expect(failingFields(form({ countries: "Atlantis" }))).toEqual([
+      "countries",
+    ]);
     expect(failingFields(form({ payMin: "lots" }))).toEqual(["payMin"]);
     expect(
       failingFields(form({ payMin: "50", payMax: "40", payUnit: "hour" })),
