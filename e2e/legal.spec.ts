@@ -46,6 +46,9 @@ test.describe("legal pages", () => {
     await expect(
       page.getByText(/AI provider \(Anthropic\)[^.]*public information/),
     ).toBeVisible();
+    await expect(
+      page.getByText(/the operator and one administrator\) can see account/),
+    ).toBeVisible();
   });
 
   test("answer 404 for an unknown document", async ({ page }) => {

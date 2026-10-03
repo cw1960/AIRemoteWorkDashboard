@@ -15,6 +15,7 @@ import {
   isAdmin,
 } from "@/lib/listings/queries";
 
+import { AdminNav } from "../admin-nav";
 import { ListingActions } from "./listing-actions";
 import { ListingForm } from "./listing-form";
 
@@ -43,11 +44,12 @@ export default async function AdminListingsPage() {
       </SiteHeader>
       <main id="main" className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
         <h1 className="font-display text-3xl font-extrabold">{t("title")}</h1>
-        <p className="mt-2 text-muted-foreground">
+        <p className="mt-2 mb-6 text-muted-foreground">
           {t("intro", { newsletter: siteConfig.newsletter.name })}
         </p>
+        <AdminNav current="listings" />
 
-        <div className="mt-8">
+        <div>
           <ListingForm platforms={platforms} />
         </div>
 

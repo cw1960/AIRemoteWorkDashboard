@@ -687,6 +687,30 @@ export type Database = {
           verified_at: string | null;
         }[];
       };
+      admin_signup_stats: {
+        Args: Record<PropertyKey, never>;
+        Returns: {
+          last_30d: number;
+          last_7d: number;
+          source: string;
+          utm_campaign: string | null;
+          utm_source: string | null;
+        }[];
+      };
+      admin_site_stats: { Args: Record<PropertyKey, never>; Returns: Json };
+      admin_source_health: {
+        Args: Record<PropertyKey, never>;
+        Returns: {
+          failures_in_row: number;
+          last_error: string | null;
+          last_found: number;
+          last_started_at: string;
+          name: string;
+          newsletter_only: boolean;
+          open_jobs: number;
+          slug: string;
+        }[];
+      };
       admin_platforms: {
         Args: Record<PropertyKey, never>;
         Returns: { id: string; name: string; slug: string }[];
@@ -726,6 +750,18 @@ export type Database = {
           p_verified_at: string | null;
         };
         Returns: boolean;
+      };
+      admin_users: {
+        Args: { p_limit?: number; p_offset?: number; p_search?: string };
+        Returns: {
+          cards: number;
+          created_at: string;
+          email: string;
+          last_sign_in_at: string | null;
+          onboarded: boolean;
+          total: number;
+          user_id: string;
+        }[];
       };
       claim_welcome_email: {
         Args: Record<PropertyKey, never>;

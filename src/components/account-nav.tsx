@@ -76,7 +76,7 @@ export async function AccountNav() {
           size="touch"
           className="px-3 sm:px-5"
         >
-          <Link href="/admin/listings">
+          <Link href="/admin">
             <ShieldCheck aria-hidden="true" />
             <span className="sr-only sm:not-sr-only">{t("admin")}</span>
           </Link>
