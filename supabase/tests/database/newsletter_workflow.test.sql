@@ -2,7 +2,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 
-select plan(24);
+select plan(28);
 
 -- Fixtures (as postgres) ---------------------------------------------------
 -- Jobs in January 2020, away from the seeded sample jobs. The period under
@@ -178,6 +178,33 @@ select results_eq(
   $$ values ('linkedin'::text, 'Second'::text) $$,
   'only the latest drafts are kept'
 );
+
+-- A source's first import is its backlog, not new jobs -----------------------
+-- xAI's first successful run starts at noon on 12 January: its jobs first
+-- seen then or before (nw-3, nw-4) are its backlog. Later ones count.
+
+insert into public.ingest_runs (platform_id, started_at, finished_at, found)
+select id, '2020-01-12', '2020-01-12', 3 from public.platforms where slug = 'xai';
+insert into public.jobs (platform_id, external_id, title, domain, url,
+  first_seen_at, last_seen_at)
+select id, 'nw-8', 'Generalist', 'other', 'https://example.com/nw-8',
+  '2020-01-13', '2020-01-13'
+from public.platforms where slug = 'mercor';
+
+delete from n;
+insert into n
+select public.newsletter_numbers((select token from t), '2020-01-08', '2020-01-15');
+
+select is((select (v ->> 'new_jobs')::int from n), 6,
+  'new jobs leave out a source''s first import');
+select is((select v -> 'by_platform' from n),
+  '[{"platform": "Mercor", "jobs": 5}, {"platform": "xAI", "jobs": 1}]'::jsonb,
+  'by platform, without the backlog');
+select is((select v -> 'busiest_fields' from n),
+  '[{"field": "law", "jobs": 2}, {"field": "math", "jobs": 1}, {"field": "medicine", "jobs": 1}]'::jsonb,
+  'busiest fields leave out the catch-all "other"');
+select is((select v -> 'top_hourly' ->> 'title' from n), 'Patent Attorney',
+  'the top hourly rate comes from new jobs only');
 
 select * from finish();
 rollback;

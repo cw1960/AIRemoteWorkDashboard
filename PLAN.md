@@ -357,8 +357,9 @@ Gate: at least 5 sources land on schedule for a week, and the site looks exactly
 **N4 — Job picks and The Numbers, database side** (this repo; started early, owner 2026-10-03)
 
 - [x] PR A (#47, deployed 2026-10-03): newsletter token in Vault; `newsletter_runs`, `job_shortlists` and `social_drafts` (admin only); token-gated `newsletter_numbers()` (new jobs, by platform, busiest fields, top advertised hourly rate, fastest-growing field), `newsletter_candidates()` (open jobs, public fields, whether they link through `/go`), and functions to start and finish runs and save shortlists and drafts; pgTAP
-- [ ] PR B: `/api/newsletter/notify` emails the drafts through Resend (LinkedIn to Amir, the rest to the owner); a Newsletter tab in `/admin` with runs, cost, shortlist and drafts
-- [ ] Owner: deploy, then copy the newsletter token into the newsletter repo's GitHub secrets (exact steps given at the time)
+- [x] PR B (#48, deployed 2026-10-03): `/api/newsletter/notify` emails the drafts through Resend (LinkedIn to Amir, the rest to the owner); a Newsletter tab in `/admin` with runs, cost, shortlist and drafts
+- [x] Owner: deploy, then copy the newsletter token into the newsletter repo's GitHub secrets (2026-10-03)
+- [ ] The Numbers count only really new jobs: a source's first import (its backlog) is left out, and "other" is left out of the field rankings (found in the first dry run, 2026-10-03)
 
 **N4 onwards** happen in the newsletter repo. Any tables or SQL functions they need (token-gated functions for the workflow, The Numbers, sources and research notes, issues) ship here in a PR first.
 
