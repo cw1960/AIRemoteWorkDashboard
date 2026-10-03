@@ -2,6 +2,7 @@ import {
   BriefcaseBusiness,
   LayoutDashboard,
   LogOut,
+  ShieldCheck,
   UserRound,
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
@@ -9,12 +10,17 @@ import { getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { getSessionUser } from "@/lib/auth/session";
+import { isAdmin } from "@/lib/listings/queries";
 
-/** Header account area: "Sign in", or the signed-in email and "Sign out". */
+/**
+ * Header account area: "Sign in", or the signed-in email, the account
+ * links and "Sign out". Admins also get a link to the admin pages.
+ */
 export async function AccountNav() {
-  const [t, user] = await Promise.all([
+  const [t, user, admin] = await Promise.all([
     getTranslations("Auth"),
     getSessionUser(),
+    isAdmin(),
   ]);
 
   if (!user) {
@@ -63,6 +69,19 @@ export async function AccountNav() {
           <span className="sr-only sm:not-sr-only">{t("profile")}</span>
         </Link>
       </Button>
+      {admin && (
+        <Button
+          asChild
+          variant="editorialOutline"
+          size="touch"
+          className="px-3 sm:px-5"
+        >
+          <Link href="/admin/listings">
+            <ShieldCheck aria-hidden="true" />
+            <span className="sr-only sm:not-sr-only">{t("admin")}</span>
+          </Link>
+        </Button>
+      )}
       <form action="/auth/sign-out" method="post">
         <Button
           type="submit"

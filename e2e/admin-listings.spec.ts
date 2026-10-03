@@ -20,6 +20,8 @@ test.describe("hand-picked listings", () => {
     await expect(
       page.getByRole("heading", { level: 1, name: "Page not found" }),
     ).toBeVisible();
+    await page.goto("/dashboard");
+    await expect(page.getByRole("link", { name: "Admin" })).toHaveCount(0);
   });
 
   test("the editor adds a listing, is told about a repeat, and closes it", async ({
@@ -29,7 +31,9 @@ test.describe("hand-picked listings", () => {
     const project = testInfo.project.name;
     // A first sign-in goes to the profile form first; open the page directly.
     await signIn(page, request, `e2e-admin-${project}@example.com`);
-    await page.goto("/admin/listings");
+    await page.goto("/dashboard");
+    await page.getByRole("link", { name: "Admin" }).click();
+    await expect(page).toHaveURL(/\/admin\/listings$/);
     await expect(
       page.getByRole("heading", { level: 1, name: "Hand-picked listings" }),
     ).toBeVisible();
