@@ -23,7 +23,10 @@ const searchSchema = z.object({
   page: z.coerce.number().int().min(1).max(10_000).catch(1),
 });
 
-const cellClass = "border-b border-border px-3 py-2 text-left align-top";
+// Cells wrap long emails and errors so tables fit a phone without a
+// sideways-scrolling region.
+const cellClass =
+  "border-b border-border px-3 py-2 text-left align-top wrap-anywhere";
 
 function pageHref(q: string, page: number): string {
   const params = new URLSearchParams();
@@ -103,7 +106,7 @@ export default async function AdminUsersPage({
         {users.length === 0 ? (
           <p className="mt-6 text-sm">{t("empty")}</p>
         ) : (
-          <div className="mt-4 overflow-x-auto">
+          <div className="mt-4">
             <table className="w-full text-sm">
               <thead>
                 <tr>

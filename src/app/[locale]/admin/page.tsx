@@ -19,7 +19,10 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t("metaTitle"), robots: { index: false } };
 }
 
-const cellClass = "border-b border-border px-3 py-2 text-left align-top";
+// Cells wrap long emails and errors so tables fit a phone without a
+// sideways-scrolling region.
+const cellClass =
+  "border-b border-border px-3 py-2 text-left align-top wrap-anywhere";
 
 /** Admin overview: site activity, newsletter signups, job source health. */
 export default async function AdminPage() {
@@ -94,7 +97,7 @@ export default async function AdminPage() {
           {signups.length === 0 ? (
             <p className="mt-4 text-sm">{t("signups.empty")}</p>
           ) : (
-            <div className="mt-4 overflow-x-auto">
+            <div className="mt-4">
               <table className="w-full text-sm">
                 <thead>
                   <tr>
@@ -154,7 +157,7 @@ export default async function AdminPage() {
           {sources.length === 0 ? (
             <p className="mt-4 text-sm">{t("sources.empty")}</p>
           ) : (
-            <div className="mt-4 overflow-x-auto">
+            <div className="mt-4">
               <table className="w-full text-sm">
                 <thead>
                   <tr>
