@@ -2,13 +2,19 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 
-select plan(28);
+select plan(29);
 
 -- Fixtures (as postgres) ---------------------------------------------------
 -- Jobs in January 2020, away from the seeded sample jobs. The period under
 -- test is 8–15 January; 1–8 January is the period before it.
 
 create temporary table ids (ext text, id uuid) on commit drop;
+
+-- Both sources have been running since December, so every January job is
+-- new and both weeks compare like with like.
+insert into public.ingest_runs (platform_id, started_at, finished_at, found)
+select id, '2019-12-01', '2019-12-01', 1 from public.platforms
+where slug in ('mercor', 'xai');
 
 with new_jobs as (
   insert into public.jobs (platform_id, external_id, title, domain, pay_min,
@@ -179,10 +185,24 @@ select results_eq(
   'only the latest drafts are kept'
 );
 
--- A source's first import is its backlog, not new jobs -----------------------
--- xAI's first successful run starts at noon on 12 January: its jobs first
--- seen then or before (nw-3, nw-4) are its backlog. Later ones count.
+-- Growth compares like with like --------------------------------------------
+-- If Mercor's first run had been on 5 January, the week before 8 January
+-- isn't comparable for Mercor, and xAI alone has no field with 3 new jobs.
 
+update public.ingest_runs set started_at = '2020-01-05', finished_at = '2020-01-05'
+where platform_id = (select id from public.platforms where slug = 'mercor');
+
+select is(
+  public.newsletter_numbers((select token from t), '2020-01-08', '2020-01-15') -> 'fastest_growing',
+  'null'::jsonb,
+  'a source that started during the earlier period is left out of growth');
+
+-- A source's first import is its backlog, not new jobs -----------------------
+-- xAI's first successful run starts on 12 January: its jobs first seen then
+-- or before (nw-3, nw-4) are its backlog. Later ones count.
+
+delete from public.ingest_runs
+where platform_id = (select id from public.platforms where slug = 'xai');
 insert into public.ingest_runs (platform_id, started_at, finished_at, found)
 select id, '2020-01-12', '2020-01-12', 3 from public.platforms where slug = 'xai';
 insert into public.jobs (platform_id, external_id, title, domain, url,
