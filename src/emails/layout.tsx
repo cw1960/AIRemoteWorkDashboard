@@ -22,6 +22,11 @@ export interface EmailFooter {
   settingsUrl: string;
 }
 
+/** The footer of an email to the team (no list to unsubscribe from). */
+export interface StaffEmailFooter {
+  reason: string;
+}
+
 /** The frame every email shares: brand, content card and footer links. */
 export function EmailLayout({
   lang,
@@ -33,7 +38,7 @@ export function EmailLayout({
   lang: string;
   brand: string;
   preview: string;
-  footer: EmailFooter;
+  footer: EmailFooter | StaffEmailFooter;
   children: ReactNode;
 }) {
   return (
@@ -74,17 +79,23 @@ export function EmailLayout({
           <Text style={{ fontSize: "12px", color: theme.muted, margin: 0 }}>
             {footer.reason}
           </Text>
-          <Text
-            style={{ fontSize: "12px", color: theme.muted, margin: "8px 0 0" }}
-          >
-            <Link href={footer.unsubscribeUrl} style={{ color: theme.muted }}>
-              {footer.unsubscribeLabel}
-            </Link>
-            {" · "}
-            <Link href={footer.settingsUrl} style={{ color: theme.muted }}>
-              {footer.settingsLabel}
-            </Link>
-          </Text>
+          {"unsubscribeUrl" in footer && (
+            <Text
+              style={{
+                fontSize: "12px",
+                color: theme.muted,
+                margin: "8px 0 0",
+              }}
+            >
+              <Link href={footer.unsubscribeUrl} style={{ color: theme.muted }}>
+                {footer.unsubscribeLabel}
+              </Link>
+              {" · "}
+              <Link href={footer.settingsUrl} style={{ color: theme.muted }}>
+                {footer.settingsLabel}
+              </Link>
+            </Text>
+          )}
         </Container>
       </Body>
     </Html>

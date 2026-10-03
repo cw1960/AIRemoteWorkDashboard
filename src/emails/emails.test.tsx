@@ -2,6 +2,7 @@ import { render } from "react-email";
 import { describe, expect, it } from "vitest";
 
 import { JobAlertEmail } from "./job-alert";
+import { NewsletterDraftsEmail } from "./newsletter-drafts";
 import { RecapEmail } from "./recap";
 import { ReminderEmail } from "./reminder";
 import { WelcomeEmail } from "./welcome";
@@ -15,6 +16,28 @@ const footer = {
 };
 
 describe("email templates", () => {
+  it("renders newsletter drafts line by line, with no unsubscribe link", async () => {
+    const element = (
+      <NewsletterDraftsEmail
+        lang="en"
+        brand="Newsletter"
+        preview="Preview"
+        heading="This week's data post"
+        intro="Intro"
+        drafts={[{ label: "LinkedIn", body: "First line\nSecond <line>" }]}
+        cta="Open in the admin area"
+        adminUrl="https://example.com/admin/newsletter"
+        footer={{ reason: "Only admins receive these" }}
+      />
+    );
+    const html = await render(element);
+    expect(html).toContain("Second &lt;line&gt;");
+    expect(html).toContain('href="https://example.com/admin/newsletter"');
+    expect(html).not.toContain("unsubscribe");
+    const text = await render(element, { plainText: true });
+    expect(text).toContain("LinkedIn\nFirst line\nSecond <line>");
+  });
+
   it("renders the welcome email with its links", async () => {
     const html = await render(
       <WelcomeEmail

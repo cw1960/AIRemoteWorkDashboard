@@ -3,7 +3,12 @@ import { expect, type Page, test } from "@playwright/test";
 
 import { signIn, uniqueEmail } from "./helpers";
 
-const ADMIN_PAGES = ["/admin", "/admin/users", "/admin/listings"];
+const ADMIN_PAGES = [
+  "/admin",
+  "/admin/users",
+  "/admin/listings",
+  "/admin/newsletter",
+];
 
 async function expectNoAxeViolations(page: Page) {
   const axe = await new AxeBuilder({ page })
@@ -40,8 +45,9 @@ test.describe("admin area", () => {
     await expect(page.getByRole("link", { name: "Admin" })).toHaveCount(0);
   });
 
-  test("an admin sees the overview and users, and manages listings", async ({
+  test("an admin sees the overview, users and newsletter, and manages listings", async ({
     page,
+    context,
     request,
   }, testInfo) => {
     const project = testInfo.project.name;
@@ -89,6 +95,36 @@ test.describe("admin area", () => {
       page.getByRole("rowheader", { name: adminEmail }),
     ).toBeVisible();
     await expectNoAxeViolations(page);
+
+    // Newsletter: the seeded sample run (supabase/seed.sql), its pick and
+    // drafts, each with a working Copy button.
+    await page
+      .getByRole("navigation", { name: "Admin sections" })
+      .getByRole("link", { name: "Newsletter" })
+      .click();
+    await expect(
+      page.getByRole("heading", { level: 1, name: "Newsletter" }),
+    ).toBeVisible();
+    for (const name of ["Model spend", "Runs", "Job picks", "Social drafts"]) {
+      await expect(
+        page.getByRole("heading", { name, exact: true }),
+      ).toBeVisible();
+    }
+    await expect(
+      page.getByRole("listitem").filter({ hasText: "Data Analyst" }),
+    ).toContainText("Highest advertised hourly rate this week.");
+    await expectNoAxeViolations(page);
+    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+    const linkedin = page
+      .getByRole("listitem")
+      .filter({ has: page.getByRole("heading", { name: "LinkedIn" }) });
+    await linkedin
+      .getByRole("button", { name: "Copy the LinkedIn draft" })
+      .click();
+    await expect(linkedin.getByRole("status")).toHaveText("Copied.");
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
+      "New AI training roles this week.\nData analysts are in demand.",
+    );
 
     // Listings
     await page

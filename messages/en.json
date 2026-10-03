@@ -388,6 +388,14 @@
       "moves": "{count, plural, one {Stage change} other {Stage changes}}",
       "matchesHeading": "Top matches for you",
       "cta": "Open my dashboard"
+    },
+    "reasonNewsletterDrafts": "You're getting this because you post {newsletter}'s social drafts. Only admins receive them.",
+    "newsletterDrafts": {
+      "subject": "{kind, select, weekly {Weekly data post} other {Social drafts}} for {date}",
+      "preview": "{count, plural, one {# draft} other {# drafts}} ready to check and post.",
+      "heading": "{kind, select, weekly {This week's data post} other {Social drafts}}",
+      "intro": "Drafts for {date}. Check each one, edit it as you like and post it by hand: nothing is posted automatically.",
+      "cta": "Open in the admin area"
     }
   },
   "EmailSettings": {
@@ -827,7 +835,8 @@
       "label": "Admin sections",
       "overview": "Overview",
       "users": "Users",
-      "listings": "Listings"
+      "listings": "Listings",
+      "newsletter": "Newsletter"
     },
     "overview": {
       "metaTitle": "Admin",
@@ -892,6 +901,58 @@
       "next": "Next page",
       "page": "Page {page} of {pages}",
       "privacy": "Account email addresses are personal data. Use them only to run the service and answer support requests."
+    },
+    "newsletter": {
+      "metaTitle": "Newsletter",
+      "title": "Newsletter",
+      "intro": "What the {newsletter} workflow produced: job picks, social drafts to copy and post by hand, and what each run cost.",
+      "cost": {
+        "heading": "Model spend",
+        "last7": "Last 7 days",
+        "last30": "Last 30 days",
+        "thisMonth": "This month"
+      },
+      "runs": {
+        "heading": "Runs",
+        "empty": "No runs yet. They appear here once the newsletter workflow starts running.",
+        "issue": "Issue",
+        "kind": "Run",
+        "status": "Status",
+        "cost": "Cost",
+        "output": "Picks and drafts",
+        "outputValue": "{picks, plural, one {# pick} other {# picks}}, {drafts, plural, one {# draft} other {# drafts}}",
+        "view": "View",
+        "viewLabel": "View the run for {date}",
+        "kinds": {
+          "daily": "Daily",
+          "weekly": "Weekly"
+        },
+        "statuses": {
+          "running": "Running",
+          "succeeded": "Done",
+          "failed": "Failed"
+        }
+      },
+      "run": {
+        "heading": "Run for {date}",
+        "shortlist": "Job picks",
+        "shortlistEmpty": "This run picked no jobs.",
+        "caveats": "Caveats:",
+        "drafts": "Social drafts",
+        "draftsEmpty": "This run wrote no drafts.",
+        "emailed": "Emailed {date}",
+        "notEmailed": "Not emailed",
+        "copy": "Copy",
+        "copyLabel": "Copy the {channel} draft",
+        "copied": "Copied.",
+        "copyFailed": "Couldn't copy. Select the text and copy it instead."
+      }
     }
+  },
+  "NewsletterChannels": {
+    "linkedin": "LinkedIn",
+    "x": "X",
+    "reddit": "Reddit",
+    "video": "Video script"
   }
 }

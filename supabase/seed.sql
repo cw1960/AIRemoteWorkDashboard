@@ -39,3 +39,22 @@ join public.platforms p on p.slug = v.slug;
 insert into private.admins (email)
 values ('e2e-admin-mobile@example.com'), ('e2e-admin-desktop@example.com')
 on conflict (email) do nothing;
+
+-- A sample newsletter run with a shortlist and social drafts, for the
+-- end-to-end test of /admin/newsletter. It cost nothing, so it never
+-- changes the cost figures that tests check.
+with run as (
+  insert into public.newsletter_runs (id, kind, issue_date, finished_at, status)
+  values (md5('seed-newsletter-run')::uuid, 'weekly', current_date, now(), 'succeeded')
+  returning id
+)
+insert into public.job_shortlists (run_id, job_id, rank, reason, caveats)
+select run.id, md5('seed-mercor-12')::uuid, 1,
+  'Highest advertised hourly rate this week.', 'Wide pay range.'
+from run;
+
+insert into public.social_drafts (run_id, channel, body)
+values
+  (md5('seed-newsletter-run')::uuid, 'linkedin',
+   E'New AI training roles this week.\nData analysts are in demand.'),
+  (md5('seed-newsletter-run')::uuid, 'x', 'Data analyst roles advertised at up to $160/hr this week.');

@@ -54,3 +54,42 @@ export async function getUsers(search: string, page: number) {
 export type SignupStat = Awaited<ReturnType<typeof getSignupStats>>[number];
 export type SourceHealth = Awaited<ReturnType<typeof getSourceHealth>>[number];
 export type AdminUser = Awaited<ReturnType<typeof getUsers>>["users"][number];
+
+const newsletterCostSchema = z.object({
+  last_7d: z.number(),
+  last_30d: z.number(),
+  this_month: z.number(),
+});
+export type NewsletterCost = z.infer<typeof newsletterCostSchema>;
+
+/** Newsletter model spend in USD: last 7 and 30 days, this month. */
+export async function getNewsletterCost(): Promise<NewsletterCost> {
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase.rpc("admin_newsletter_cost");
+  if (error) throw new Error(error.message);
+  return newsletterCostSchema.parse(data);
+}
+
+/** The latest newsletter workflow runs, newest first. */
+export async function getNewsletterRuns() {
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase.rpc("admin_newsletter_runs");
+  if (error) throw new Error(error.message);
+  return data;
+}
+
+/** A run's job shortlist and social drafts. */
+export async function getNewsletterRun(runId: string) {
+  const supabase = await createSupabaseServerClient();
+  const [shortlist, drafts] = await Promise.all([
+    supabase.rpc("admin_newsletter_shortlist", { p_run_id: runId }),
+    supabase.rpc("admin_newsletter_drafts", { p_run_id: runId }),
+  ]);
+  if (shortlist.error) throw new Error(shortlist.error.message);
+  if (drafts.error) throw new Error(drafts.error.message);
+  return { shortlist: shortlist.data, drafts: drafts.data };
+}
+
+export type NewsletterRun = Awaited<
+  ReturnType<typeof getNewsletterRuns>
+>[number];
