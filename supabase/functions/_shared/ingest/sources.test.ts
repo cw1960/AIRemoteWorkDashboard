@@ -118,3 +118,21 @@ describe("Greenhouse and Lever sources", () => {
     await expect(SOURCES.xai(ctx)).rejects.toThrow(SourceHttpError);
   });
 });
+
+describe("remoexperts source", () => {
+  it("reads the opportunities endpoint once", async () => {
+    const { ctx, calls } = context(() => Response.json([]));
+    const result = await SOURCES.remoexperts(ctx);
+
+    expect(result).toEqual({ jobs: [], skipped: 0, requests: 1 });
+    expect(calls.map((call) => call.url)).toEqual([
+      "https://www.rex.zone/get-open-opportunities",
+    ]);
+    expect(calls[0]?.init.headers).toMatchObject({ "User-Agent": USER_AGENT });
+  });
+
+  it("fails the run on an HTTP error", async () => {
+    const { ctx } = context(() => new Response("busy", { status: 503 }));
+    await expect(SOURCES.remoexperts(ctx)).rejects.toThrow(SourceHttpError);
+  });
+});

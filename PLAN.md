@@ -337,7 +337,7 @@ Gate: real signups arrive in Beehiiv with their source recorded.
 
 - [x] Migration: `platforms.newsletter_only` (copied onto each job by trigger); RLS hides newsletter-only jobs from site reads, and the security-definer functions (matching, weekly recap, alerts, `/go`) and tracker cards filter them too. Mercor and micro1 stay site-listed, so their jobs show on the site and feed the newsletter (pgTAP proves both). Of the PRD's job fields, company, specialty and discovered date are the platform, `domain` and `first_seen_at`; verification status comes with manual entry
 - [x] Re-check terms and robots.txt, then restore the Invisible, Welo Data and xAI adapters as newsletter-only sources (vetting below)
-- [ ] Vet more official job-board sources (Greenhouse, Lever, Ashby) toward 10–15 in total; record each check in this file before building its adapter
+- [ ] Vet more official job-board sources (Greenhouse, Lever, Ashby) toward 10–15 in total; record each check in this file before building its adapter (2026-10-02: seven platforms vetted, RemoExperts built, see below)
 - [ ] Editor's manual entry for hand-picked listings (owner-only admin form)
 - [ ] Deduplication in code: new / duplicate / updated / uncertain, with uncertain cases in a review list
 
@@ -350,6 +350,9 @@ Gate: at least 5 sources land on schedule for a week, and the site looks exactly
 | Invisible | Greenhouse `boards-api.greenhouse.io/v1/boards/agency` | `Disallow: /embed/` only, feed allowed | invisibletech.ai has no terms page | Pass |
 | Welo Data | Lever `api.lever.co/v0/postings/weloglobal` | `Allow: /`, `Crawl-delay: 1` | welodata.ai has no terms page | Pass |
 | xAI | Greenhouse `boards-api.greenhouse.io/v1/boards/xai` | `Disallow: /embed/` only, feed allowed | No scraping, crawling or automated-access wording | Pass |
+| RemoExperts (rex.zone) | JSON `www.rex.zone/get-open-opportunities` (what the public Open Opportunities page loads; one request returns every open role) | `User-agent: *` with an empty `Disallow:`, everything allowed | rex.zone has no terms page | Pass |
+| Ethos | None: projects are matched privately to expert profiles | n/a | n/a | No public listings |
+| Atlas Capture, Neevo (Defined.ai), Pila8, Silencio, TaskVerse (TaskUs) | None: task apps that assign work after sign-up | n/a | n/a | No public listings; hand-picked or news items only |
 
 **N4 onwards** happen in the newsletter repo. Any tables or SQL functions they need (token-gated functions for the workflow, The Numbers, sources and research notes, issues) ship here in a PR first.
 

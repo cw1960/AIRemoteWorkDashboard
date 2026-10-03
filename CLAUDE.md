@@ -99,7 +99,8 @@ this repo:
    its jobs) keeps its jobs off the site: RLS hides them from site reads,
    and every security-definer function that reads jobs filters them
    explicitly. Mercor and micro1 jobs are site jobs and also feed the
-   newsletter. Built and vetted (2026-10-02): Invisible, Welo Data, xAI.
+   newsletter. Built and vetted (2026-10-02): Invisible, Welo Data, xAI,
+   RemoExperts.
    Platforms whose terms forbid scraping are never fetched; the editor adds
    their public listings by hand. Competitor boards and OpenTrain AI stay
    off-limits as job sources.

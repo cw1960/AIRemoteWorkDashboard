@@ -15,9 +15,9 @@ where user_id = '00000000-0000-0000-0000-0000000000a1';
 
 select results_eq(
   $$ select slug, newsletter_only from public.platforms
-     where slug in ('invisible', 'mercor', 'micro1', 'welo-data', 'xai') order by slug $$,
+     where slug in ('invisible', 'mercor', 'micro1', 'remoexperts', 'welo-data', 'xai') order by slug $$,
   $$ values ('invisible'::text, true), ('mercor', false), ('micro1', false),
-            ('welo-data', true), ('xai', true) $$,
+            ('remoexperts', true), ('welo-data', true), ('xai', true) $$,
   'only the vetted newsletter sources are newsletter-only'
 );
 

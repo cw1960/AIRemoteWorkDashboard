@@ -11,6 +11,7 @@ select results_eq(
   $$ values ('ingest-invisible'::text, '17 */6 * * *'::text),
             ('ingest-mercor', '7 */6 * * *'),
             ('ingest-micro1', '37 */6 * * *'),
+            ('ingest-remoexperts', '57 */6 * * *'),
             ('ingest-welo-data', '27 */6 * * *'),
             ('ingest-xai', '47 */6 * * *') $$,
   'each platform runs every 6 hours, staggered'
