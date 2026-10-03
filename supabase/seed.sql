@@ -33,3 +33,9 @@ from (values
   ('micro1', 'seed-micro1-12', 'Mechanical Engineer', 'Sample listing for local development and tests (Mechanical Engineer).', 'engineering', 60, 70, 'hour', '{}', '{}', '{}', 'https://example.com/micro1/12', '2026-09-27 12:00:00+00', 'closed')
 ) as v(slug, ext, title, summary, domain, lo, hi, unit, langs, countries, blocked, url, posted, status)
 join public.platforms p on p.slug = v.slug;
+
+-- Admins for the end-to-end tests of /admin/listings, one per Playwright
+-- project (local and CI only, like everything in this file).
+insert into private.admins (email)
+values ('e2e-admin-mobile@example.com'), ('e2e-admin-desktop@example.com')
+on conflict (email) do nothing;

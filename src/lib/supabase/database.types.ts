@@ -236,12 +236,15 @@ export type Database = {
           pay_unit: Database["public"]["Enums"]["pay_unit"] | null;
           platform_id: string;
           posted_at: string | null;
+          review_of: string | null;
+          source: string;
           status: Database["public"]["Enums"]["job_status"];
           summary: string | null;
           tags: string[];
           title: string;
           updated_at: string;
           url: string;
+          verified_at: string | null;
         };
         Insert: {
           closed_at?: string | null;
@@ -260,12 +263,15 @@ export type Database = {
           pay_unit?: Database["public"]["Enums"]["pay_unit"] | null;
           platform_id: string;
           posted_at?: string | null;
+          review_of?: string | null;
+          source?: string;
           status?: Database["public"]["Enums"]["job_status"];
           summary?: string | null;
           tags?: string[];
           title: string;
           updated_at?: string;
           url: string;
+          verified_at?: string | null;
         };
         Update: {
           closed_at?: string | null;
@@ -284,14 +290,24 @@ export type Database = {
           pay_unit?: Database["public"]["Enums"]["pay_unit"] | null;
           platform_id?: string;
           posted_at?: string | null;
+          review_of?: string | null;
+          source?: string;
           status?: Database["public"]["Enums"]["job_status"];
           summary?: string | null;
           tags?: string[];
           title?: string;
           updated_at?: string;
           url?: string;
+          verified_at?: string | null;
         };
         Relationships: [
+          {
+            foreignKeyName: "jobs_review_of_fkey";
+            columns: ["review_of"];
+            isOneToOne: false;
+            referencedRelation: "jobs";
+            referencedColumns: ["id"];
+          },
           {
             foreignKeyName: "jobs_platform_id_fkey";
             columns: ["platform_id"];
@@ -636,6 +652,81 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      admin_close_listing: { Args: { p_job_id: string }; Returns: boolean };
+      admin_listing_candidates: {
+        Args: { p_platform_id: string; p_url: string };
+        Returns: {
+          countries: string[];
+          id: string;
+          pay_max: number | null;
+          pay_min: number | null;
+          pay_unit: Database["public"]["Enums"]["pay_unit"] | null;
+          platform_id: string;
+          source: string;
+          title: string;
+          url: string;
+        }[];
+      };
+      admin_listings: {
+        Args: Record<PropertyKey, never>;
+        Returns: {
+          countries: string[];
+          created_at: string;
+          id: string;
+          pay_max: number | null;
+          pay_min: number | null;
+          pay_unit: Database["public"]["Enums"]["pay_unit"] | null;
+          platform_name: string;
+          posted_at: string | null;
+          review_of: string | null;
+          review_title: string | null;
+          review_url: string | null;
+          status: Database["public"]["Enums"]["job_status"];
+          title: string;
+          url: string;
+          verified_at: string | null;
+        }[];
+      };
+      admin_platforms: {
+        Args: Record<PropertyKey, never>;
+        Returns: { id: string; name: string; slug: string }[];
+      };
+      admin_resolve_listing: {
+        Args: { p_job_id: string; p_keep: boolean };
+        Returns: boolean;
+      };
+      admin_save_listing: {
+        Args: {
+          p_countries: string[];
+          p_pay_max: number | null;
+          p_pay_min: number | null;
+          p_pay_unit: Database["public"]["Enums"]["pay_unit"] | null;
+          p_platform_id: string | null;
+          p_platform_name: string;
+          p_posted_at: string | null;
+          p_review_of?: string | null;
+          p_summary: string;
+          p_title: string;
+          p_url: string;
+          p_verified_at: string | null;
+        };
+        Returns: string;
+      };
+      admin_update_listing: {
+        Args: {
+          p_countries: string[];
+          p_job_id: string;
+          p_pay_max: number | null;
+          p_pay_min: number | null;
+          p_pay_unit: Database["public"]["Enums"]["pay_unit"] | null;
+          p_posted_at: string | null;
+          p_summary: string;
+          p_title: string;
+          p_url: string;
+          p_verified_at: string | null;
+        };
+        Returns: boolean;
+      };
       claim_welcome_email: {
         Args: Record<PropertyKey, never>;
         Returns: {
@@ -703,6 +794,7 @@ export type Database = {
         Returns: Json;
       };
       log_outbound_click: { Args: { p_job_id: string }; Returns: boolean };
+      is_admin: { Args: Record<PropertyKey, never>; Returns: boolean };
       log_site_event: {
         Args: {
           p_event: string;
