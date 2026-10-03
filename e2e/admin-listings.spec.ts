@@ -27,12 +27,9 @@ test.describe("hand-picked listings", () => {
     request,
   }, testInfo) => {
     const project = testInfo.project.name;
-    await signIn(
-      page,
-      request,
-      `e2e-admin-${project}@example.com`,
-      "/admin/listings",
-    );
+    // A first sign-in goes to the profile form first; open the page directly.
+    await signIn(page, request, `e2e-admin-${project}@example.com`);
+    await page.goto("/admin/listings");
     await expect(
       page.getByRole("heading", { level: 1, name: "Hand-picked listings" }),
     ).toBeVisible();
