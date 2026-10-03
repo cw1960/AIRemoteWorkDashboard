@@ -360,7 +360,8 @@ Gate: at least 5 sources land on schedule for a week, and the site looks exactly
 - [x] PR B (#48, deployed 2026-10-03): `/api/newsletter/notify` emails the drafts through Resend (LinkedIn to Amir, the rest to the owner); a Newsletter tab in `/admin` with runs, cost, shortlist and drafts
 - [x] Owner: deploy, then copy the newsletter token into the newsletter repo's GitHub secrets (2026-10-03)
 - [x] The Numbers count only really new jobs: a source's first import (its backlog) is left out, and "other" is left out of the field rankings (found in the first dry run; #49, deployed 2026-10-03)
-- [ ] "Fastest-growing field" compares like with like: only sources already running when the earlier period began (found in the second dry run, 2026-10-03)
+- [x] "Fastest-growing field" compares like with like: only sources already running when the earlier period began (found in the second dry run; #50, deployed 2026-10-03)
+- [x] Newsletter workflow switched on (`NEWSLETTER_SCHEDULE`, 2026-10-03); first scheduled run Sunday 4 October
 
 **N4 onwards** happen in the newsletter repo. Any tables or SQL functions they need (token-gated functions for the workflow, The Numbers, sources and research notes, issues) ship here in a PR first.
 
