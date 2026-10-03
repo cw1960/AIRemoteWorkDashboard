@@ -50,6 +50,9 @@ test.describe("hand-picked listings", () => {
       await form.getByLabel("Pay from (USD)").fill("40");
       await form.getByLabel("Pay up to (USD)").fill("60");
       await form.getByLabel("Per", { exact: true }).selectOption("hour");
+      await form
+        .getByLabel("Countries (optional)")
+        .fill("United States, mexico");
       await form.getByRole("button", { name: "Check and save" }).click();
     }
 
@@ -69,6 +72,7 @@ test.describe("hand-picked listings", () => {
     );
     const item = page.getByRole("listitem").filter({ hasText: title });
     await expect(item).toContainText("Outlier");
+    await expect(item).toContainText("Mexico, United States");
     await expect(item).toContainText("Open");
 
     await submit();

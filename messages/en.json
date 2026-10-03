@@ -777,7 +777,7 @@
       "project": "project"
     },
     "countries": "Countries (optional)",
-    "countriesHint": "Two-letter codes such as US, MX. Leave empty if open everywhere.",
+    "countriesHint": "Country names, separated by commas, e.g. United States, Mexico. Leave empty if it's open everywhere.",
     "postedAt": "Posted on (optional)",
     "verifiedAt": "Checked on (optional)",
     "save": "Check and save",
@@ -801,9 +801,10 @@
       "payMin": "Enter a number.",
       "payMax": "Enter a number at least as high as “Pay from”.",
       "payUnit": "Choose what the pay is per.",
-      "countries": "Use two-letter codes, separated by commas.",
+      "countries": "Separate country names with commas.",
       "postedAt": "Enter a date.",
-      "verifiedAt": "Enter a date."
+      "verifiedAt": "Enter a date.",
+      "countriesUnknown": "Not recognised: {names}. Check the spelling (English names)."
     },
     "listTitle": "Your listings",
     "empty": "No hand-picked listings yet.",

@@ -6,6 +6,11 @@ import { z } from "zod";
 
 import type { Database } from "@/lib/supabase/database.types";
 
+import {
+  ALPHA3_TO_ALPHA2,
+  countriesFromLocation,
+} from "../../../supabase/functions/_shared/ingest/countries";
+
 export type PayUnit = Database["public"]["Enums"]["pay_unit"];
 
 export const PAY_UNITS = [
@@ -45,20 +50,46 @@ const optionalDate = z
   .refine((value) => value === "" || /^\d{4}-\d{2}-\d{2}$/.test(value))
   .transform((value) => (value === "" ? null : `${value}T00:00:00Z`));
 
-/** "us, CA mx" → ["CA", "MX", "US"]; empty means open to everyone. */
-const countryList = z
+const ALPHA2 = new Set(Object.values(ALPHA3_TO_ALPHA2));
+
+/** One country, by English name ("Mexico", "United States", "UK") or code. */
+function countryCode(entry: string): string | null {
+  const code = entry.toUpperCase();
+  if (/^[A-Z]{2}$/.test(code) && ALPHA2.has(code)) return code;
+  return countriesFromLocation(entry)[0] ?? null;
+}
+
+/**
+ * "United States, Mexico; uk" → ["GB", "MX", "US"]; empty (or "Anywhere")
+ * means open to everyone. Names that aren't recognised are reported back.
+ */
+export const countryList = z
   .string()
   .trim()
   .transform((value, ctx) => {
-    const codes = value
-      .toUpperCase()
-      .split(/[\s,;]+/)
-      .filter((code) => code !== "");
-    if (codes.some((code) => !/^[A-Z]{2}$/.test(code))) {
-      ctx.addIssue({ code: "custom", message: "countries" });
+    const entries = value
+      .split(/[,;\n]+/)
+      .map((entry) => entry.trim())
+      .filter((entry) => entry !== "");
+    if (entries.some((entry) => /^(anywhere|worldwide|global)$/i.test(entry))) {
+      return [];
+    }
+    const codes = new Set<string>();
+    const unknown: string[] = [];
+    for (const entry of entries) {
+      const code = countryCode(entry);
+      if (code) codes.add(code);
+      else unknown.push(entry);
+    }
+    if (unknown.length > 0) {
+      ctx.addIssue({
+        code: "custom",
+        message: "countries",
+        params: { unknown },
+      });
       return z.NEVER;
     }
-    return [...new Set(codes)].sort();
+    return [...codes].sort();
   });
 
 export const listingSchema = z

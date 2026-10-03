@@ -17,6 +17,8 @@ export type SaveListingResult =
       ok: false;
       error: "invalid" | "forbidden" | "preview" | "failed";
       fields?: string[];
+      /** Country names the form could not recognise. */
+      unknownCountries?: string[];
     };
 
 export type ListingActionResult =
@@ -44,10 +46,16 @@ function revalidate() {
 export async function saveListing(input: unknown): Promise<SaveListingResult> {
   const parsed = listingSchema.safeParse(input);
   if (!parsed.success) {
+    const unknown = parsed.error.issues.flatMap((issue) =>
+      issue.code === "custom"
+        ? (z.array(z.string()).safeParse(issue.params?.unknown).data ?? [])
+        : [],
+    );
     return {
       ok: false,
       error: "invalid",
       fields: [...new Set(parsed.error.issues.map((i) => String(i.path[0])))],
+      ...(unknown.length > 0 ? { unknownCountries: unknown } : {}),
     };
   }
   if (await onPreview()) return { ok: false, error: "preview" };

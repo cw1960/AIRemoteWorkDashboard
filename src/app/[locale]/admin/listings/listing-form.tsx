@@ -94,8 +94,17 @@ export function ListingForm({ platforms }: { platforms: AdminPlatform[] }) {
     ]
       .filter(Boolean)
       .join(" ") || undefined;
-  const errorFor = (field: Field) =>
-    invalid.has(field) ? t(`fieldErrors.${field}`) : undefined;
+  const unknownCountries =
+    result && !result.ok ? (result.unknownCountries ?? []) : [];
+  const errorFor = (field: Field) => {
+    if (!invalid.has(field)) return undefined;
+    if (field === "countries" && unknownCountries.length > 0) {
+      return t("fieldErrors.countriesUnknown", {
+        names: unknownCountries.join(", "),
+      });
+    }
+    return t(`fieldErrors.${field}`);
+  };
   const text = (form: FormData, name: string) => {
     const value = form.get(name);
     return typeof value === "string" ? value : "";
