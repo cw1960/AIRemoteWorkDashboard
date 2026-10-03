@@ -42,8 +42,9 @@ and the dashboard-side tasks (see "Newsletter" below).
   Never hard-code these elsewhere.
 - **Small, reviewable commits** with clear messages. Never rewrite pushed
   history.
-- Current phase: **Newsletter N3 — Newsletter data layer** (approved
-  2026-10-02; N1 and N2 are done). The dashboard's open Phase 5–7 items (beta invites, beta
+- Current phase: **Newsletter N4 — Job picks and The Numbers**, database
+  side (started early, owner 2026-10-03, while N3's week-of-sources gate
+  runs; N1 and N2 are done). The dashboard's open Phase 5–7 items (beta invites, beta
   fixes, Lovable screens) continue alongside (see PLAN.md → Build plan).
 
 ## Stack (fixed — do not substitute)
@@ -177,7 +178,7 @@ this repo:
   this is not spamming). Confirmed link formats: PLAN.md → Monetization.
 - Out of V1: headless-browser scraping, community, reviews, native apps.
 
-## Data model (12 tables, plus `site_events`)
+## Data model (12 tables, plus `site_events` and the newsletter's)
 
 Public read: `platforms`, `playbooks`, `jobs` (site jobs only:
 `newsletter_only` jobs are hidden from anon and users; `source` is `feed`
@@ -186,7 +187,11 @@ or `manual`, the editor's hand-picked listings). Admin only:
 Owner-only (RLS `user_id = auth.uid()`): everything user-owned.
 `outbound_clicks`: insert via function, admin read. `site_events` (newsletter
 N2): anonymous signup counts by source and campaign, insert via
-`log_site_event()`, admin read, no personal data.
+`log_site_event()`, admin read, no personal data. Newsletter workflow
+(N4): `newsletter_runs` (usage and cost per run), `job_shortlists`,
+`social_drafts`; admin only, written and read by the newsletter repo's
+workflow only through token-gated `newsletter_*()` functions (newsletter
+token in Vault), which read public job data only.
 
 | Table                | Key columns                                                                                                                                            |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |

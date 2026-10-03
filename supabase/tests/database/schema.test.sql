@@ -12,9 +12,10 @@ select tables_are(
   array[
     'platforms', 'playbooks', 'jobs', 'ingest_runs', 'profiles',
     'platform_memberships', 'tracker_cards', 'card_events', 'saved_searches',
-    'email_prefs', 'inbound_emails', 'outbound_clicks', 'site_events'
+    'email_prefs', 'inbound_emails', 'outbound_clicks', 'site_events',
+    'newsletter_runs', 'job_shortlists', 'social_drafts'
   ],
-  'public schema has exactly the twelve V1 tables plus site_events'
+  'public schema has the twelve V1 tables, site_events and the newsletter workflow tables'
 );
 
 select is(

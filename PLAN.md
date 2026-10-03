@@ -354,6 +354,12 @@ Gate: at least 5 sources land on schedule for a week, and the site looks exactly
 | Ethos | None: projects are matched privately to expert profiles | n/a | n/a | No public listings |
 | Atlas Capture, Neevo (Defined.ai), Pila8, Silencio, TaskVerse (TaskUs) | None: task apps that assign work after sign-up | n/a | n/a | No public listings; hand-picked or news items only |
 
+**N4 — Job picks and The Numbers, database side** (this repo; started early, owner 2026-10-03)
+
+- [ ] PR A: newsletter token in Vault; `newsletter_runs`, `job_shortlists` and `social_drafts` (admin only); token-gated `newsletter_numbers()` (new jobs, by platform, busiest fields, top advertised hourly rate, fastest-growing field), `newsletter_candidates()` (open jobs, public fields, whether they link through `/go`), and functions to start and finish runs and save shortlists and drafts; pgTAP
+- [ ] PR B: `/api/newsletter/notify` emails the drafts through Resend (LinkedIn to Amir, the rest to the owner); a Newsletter tab in `/admin` with runs, cost, shortlist and drafts
+- [ ] Owner: deploy, then copy the newsletter token into the newsletter repo's GitHub secrets (exact steps given at the time)
+
 **N4 onwards** happen in the newsletter repo. Any tables or SQL functions they need (token-gated functions for the workflow, The Numbers, sources and research notes, issues) ship here in a PR first.
 
 ## Sources

@@ -39,7 +39,8 @@ select is_empty(
     join pg_namespace n on n.oid = c.relnamespace
     where n.nspname = 'public'
       and c.relkind in ('r', 'p')
-      and c.relname not in ('ingest_runs', 'outbound_clicks', 'site_events')
+      and c.relname not in ('ingest_runs', 'outbound_clicks', 'site_events',
+                            'newsletter_runs', 'job_shortlists', 'social_drafts')
       and not exists (select 1 from pg_policy p where p.polrelid = c.oid)
   $$,
   'every non-admin public table has at least one policy'
