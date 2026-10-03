@@ -111,7 +111,9 @@ test.describe("admin area", () => {
       ).toBeVisible();
     }
     await expect(
-      page.getByRole("listitem").filter({ hasText: "Data Analyst" }),
+      page.getByRole("listitem").filter({
+        has: page.getByRole("link", { name: "Data Analyst", exact: true }),
+      }),
     ).toContainText("Highest advertised hourly rate this week.");
     await expectNoAxeViolations(page);
     await context.grantPermissions(["clipboard-read", "clipboard-write"]);
