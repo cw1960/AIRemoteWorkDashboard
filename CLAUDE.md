@@ -180,7 +180,8 @@ this repo:
 ## Data model (12 tables, plus `site_events`)
 
 Public read: `platforms`, `playbooks`, `jobs` (site jobs only:
-`newsletter_only` jobs are hidden from anon and users). Admin only:
+`newsletter_only` jobs are hidden from anon and users; `source` is `feed`
+or `manual`, the editor's hand-picked listings). Admin only:
 `ingest_runs`.
 Owner-only (RLS `user_id = auth.uid()`): everything user-owned.
 `outbound_clicks`: insert via function, admin read. `site_events` (newsletter
@@ -254,6 +255,12 @@ Key rules:
   "Run workflow" (dry run by default) pushes migrations, deploys functions,
   sets function secrets. `scripts/ingest-user-agent.mjs` builds the bot
   User-Agent from `siteConfig`.
+- Hand-picked listings (N3): owner-only `/admin/listings`
+  (`src/app/[locale]/admin/listings/`, 404 for everyone else) and
+  `src/lib/listings/` (form schema, duplicate rules, server actions). Admins
+  are emails in `private.admins`; every `admin_*` SQL function checks
+  `private.is_admin()`. Hand-picked jobs have `source = 'manual'`, are
+  always newsletter-only and are never closed by ingestion.
 - Newsletter signup (N2): `src/components/newsletter-signup.tsx` in the
   footer, on job pages and on the dashboard; `src/lib/newsletter/` holds the
   Zod schema, the Beehiiv API call and the server action, which also counts

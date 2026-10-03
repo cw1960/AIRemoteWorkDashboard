@@ -338,8 +338,8 @@ Gate: real signups arrive in Beehiiv with their source recorded.
 - [x] Migration: `platforms.newsletter_only` (copied onto each job by trigger); RLS hides newsletter-only jobs from site reads, and the security-definer functions (matching, weekly recap, alerts, `/go`) and tracker cards filter them too. Mercor and micro1 stay site-listed, so their jobs show on the site and feed the newsletter (pgTAP proves both). Of the PRD's job fields, company, specialty and discovered date are the platform, `domain` and `first_seen_at`; verification status comes with manual entry
 - [x] Re-check terms and robots.txt, then restore the Invisible, Welo Data and xAI adapters as newsletter-only sources (vetting below)
 - [ ] Vet more official job-board sources (Greenhouse, Lever, Ashby) toward 10–15 in total; record each check in this file before building its adapter (2026-10-02: seven platforms vetted, RemoExperts built, see below)
-- [ ] Editor's manual entry for hand-picked listings (owner-only admin form)
-- [ ] Deduplication in code: new / duplicate / updated / uncertain, with uncertain cases in a review list
+- [x] Editor's manual entry for hand-picked listings (owner-only `/admin/listings`; admins by email in `private.admins`; listings are always newsletter-only and never closed by ingestion)
+- [x] Deduplication in code: new / duplicate / updated / uncertain, with uncertain cases in a review list (`src/lib/listings/dedupe.ts`; applied to hand-picked listings)
 
 Gate: at least 5 sources land on schedule for a week, and the site looks exactly as before.
 
