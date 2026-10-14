@@ -131,7 +131,7 @@ export function IntroBand({
         </div>
 
         <div className="rounded-2xl border border-primary/30 bg-card/70 p-6 glass-panel">
-          <p className="inline-flex rounded-full bg-primary px-2.5 py-0.5 text-xs font-bold text-primary-foreground uppercase">
+          <p className="inline-flex rounded-full bg-foreground px-2.5 py-0.5 text-xs font-bold text-background uppercase">
             {t("spotlight.badge")}
           </p>
           <h3 className="mt-3 flex items-center gap-2 font-display text-2xl font-extrabold">
@@ -175,7 +175,7 @@ export function IntroBand({
               <span className="flex flex-wrap items-center gap-2 font-bold">
                 {t(`features.${key}.title`)}
                 {key === "resume" && (
-                  <span className="rounded-full bg-primary px-2 py-0.5 text-[0.65rem] font-bold text-primary-foreground uppercase">
+                  <span className="rounded-full bg-foreground px-2 py-0.5 text-[0.65rem] font-bold text-background uppercase">
                     {t("spotlight.badge")}
                   </span>
                 )}
