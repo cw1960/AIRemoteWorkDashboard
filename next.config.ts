@@ -16,6 +16,12 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
+  experimental: {
+    serverActions: {
+      // Resume uploads: files up to 4 MB, plus the form's overhead.
+      bodySizeLimit: "5mb",
+    },
+  },
   headers() {
     return Promise.resolve([{ source: "/:path*", headers: securityHeaders }]);
   },

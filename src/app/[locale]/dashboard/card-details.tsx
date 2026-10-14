@@ -447,6 +447,47 @@ function Editor({
           </section>
         )}
 
+        {card.job && (
+          <section
+            aria-labelledby="details-resume"
+            className="rounded-xl border border-border bg-card/60 p-3"
+          >
+            <h3
+              id="details-resume"
+              className="flex items-center gap-1.5 text-sm font-bold"
+            >
+              <FileText className="size-4" aria-hidden="true" />
+              {t("details.resume")}
+            </h3>
+            {card.tailoredResumeId ? (
+              <p className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-sm">
+                <Link
+                  href={`/resume/${card.tailoredResumeId}`}
+                  className="inline-flex min-h-11 items-center font-semibold text-primary hover:underline"
+                >
+                  {t("details.resumeView")}
+                </Link>
+                <a
+                  href={`/api/resumes/${card.tailoredResumeId}/download?format=docx`}
+                  className="inline-flex min-h-11 items-center font-semibold text-primary hover:underline"
+                >
+                  {t("details.resumeDownload")}
+                </a>
+              </p>
+            ) : (
+              <p className="mt-1 text-sm text-muted-foreground">
+                {t("details.resumeNone")}{" "}
+                <Link
+                  href={`/jobs/${card.job.id}#tailor`}
+                  className="inline-flex min-h-11 items-center font-semibold text-primary hover:underline"
+                >
+                  {t("details.resumeTailor")}
+                </Link>
+              </p>
+            )}
+          </section>
+        )}
+
         <section aria-labelledby="details-stage">
           <h3 id="details-stage" className="text-sm font-bold">
             {t("details.stage")}

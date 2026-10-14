@@ -44,7 +44,12 @@ test.describe("legal pages", () => {
       page.getByText(/Beehiiv \(newsletter delivery and the newsletter/),
     ).toBeVisible();
     await expect(
-      page.getByText(/AI provider \(Anthropic\)[^.]*public information/),
+      page.getByText(
+        /AI provider, Anthropic\. It helps research[^.]*public information/,
+      ),
+    ).toBeVisible();
+    await expect(
+      page.getByText(/we send Anthropic your master resume/),
     ).toBeVisible();
     await expect(
       page.getByText(/the operator and one administrator\) can see account/),

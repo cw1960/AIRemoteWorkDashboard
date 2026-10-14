@@ -23,7 +23,7 @@
     "db:reset": "supabase db reset",
     "db:test": "supabase test db",
     "db:types": "supabase gen types typescript --local > src/lib/supabase/database.types.ts && prettier --write src/lib/supabase/database.types.ts",
-    "functions:check": "deno check --config supabase/functions/ingest/deno.json supabase/functions/ingest/index.ts && deno check --config supabase/functions/inbound-email/deno.json supabase/functions/inbound-email/index.ts && deno lint --no-config supabase/functions",
+    "functions:check": "deno check --config supabase/functions/ingest/deno.json supabase/functions/ingest/index.ts && deno check --config supabase/functions/inbound-email/deno.json supabase/functions/inbound-email/index.ts && deno check --config supabase/functions/tailor-resume/deno.json supabase/functions/tailor-resume/index.ts && deno lint --no-config supabase/functions",
     "check": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm test"
   },
   "dependencies": {
@@ -38,16 +38,21 @@
     "@supabase/supabase-js": "^2.117.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "docx": "^9.11.0",
     "lucide-react": "^1.49.0",
+    "mammoth": "^1.13.0",
     "next": "16.3.6",
     "next-intl": "^4.14.7",
+    "pdf-lib": "^1.17.1",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "react-email": "6.11.0",
     "tailwind-merge": "^3.7.0",
+    "unpdf": "^1.8.1",
     "zod": "^4.6.5"
   },
   "devDependencies": {
+    "@anthropic-ai/sdk": "^0.133.0",
     "@axe-core/playwright": "^4.13.0",
     "@playwright/test": "^1.63.0",
     "@tailwindcss/postcss": "^4",

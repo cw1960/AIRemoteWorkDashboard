@@ -50,6 +50,40 @@ export async function signIn(
   await page.goto(await magicLink(request, email));
 }
 
+/** The signed-in user's access token, read from the auth cookie. */
+export async function accessToken(page: Page): Promise<string> {
+  const cookies = await page.context().cookies();
+  const raw = cookies
+    .filter((c) => /^sb-.+-auth-token(\.\d+)?$/.test(c.name))
+    .sort((a, b) => a.name.localeCompare(b.name, "en", { numeric: true }))
+    .map((c) => c.value)
+    .join("");
+  const json = raw.startsWith("base64-")
+    ? Buffer.from(raw.slice(7), "base64url").toString("utf8")
+    : decodeURIComponent(raw);
+  const { access_token } = JSON.parse(json) as { access_token: string };
+  return access_token;
+}
+
+/** Calls a database function through the REST API as the signed-in user. */
+export async function rpcAsUser(
+  page: Page,
+  request: APIRequestContext,
+  name: string,
+  args: Record<string, unknown>,
+): Promise<unknown> {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "http://127.0.0.1:54321";
+  const response = await request.post(`${url}/rest/v1/rpc/${name}`, {
+    headers: {
+      apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "",
+      Authorization: `Bearer ${await accessToken(page)}`,
+    },
+    data: args,
+  });
+  expect(response.ok(), await response.text()).toBe(true);
+  return response.json();
+}
+
 /**
  * Reads a column of the signed-in user's own email_prefs row through the
  * Supabase REST API, as that user (session from the auth cookie).
@@ -62,16 +96,7 @@ export async function ownEmailPrefs(
   reminders_on: boolean;
   inbound_token: string;
 }> {
-  const cookies = await page.context().cookies();
-  const raw = cookies
-    .filter((c) => /^sb-.+-auth-token(\.\d+)?$/.test(c.name))
-    .sort((a, b) => a.name.localeCompare(b.name, "en", { numeric: true }))
-    .map((c) => c.value)
-    .join("");
-  const json = raw.startsWith("base64-")
-    ? Buffer.from(raw.slice(7), "base64url").toString("utf8")
-    : decodeURIComponent(raw);
-  const { access_token } = JSON.parse(json) as { access_token: string };
+  const access_token = await accessToken(page);
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "http://127.0.0.1:54321";
   const response = await request.get(
     `${url}/rest/v1/email_prefs?select=unsubscribe_token,reminders_on,inbound_token`,

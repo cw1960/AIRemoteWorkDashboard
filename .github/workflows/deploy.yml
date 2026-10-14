@@ -6,7 +6,8 @@ name: Deploy to production
 #
 # Repository secrets:  SUPABASE_ACCESS_TOKEN, SUPABASE_DB_PASSWORD (required);
 #                      RESEND_API_KEY, ALERT_EMAIL (optional, failure alerts);
-#                      RESEND_WEBHOOK_SECRET (optional, email auto-capture).
+#                      RESEND_WEBHOOK_SECRET (optional, email auto-capture);
+#                      ANTHROPIC_API_KEY (optional, resume tailoring).
 # The bot's User-Agent comes from src/config/site.ts.
 
 on:
@@ -92,6 +93,10 @@ jobs:
         if: ${{ !inputs.dry_run }}
         run: pnpm exec supabase functions deploy inbound-email --project-ref "$SUPABASE_PROJECT_REF"
 
+      - name: Deploy the tailor-resume function
+        if: ${{ !inputs.dry_run }}
+        run: pnpm exec supabase functions deploy tailor-resume --project-ref "$SUPABASE_PROJECT_REF"
+
       - name: Set function secrets
         if: ${{ !inputs.dry_run }}
         env:
@@ -100,6 +105,7 @@ jobs:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
           RESEND_WEBHOOK_SECRET: ${{ secrets.RESEND_WEBHOOK_SECRET }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
           args=("INGEST_USER_AGENT=$INGEST_USER_AGENT" "INBOUND_DOMAIN=$INBOUND_DOMAIN")
           if [ -n "$RESEND_API_KEY" ]; then
@@ -116,6 +122,11 @@ jobs:
             args+=("RESEND_WEBHOOK_SECRET=$RESEND_WEBHOOK_SECRET")
           else
             echo "::warning::RESEND_WEBHOOK_SECRET not set: email auto-capture refuses every delivery."
+          fi
+          if [ -n "$ANTHROPIC_API_KEY" ]; then
+            args+=("ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY")
+          else
+            echo "::warning::ANTHROPIC_API_KEY not set: resume tailoring answers \"not configured\"."
           fi
           pnpm exec supabase secrets set --project-ref "$SUPABASE_PROJECT_REF" "${args[@]}"
 

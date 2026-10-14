@@ -317,6 +317,39 @@ export type Database = {
           },
         ];
       };
+      master_resumes: {
+        Row: {
+          content: string;
+          created_at: string;
+          file_name: string;
+          file_size: number;
+          file_type: string;
+          id: string;
+          is_active: boolean;
+          user_id: string;
+        };
+        Insert: {
+          content: string;
+          created_at?: string;
+          file_name: string;
+          file_size: number;
+          file_type: string;
+          id?: string;
+          is_active?: boolean;
+          user_id?: string;
+        };
+        Update: {
+          content?: string;
+          created_at?: string;
+          file_name?: string;
+          file_size?: number;
+          file_type?: string;
+          id?: string;
+          is_active?: boolean;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
       outbound_clicks: {
         Row: {
           at: string;
@@ -524,6 +557,79 @@ export type Database = {
         };
         Relationships: [];
       };
+      resume_generations: {
+        Row: {
+          company: string;
+          error: string | null;
+          finished_at: string | null;
+          id: number;
+          input_tokens: number | null;
+          job_id: string;
+          job_title: string;
+          master_resume_id: string | null;
+          model: string | null;
+          ok: boolean | null;
+          output_tokens: number | null;
+          started_at: string;
+          tailored_resume_id: string | null;
+          user_id: string;
+        };
+        Insert: {
+          company: string;
+          error?: string | null;
+          finished_at?: string | null;
+          id?: number;
+          input_tokens?: number | null;
+          job_id: string;
+          job_title: string;
+          master_resume_id?: string | null;
+          model?: string | null;
+          ok?: boolean | null;
+          output_tokens?: number | null;
+          started_at?: string;
+          tailored_resume_id?: string | null;
+          user_id: string;
+        };
+        Update: {
+          company?: string;
+          error?: string | null;
+          finished_at?: string | null;
+          id?: number;
+          input_tokens?: number | null;
+          job_id?: string;
+          job_title?: string;
+          master_resume_id?: string | null;
+          model?: string | null;
+          ok?: boolean | null;
+          output_tokens?: number | null;
+          started_at?: string;
+          tailored_resume_id?: string | null;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "resume_generations_job_id_fkey";
+            columns: ["job_id"];
+            isOneToOne: false;
+            referencedRelation: "jobs";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "resume_generations_master_resume_id_fkey";
+            columns: ["master_resume_id"];
+            isOneToOne: false;
+            referencedRelation: "master_resumes";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "resume_generations_tailored_resume_id_fkey";
+            columns: ["tailored_resume_id"];
+            isOneToOne: false;
+            referencedRelation: "tailored_resumes";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       saved_searches: {
         Row: {
           created_at: string;
@@ -584,6 +690,72 @@ export type Database = {
         };
         Relationships: [];
       };
+      tailored_resumes: {
+        Row: {
+          company: string;
+          content: Json;
+          created_at: string;
+          id: string;
+          job_id: string;
+          job_title: string;
+          master_resume_id: string | null;
+          model: string | null;
+          review: Json;
+          saved_at: string | null;
+          status: Database["public"]["Enums"]["tailored_resume_status"];
+          updated_at: string;
+          user_id: string;
+          version: number;
+        };
+        Insert: {
+          company: string;
+          content: Json;
+          created_at?: string;
+          id?: string;
+          job_id: string;
+          job_title: string;
+          master_resume_id?: string | null;
+          model?: string | null;
+          review?: Json;
+          saved_at?: string | null;
+          status?: Database["public"]["Enums"]["tailored_resume_status"];
+          updated_at?: string;
+          user_id: string;
+          version: number;
+        };
+        Update: {
+          company?: string;
+          content?: Json;
+          created_at?: string;
+          id?: string;
+          job_id?: string;
+          job_title?: string;
+          master_resume_id?: string | null;
+          model?: string | null;
+          review?: Json;
+          saved_at?: string | null;
+          status?: Database["public"]["Enums"]["tailored_resume_status"];
+          updated_at?: string;
+          user_id?: string;
+          version?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tailored_resumes_job_id_fkey";
+            columns: ["job_id"];
+            isOneToOne: false;
+            referencedRelation: "jobs";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tailored_resumes_master_resume_id_fkey";
+            columns: ["master_resume_id"];
+            isOneToOne: false;
+            referencedRelation: "master_resumes";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       tracker_cards: {
         Row: {
           applied_at: string | null;
@@ -596,6 +768,7 @@ export type Database = {
           platform_id: string | null;
           position: number;
           stage: Database["public"]["Enums"]["card_stage"];
+          tailored_resume_id: string | null;
           title: string;
           updated_at: string;
           user_id: string;
@@ -611,6 +784,7 @@ export type Database = {
           platform_id?: string | null;
           position?: number;
           stage?: Database["public"]["Enums"]["card_stage"];
+          tailored_resume_id?: string | null;
           title: string;
           updated_at?: string;
           user_id?: string;
@@ -626,6 +800,7 @@ export type Database = {
           platform_id?: string | null;
           position?: number;
           stage?: Database["public"]["Enums"]["card_stage"];
+          tailored_resume_id?: string | null;
           title?: string;
           updated_at?: string;
           user_id?: string;
@@ -643,6 +818,13 @@ export type Database = {
             columns: ["platform_id"];
             isOneToOne: false;
             referencedRelation: "platforms";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tracker_cards_tailored_resume_id_fkey";
+            columns: ["tailored_resume_id"];
+            isOneToOne: false;
+            referencedRelation: "tailored_resumes";
             referencedColumns: ["id"];
           },
         ];
@@ -859,6 +1041,19 @@ export type Database = {
         }[];
       };
       feed_facets: { Args: Record<PropertyKey, never>; Returns: Json };
+      finish_resume_generation: {
+        Args: {
+          p_content: Json;
+          p_error: string;
+          p_generation_id: number;
+          p_input_tokens: number;
+          p_model: string;
+          p_ok: boolean;
+          p_output_tokens: number;
+          p_review: Json;
+        };
+        Returns: string;
+      };
       ingest_jobs: {
         Args: {
           p_error?: string;
@@ -928,6 +1123,15 @@ export type Database = {
         };
         Returns: string;
       };
+      replace_master_resume: {
+        Args: {
+          p_content: string;
+          p_file_name: string;
+          p_file_size: number;
+          p_file_type: string;
+        };
+        Returns: string;
+      };
       resolve_inbound_email: {
         Args: {
           p_card_id?: string;
@@ -935,6 +1139,14 @@ export type Database = {
           p_stage: Database["public"]["Enums"]["card_stage"];
         };
         Returns: string;
+      };
+      resume_tailoring_usage: {
+        Args: Record<PropertyKey, never>;
+        Returns: { daily_limit: number; used: number }[];
+      };
+      save_tailored_resume: {
+        Args: { p_content: Json; p_final: boolean; p_id: string };
+        Returns: undefined;
       };
       set_app_url: { Args: { p_url: string }; Returns: undefined };
       set_email_prefs_by_token: {
@@ -947,6 +1159,16 @@ export type Database = {
         Returns: boolean;
       };
       set_ingest_url: { Args: { p_url: string }; Returns: undefined };
+      start_resume_generation: {
+        Args: { p_job_id: string };
+        Returns: {
+          company: string;
+          generation_id: number;
+          job_title: string;
+          master_content: string;
+          master_resume_id: string;
+        }[];
+      };
       verify_ingest_token: { Args: { p_token: string }; Returns: boolean };
     };
     Enums: {
@@ -973,6 +1195,7 @@ export type Database = {
         | "session"
         | "project";
       search_frequency: "daily" | "weekly";
+      tailored_resume_status: "draft" | "saved";
     };
     CompositeTypes: {
       [_ in never]: never;
@@ -1133,6 +1356,7 @@ export const Constants = {
         "project",
       ],
       search_frequency: ["daily", "weekly"],
+      tailored_resume_status: ["draft", "saved"],
     },
   },
 } as const;

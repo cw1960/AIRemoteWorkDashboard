@@ -70,6 +70,8 @@ and the dashboard-side tasks (see "Newsletter" below).
 - **Claude API** (`@anthropic-ai/sdk`) for the newsletter agents, which live
   in the separate newsletter repo `cw1960/airemoteworktoday` and run there on
   a scheduled **GitHub Actions** workflow (see Newsletter below).
+  In this repo it powers resume tailoring only, from the `tailor-resume`
+  Edge Function (key: `ANTHROPIC_API_KEY`, a Supabase function secret).
 - **GitHub** for source and CI (GitHub Actions must pass before merge).
 - **Lovable is for visual design only.** Do not invent final visual designs.
   Build clean, token-based components (colors, type, spacing, radii as CSS
@@ -140,7 +142,10 @@ this repo:
 ## Hard scope rules (V1)
 
 - **V1 is completely free.** No Stripe, no Pro tier, no paywalls, no upsell
-  nudges, no Resume Tuner, no Interview Simulator.
+  nudges, no Interview Simulator.
+- **Resume tailoring is in (owner's decision, 2026-10-14)**, free, limited to
+  5 generations per user per rolling 24 hours (`private.resume_daily_limit()`).
+  It must never invent facts: see Resume tailoring below.
 - **Only platforms with a referral program get a fetcher** (owner's decision,
   2026-10-01: referrals are how the app earns). Build an adapter only after
   the platform's referral link format is confirmed and recorded in PLAN.md →
@@ -207,6 +212,12 @@ token in Vault), which read public job data only.
 | email_prefs          | user_id, alerts_on, reminders_on, recap_on, inbound_token, unsubscribe_token                                                                           |
 | inbound_emails       | user_id, from_domain, subject, matched_platform_id, matched_stage, card_id, status (applied/needs_review/ignored)                                      |
 | outbound_clicks      | job_id, user_id (nullable), referrer_used, at                                                                                                          |
+| master_resumes       | user_id, file_name, file_type (pdf/docx), file_size, content (text only, never the file), is_active                                                    |
+| tailored_resumes     | user_id, job_id, master_resume_id, version, job_title, company (snapshots), content (json), review (json), status (draft/saved), saved_at              |
+| resume_generations   | user_id, job_id, started_at, finished_at, ok, error, model, input/output tokens (no content; no user access)                                           |
+
+`tracker_cards.tailored_resume_id` points at the saved tailored resume for
+that application (set by `save_tailored_resume()`).
 
 Key rules:
 
@@ -221,6 +232,25 @@ Key rules:
   `email.received` webhook → Edge Function verifies signature → rules match
   sender domain + keywords → confident match creates/moves a card, otherwise
   "Needs review".
+
+## Resume tailoring
+
+- Flow: upload a PDF/DOCX on `/resume` (text extracted in memory, file not
+  kept; no OCR) → job page "Tailor My Resume for This Job" → the user pastes
+  the full job description (jobs store only a 500-character summary, by the
+  scraping rules) → the browser calls the `tailor-resume` Edge Function (it
+  can run longer than a Netlify function) → a draft opens on
+  `/resume/<id>` for review, editing, saving and Word/PDF download.
+- The function runs as the user: `start_resume_generation()` checks the job,
+  the master resume, one-at-a-time and the daily limit;
+  `finish_resume_generation()` stores the draft as the job's next version.
+  Re-tailoring adds a version; replacing the master keeps old versions while
+  tailored resumes use them.
+- Model: `claude-opus-5-5`, structured output (`_shared/resume/schema.ts`),
+  server-side refusal fallback. Documents are untrusted data in tags they
+  can't close (`prompt.ts`); `facts.ts` lists anything not in the master
+  resume for the user to verify. Never log resume or job text.
+- Tests never call the API: the SDK runs against a fake `fetch`.
 
 ## Codebase map
 

@@ -16,6 +16,7 @@ function card(overrides: Partial<BoardCard> & { id: string }): BoardCard {
     nextActionAt: null,
     platformName: null,
     job: null,
+    tailoredResumeId: null,
     ...overrides,
   };
 }

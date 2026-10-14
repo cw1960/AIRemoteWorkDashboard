@@ -170,7 +170,8 @@
     },
     "consent": "By continuing you agree to our <terms>Terms of Use</terms> and <privacy>Privacy Notice</privacy>.",
     "allJobs": "All jobs",
-    "admin": "Admin"
+    "admin": "Admin",
+    "resume": "Resume"
   },
   "Onboarding": {
     "metaTitle": "Set up your profile",
@@ -321,7 +322,12 @@
       "deleteFailed": "Couldn't delete the card. Please try again.",
       "playbookTitle": "What usually comes next on {platform}",
       "playbookChecklist": "Checklist",
-      "playbookSource": "Based on {platform}'s public help pages. Their steps can change."
+      "playbookSource": "Based on {platform}'s public help pages. Their steps can change.",
+      "resume": "Tailored resume",
+      "resumeView": "View",
+      "resumeDownload": "Download (Word)",
+      "resumeNone": "No tailored resume saved for this job yet.",
+      "resumeTailor": "Tailor my resume"
     },
     "emailSettings": "Email settings",
     "movedOffered": "Moved “{title}” to Offered. Congratulations!",
@@ -578,7 +584,7 @@
           },
           "content": {
             "heading": "5. Your content",
-            "body": "Notes, cards, saved searches and profile answers you add belong to you. You give us permission to store and process them only to provide the Service to you. Don't add content that is unlawful or that you have no right to use."
+            "body": "Notes, cards, saved searches and profile answers you add belong to you. You give us permission to store and process them only to provide the Service to you. Don't add content that is unlawful or that you have no right to use.\n\nTailored resumes are drafts written by AI from the resume you upload. Check every detail before you use one: you're responsible for what you send to a platform, and we don't promise that any resume will pass a platform's screening."
           },
           "use": {
             "heading": "6. Acceptable use",
@@ -613,7 +619,7 @@
         "sections": {
           "collect": {
             "heading": "1. What we collect",
-            "body": "If you only browse, we don't ask for any personal data.\n\nIf you create an account, we keep: your email address; the profile answers you choose to give (field of work, skills, languages, country, availability and target pay); your tracker cards, notes, dates and stage history; your platform statuses; your saved searches; and your email preferences.\n\nIf you forward emails to your private tracking address, our email provider (Resend) receives them and we read them once to update your board. We keep only the sender's domain and the subject line, never the email itself.\n\nWhen you click Apply, we record which job was clicked and when (and your account, if you're signed in), so we can measure referrals. Our hosting providers also keep standard technical logs, such as IP addresses, for security.\n\nIf you subscribe to {newsletter}, we keep your email address, when you subscribed, and where you signed up (for example, the page or link you came from). When you subscribe through a form on this site, the form sends your email address straight to our newsletter provider; we also count the signup, recording only which form it was and the campaign tags in the page address, never who you are. Our newsletter provider records whether each issue is delivered and whether you open it or click its links, so we can see which parts readers find useful."
+            "body": "If you only browse, we don't ask for any personal data.\n\nIf you create an account, we keep: your email address; the profile answers you choose to give (field of work, skills, languages, country, availability and target pay); your tracker cards, notes, dates and stage history; your platform statuses; your saved searches; and your email preferences.\n\nIf you forward emails to your private tracking address, our email provider (Resend) receives them and we read them once to update your board. We keep only the sender's domain and the subject line, never the email itself.\n\nIf you use resume tailoring, we keep the text of the master resume you upload (never the file itself), the tailored resumes you create, and a record of each tailoring request (when, for which job, and how much it cost to run, never its content).\n\nWhen you click Apply, we record which job was clicked and when (and your account, if you're signed in), so we can measure referrals. Our hosting providers also keep standard technical logs, such as IP addresses, for security.\n\nIf you subscribe to {newsletter}, we keep your email address, when you subscribed, and where you signed up (for example, the page or link you came from). When you subscribe through a form on this site, the form sends your email address straight to our newsletter provider; we also count the signup, recording only which form it was and the campaign tags in the page address, never who you are. Our newsletter provider records whether each issue is delivered and whether you open it or click its links, so we can see which parts readers find useful."
           },
           "use": {
             "heading": "2. Why we use it",
@@ -621,11 +627,11 @@
           },
           "share": {
             "heading": "3. Who we share it with",
-            "body": "We use a small number of service providers who process data on our behalf: Supabase (database and sign-in), Netlify (website hosting), Resend (email delivery) and Beehiiv (newsletter delivery and the newsletter website at {newsletterDomain}). They may process data in the United States or other countries, under contracts and safeguards that protect it.\n\nWhen you apply through our links, the platform (for example Mercor or micro1) receives our referral code. It doesn't receive your data from us. Anything you give a platform is covered by its own privacy policy.\n\nWe use an AI provider (Anthropic) to help research and draft the newsletter from public information, such as job listings and news. It never receives your personal data."
+            "body": "We use a small number of service providers who process data on our behalf: Supabase (database and sign-in), Netlify (website hosting), Resend (email delivery) and Beehiiv (newsletter delivery and the newsletter website at {newsletterDomain}). They may process data in the United States or other countries, under contracts and safeguards that protect it.\n\nWhen you apply through our links, the platform (for example Mercor or micro1) receives our referral code. It doesn't receive your data from us. Anything you give a platform is covered by its own privacy policy.\n\nWe use an AI provider, Anthropic. It helps research and draft the newsletter from public information, such as job listings and news, and for that it never receives your personal data. When you ask us to tailor your resume, we send Anthropic your master resume and the job description you provide, so it can write the tailored version. Anthropic processes them on our behalf, keeps them only for a limited time under its own data policies, and doesn't use them to train its models."
           },
           "keep": {
             "heading": "4. How long we keep it",
-            "body": "We keep your account data for as long as your account exists. If you ask us to delete your account, we delete your personal data within 30 days, apart from anything we must keep by law. Click records not linked to an account may be kept for statistics.\n\nWe keep your newsletter subscription until you unsubscribe. After that we stop emailing you, but we may keep your email address on a do-not-send list so we never email you again by mistake."
+            "body": "We keep your account data for as long as your account exists. If you ask us to delete your account, we delete your personal data within 30 days, apart from anything we must keep by law. Click records not linked to an account may be kept for statistics.\n\nYou can delete your master resume, and any tailored resume, at any time from the Resume page; they are deleted with your account too.\n\nWe keep your newsletter subscription until you unsubscribe. After that we stop emailing you, but we may keep your email address on a do-not-send list so we never email you again by mistake."
           },
           "rights": {
             "heading": "5. Your rights",
@@ -954,5 +960,166 @@
     "x": "X",
     "reddit": "Reddit",
     "video": "Video script"
+  },
+  "Tailor": {
+    "heading": "Tailored resume",
+    "button": "Tailor My Resume for This Job",
+    "signedOut": "Sign in, upload your resume once, and get a version tailored to this job in about a minute.",
+    "statusNone": "Resume not yet tailored for this job.",
+    "continueDraft": "Continue your draft",
+    "statusSaved": "Tailored resume saved (version {version}, {date}).",
+    "view": "View",
+    "downloadWord": "Download (Word)",
+    "updateAvailable": "Your master resume has changed since this version was made. Tailor again for an updated version; your saved one stays as it is.",
+    "explainer": "Your master resume is never changed. You review and edit every tailored version before saving it.",
+    "dialogTitle": "Tailor my resume",
+    "forJob": "For {title} at {company}.",
+    "needsMaster": "Tailoring needs your master resume: the one resume with all your experience. Upload it once (PDF or Word) and you can tailor it to any job in one click. You'll come straight back here.",
+    "uploadFirst": "Upload my resume",
+    "descriptionLabel": "Full job description",
+    "descriptionHelp": "We only keep a short summary of each job, so paste the full description from the <listing>job's listing</listing> (opens in a new tab). The tailored resume is based on what you paste here.",
+    "tooShort": "{count, plural, one {# more character needed} other {# more characters needed}}: paste the whole description, not just the title.",
+    "length": "{count, plural, one {# character} other {# characters}}",
+    "remaining": "{count, plural, =0 {You've used today's tailored resumes; try again tomorrow.} one {# tailored resume left today.} other {# tailored resumes left today.}}",
+    "privacy": "Your resume and this description are sent to our AI provider, Anthropic, to write the draft.",
+    "cancel": "Cancel",
+    "generate": "Tailor my resume",
+    "generating": "Tailoring your resume for {title} at {company}…",
+    "generatingHint": "This usually takes under a minute. Keep this page open; you'll go straight to the draft to review it.",
+    "errors": {
+      "description_too_short": "That description is too short to tailor a resume to. Paste the full job description.",
+      "description_too_long": "That description is too long. Paste only the job description itself.",
+      "not_authenticated": "Your session has expired. Sign in again, then try once more.",
+      "no_master_resume": "Upload your master resume first.",
+      "job_not_found": "This job is no longer open, so it can't be tailored for.",
+      "generation_in_progress": "A tailored resume is already being written. Wait for it to finish, then try again.",
+      "daily_limit": "You've reached today's limit of tailored resumes. Try again tomorrow.",
+      "not_configured": "Resume tailoring isn't available right now. Please try again later.",
+      "refused": "The AI couldn't tailor this resume. Check that your master resume and the description are what you meant to send.",
+      "truncated": "The tailored resume came out incomplete. Please try again; a shorter job description may help.",
+      "invalid_output": "The AI's answer couldn't be used, so nothing was saved. Please try again.",
+      "incomplete": "The AI's answer was missing parts of your resume, so nothing was saved. Please try again.",
+      "rate_limited": "The AI service is busy. Please wait a minute and try again.",
+      "timeout": "That took too long, so nothing was saved. Please try again.",
+      "unavailable": "The AI service is unavailable right now. Please try again in a few minutes.",
+      "failed": "Something went wrong, so nothing was saved. Please try again.",
+      "network": "We couldn't reach the server. Check your connection and try again."
+    }
+  },
+  "Resume": {
+    "metaTitle": "Your resume",
+    "title": "Your resume",
+    "subtitle": "Upload one master resume, then tailor it to any job with one click.",
+    "returnNotice": "Upload your resume and we'll take you back to the job to tailor it.",
+    "masterHeading": "Master resume",
+    "activeLabel": "Active master resume",
+    "updated": "{type} · updated {date}",
+    "emptyTitle": "Upload your resume to tailor it to jobs",
+    "emptyBody": "Your master resume is the source of truth for your experience, education and skills. Once it's here, every job page gets a \"Tailor My Resume for This Job\" button that writes a version for that job, which you review before saving.",
+    "fileHelp": "PDF or Word (.docx), up to {mb} MB. Scanned PDFs can't be read (there's no text recognition): use a text-based PDF or a Word file.",
+    "upload": "Upload resume",
+    "replace": "Replace resume",
+    "uploading": "Reading your resume…",
+    "uploaded": "Your master resume is updated. Tailored resumes you already made are unchanged.",
+    "delete": "Delete",
+    "deleteTitle": "Delete your master resume?",
+    "deleteBody": "We'll delete its text, and any earlier versions we kept. Tailored resumes you made stay, as separate documents.",
+    "keep": "Keep it",
+    "confirmDelete": "Delete resume",
+    "deleted": "Your master resume is deleted.",
+    "privacy": "We keep the text of your resume, never the file. It's sent to our AI provider, Anthropic, only when you tailor it to a job. You can delete it at any time.",
+    "tailoredHeading": "Tailored resumes",
+    "usage": "{used} of {limit} tailored resumes used in the last 24 hours.",
+    "noneTitle": "No tailored resumes yet",
+    "noneBody": "Open any job and choose \"Tailor My Resume for This Job\".",
+    "browseJobs": "Browse jobs",
+    "itemMeta": "{company} · version {version} · {date}",
+    "status": {
+      "draft": "Draft",
+      "saved": "Saved"
+    },
+    "download": "Download",
+    "downloadFor": "Download {title}, version {version} (Word)",
+    "errors": {
+      "type": "That file isn't a PDF or a Word (.docx) file. Save your resume as one of those and try again.",
+      "size": "That file is too big. Resumes can be up to {mb} MB.",
+      "scanned": "We couldn't find any text in that PDF. It's probably a scan or an image; please upload a text-based PDF or a Word file instead.",
+      "empty": "That Word file has almost no text. Check it's your resume and try again.",
+      "too_long": "That file has much more text than a resume. Please upload just your resume.",
+      "unreadable": "We couldn't open that file. It may be damaged or password-protected.",
+      "missing": "Choose a file to upload.",
+      "auth": "Your session has expired. Sign in again, then try once more.",
+      "failed": "Something went wrong. Please try again."
+    }
+  },
+  "Review": {
+    "metaTitle": "Review tailored resume",
+    "backToJob": "Back to the job",
+    "eyebrow": "Tailored resume",
+    "title": "{title} at {company}",
+    "meta": "Version {version} · made {date}",
+    "status": {
+      "draft": "Draft, not saved yet",
+      "saved": "Saved"
+    },
+    "verifyTitle": "Check every fact before you use this resume",
+    "verifyBody": "It was written by AI from your master resume. AI can make mistakes: make sure every employer, title, date, qualification and number is true. No resume is guaranteed to pass a platform's screening.",
+    "notesHeading": "What changed",
+    "unverified": "Not found in your master resume: check these before using it",
+    "changes": "Main changes",
+    "noChanges": "No changes listed.",
+    "emphasized": "Qualifications put forward",
+    "noEmphasized": "None listed.",
+    "gaps": "Job requirements your resume doesn't show",
+    "noGaps": "None found.",
+    "flags": "To check",
+    "noFlags": "Nothing flagged.",
+    "compare": "Compare with your master resume",
+    "compareHint": "The version this tailored resume was made from.",
+    "editorHeading": "Edit the tailored resume",
+    "basics": "Name and summary",
+    "name": "Name",
+    "headline": "Headline",
+    "contact": "Contact details",
+    "summary": "Summary",
+    "skills": "Skills",
+    "onePerLine": "One per line.",
+    "experience": "Experience",
+    "position": "Position",
+    "jobTitle": "Job title",
+    "employer": "Employer",
+    "location": "Location",
+    "dates": "Dates",
+    "bullets": "Highlights",
+    "removePosition": "Remove this position",
+    "education": "Education",
+    "educationEntry": "Education",
+    "credential": "Degree or qualification",
+    "institution": "School",
+    "details": "Details",
+    "more": "Certifications and more",
+    "certifications": "Certifications",
+    "save": "Save Tailored Resume",
+    "downloadWord": "Download Word",
+    "downloadPdf": "Download PDF",
+    "cancel": "Cancel",
+    "discardTitle": "Discard this draft?",
+    "discardBody": "The draft will be deleted. Your master resume and any saved versions are not affected.",
+    "keepDraft": "Keep editing",
+    "discard": "Discard draft",
+    "saved": "Saved. This is now your tailored resume for this job.",
+    "saveFailed": "Couldn't save. Please try again.",
+    "invalid": "Some required details are empty (a name, and a job title and employer for each position). Fill them in and save again.",
+    "downloaded": "Downloaded.",
+    "downloadFailed": "Couldn't create the file. Please try again.",
+    "pdfUnsupported": "This resume uses characters our PDF can't show yet. Download the Word version instead.",
+    "unsaved": "You have unsaved changes."
+  },
+  "ResumeFile": {
+    "summary": "Summary",
+    "skills": "Skills",
+    "experience": "Experience",
+    "education": "Education",
+    "certifications": "Certifications"
   }
 }

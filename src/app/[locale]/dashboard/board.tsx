@@ -503,6 +503,7 @@ function AddCardDialog({
         title: clean,
         stage: "saved",
         position: Number.MAX_SAFE_INTEGER,
+        tailoredResumeId: null,
         nextActionAt: null,
         platformName: null,
         job: null,
