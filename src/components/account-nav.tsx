@@ -1,5 +1,6 @@
 import {
   BriefcaseBusiness,
+  FileText,
   LayoutDashboard,
   LogOut,
   ShieldCheck,
@@ -67,6 +68,17 @@ export async function AccountNav() {
         <Link href="/onboarding">
           <UserRound aria-hidden="true" />
           <span className="sr-only sm:not-sr-only">{t("profile")}</span>
+        </Link>
+      </Button>
+      <Button
+        asChild
+        variant="editorialOutline"
+        size="touch"
+        className="px-3 sm:px-5"
+      >
+        <Link href="/resume">
+          <FileText aria-hidden="true" />
+          <span className="sr-only sm:not-sr-only">{t("resume")}</span>
         </Link>
       </Button>
       {admin && (

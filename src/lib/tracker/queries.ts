@@ -24,6 +24,8 @@ export interface BoardCard {
     payMax: number | null;
     payUnit: string | null;
   } | null;
+  /** The tailored resume saved for this job's application, if any. */
+  tailoredResumeId: string | null;
 }
 
 /** The signed-in user's cards, column by column; null when signed out. */
@@ -34,7 +36,7 @@ export async function getBoard(): Promise<BoardCard[] | null> {
   const { data, error } = await supabase
     .from("tracker_cards")
     .select(
-      "id, kind, title, stage, position, next_action_at, platform:platforms(name), job:jobs(id, status, pay_min, pay_max, pay_unit, platform:platforms!inner(name))",
+      "id, kind, title, stage, position, next_action_at, tailored_resume_id, platform:platforms(name), job:jobs(id, status, pay_min, pay_max, pay_unit, platform:platforms!inner(name))",
     )
     .eq("user_id", user.id)
     .order("position")
@@ -58,6 +60,7 @@ export async function getBoard(): Promise<BoardCard[] | null> {
           payUnit: card.job.pay_unit,
         }
       : null,
+    tailoredResumeId: card.tailored_resume_id,
   }));
 }
 

@@ -23,6 +23,7 @@ import {
 } from "@/components/jobs/job-card";
 import { AccountNav } from "@/components/account-nav";
 import { NewsletterSignup } from "@/components/newsletter-signup";
+import { TailorSection } from "@/components/resume/tailor-section";
 import { SiteHeader } from "@/components/site-header";
 import { TrackButton } from "@/components/track-button";
 import { Badge } from "@/components/ui/badge";
@@ -259,6 +260,14 @@ export default async function JobPage({
               </>
             )}
           </header>
+
+          <TailorSection
+            jobId={job.id}
+            jobTitle={job.title}
+            company={job.platform.name}
+            open={!closed}
+            autoOpen={query.tailor === "1"}
+          />
 
           <section
             aria-labelledby="how-joining"
