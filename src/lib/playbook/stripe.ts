@@ -78,6 +78,7 @@ export async function createCheckoutSession(): Promise<string> {
           unit_amount: playbookConfig.priceCents,
           product_data: {
             name: playbookConfig.title,
+            tax_code: playbookConfig.taxCode,
             description: `PDF ebook by ${playbookConfig.author}. ${playbookConfig.subtitle}.`,
           },
         },
