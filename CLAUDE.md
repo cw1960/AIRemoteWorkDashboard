@@ -266,6 +266,27 @@ Key rules:
   for the user to verify. Never log resume or job text.
 - Tests never call the API: the SDK runs against a fake `fetch`.
 
+## The Playbook (book sales)
+
+- `playbook.airemoteworkdashboard.com` sells _The AI Remote Work Playbook_
+  (Cris Lopez, PhD) for $19 with a 30-day refund; settings live in
+  `src/config/playbook.ts`. `src/proxy.ts` serves the sub-domain's `/` and
+  `/thanks` from `src/app/[locale]/playbook/` and sends every other path to
+  the main site; the main domain's `/playbook` redirects to the sub-domain
+  (other hosts, such as previews and CI, keep `/playbook`).
+- Stripe over plain `fetch` (no SDK, `src/lib/playbook/stripe.ts`): the buy
+  buttons post to `/api/playbook/checkout` (Checkout Session, price inline).
+  `/thanks` and `/api/playbook/download` re-check the session with Stripe
+  on every request (paid, not refunded or disputed, within 90 days); the
+  session id is the buyer's key. `/api/playbook/webhook` verifies Stripe's
+  signature and emails the link once (Resend idempotency key = session id).
+- The PDF is `content/playbook/` (never `public/`), bundled with the
+  download route only (`outputFileTracingIncludes`).
+- Env: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` (Netlify, production).
+  Without them the buy button explains checkout is unavailable.
+- Copy must come from the book: no invented testimonials, sales numbers or
+  fake urgency.
+
 ## Codebase map
 
 - `src/app/[locale]/` — all pages (the locale segment is the root layout).

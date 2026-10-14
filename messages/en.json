@@ -402,6 +402,17 @@
       "heading": "{kind, select, weekly {This week's data post} other {Social drafts}}",
       "intro": "Drafts for {date}. Check each one, edit it as you like and post it by hand: nothing is posted automatically.",
       "cta": "Open in the admin area"
+    },
+    "playbook": {
+      "subject": "Your copy of {title}",
+      "preview": "Your download link is inside, plus your first step.",
+      "heading": "Thank you, your Playbook is ready",
+      "body": "Download your PDF from the link below. It works for {days} days; save the file somewhere you'll find it.",
+      "cta": "Download the Playbook",
+      "nextStep": "Chapter 1 starts with one step: create your free {name} account. It gathers every open AI-training role in one feed and tailors your resume to each job.",
+      "nextCta": "Create my free account",
+      "guarantee": "If the Playbook doesn't help you, reply within {days} days of your purchase (or write to {email}) for a full refund.",
+      "reason": "You're getting this because you bought The AI Remote Work Playbook."
     }
   },
   "EmailSettings": {
@@ -664,7 +675,7 @@
           },
           "share": {
             "heading": "3. Who we share it with",
-            "body": "We use a small number of service providers who process data on our behalf: Supabase (database and sign-in), Netlify (website hosting), Resend (email delivery) and Beehiiv (newsletter delivery and the newsletter website at {newsletterDomain}). They may process data in the United States or other countries, under contracts and safeguards that protect it.\n\nWhen you apply through our links, the platform (for example Mercor or micro1) receives our referral code. It doesn't receive your data from us. Anything you give a platform is covered by its own privacy policy.\n\nWe use an AI provider, Anthropic. It helps research and draft the newsletter from public information, such as job listings and news, and for that it never receives your personal data. When you ask us to tailor your resume, we send Anthropic your master resume, the core skills and evidence on your Master Profile, and the job description, so it can write the tailored version. Anthropic processes them on our behalf, keeps them only for a limited time under its own data policies, and doesn't use them to train its models."
+            "body": "We use a small number of service providers who process data on our behalf: Supabase (database and sign-in), Netlify (website hosting), Resend (email delivery), Beehiiv (newsletter delivery and the newsletter website at {newsletterDomain}) and Stripe (payments for The AI Remote Work Playbook). When you buy the Playbook, Stripe collects your payment details on its own checkout page; we never see your card. We receive your name, email address and country from Stripe, and use your email only to send your download link and answer refund requests. They may process data in the United States or other countries, under contracts and safeguards that protect it.\n\nWhen you apply through our links, the platform (for example Mercor or micro1) receives our referral code. It doesn't receive your data from us. Anything you give a platform is covered by its own privacy policy.\n\nWe use an AI provider, Anthropic. It helps research and draft the newsletter from public information, such as job listings and news, and for that it never receives your personal data. When you ask us to tailor your resume, we send Anthropic your master resume, the core skills and evidence on your Master Profile, and the job description, so it can write the tailored version. Anthropic processes them on our behalf, keeps them only for a limited time under its own data policies, and doesn't use them to train its models."
           },
           "keep": {
             "heading": "4. How long we keep it",
@@ -1180,5 +1191,266 @@
     "experience": "Experience",
     "education": "Education",
     "certifications": "Certifications"
+  },
+  "Playbook": {
+    "metaTitle": "The AI Remote Work Playbook: get paid to help build the future of AI",
+    "metaDescription": "The field guide to finding AI-training work, passing AI assessments and AI interviews like micro1's Zara, and getting hired. By Cris Lopez, PhD. Instant PDF, 30-day money-back guarantee.",
+    "brand": "The AI Remote Work Playbook",
+    "buy": "Get the Playbook: {price}",
+    "buyShort": "Get it for {price}",
+    "redirecting": "Opening secure checkout…",
+    "checkout": {
+      "unavailable": "Checkout isn't open yet. Please check back soon.",
+      "error": "We couldn't start checkout. Please try again in a moment.",
+      "cancelled": "Checkout was cancelled; you haven't been charged. The Playbook is here whenever you're ready."
+    },
+    "trust": {
+      "instant": "Instant PDF download",
+      "guarantee": "{days}-day money-back guarantee",
+      "secure": "Secure checkout by Stripe"
+    },
+    "hero": {
+      "eyebrow": "New field guide · By Cris Lopez, PhD",
+      "title": "Get paid to help build the future of AI.",
+      "lead": "The step-by-step playbook for landing AI-training work: find real opportunities, pass the assessments and AI interviews like micro1's Zara, and get accepted on platforms like Mercor and micro1. No machine-learning degree required.",
+      "facts": {
+        "chapters": "14 chapters",
+        "simulations": "10 practice simulations",
+        "plan": "30-day action plan"
+      },
+      "coverAlt": "Cover of The AI Remote Work Playbook by Cris Lopez, PhD"
+    },
+    "pain": {
+      "title": "Sound familiar?",
+      "lead": "Thousands of people are applying for AI-training work. Most get stuck at the same points.",
+      "items": {
+        "silence": "You apply to platform after platform and never hear back.",
+        "assessment": "You fail an assessment and nobody tells you why.",
+        "interview": "An AI interviewer asks you to \"walk through your reasoning\" and you freeze.",
+        "scams": "You can't tell which opportunities are real and which are scams.",
+        "resume": "You rewrite your resume for every listing and still don't know what they want."
+      },
+      "close": "None of this is about talent. It's about knowing how the process works. That's what this playbook teaches."
+    },
+    "advantage": {
+      "title": "Your non-AI experience is your unfair advantage",
+      "lead": "AI work isn't one job. It's a family of tasks: evaluating answers, ranking responses, fact-checking, writing examples, reviewing code, testing for safety. Models still need human judgment to tell right from merely fluent, and that judgment comes from experience you may already have.",
+      "items": {
+        "teachers": {
+          "title": "Teachers",
+          "body": "Grade work against explicit criteria and spot recurring mistakes: the core of rubric-based evaluation."
+        },
+        "service": {
+          "title": "Customer service pros",
+          "body": "Resolve ambiguous cases while keeping strict policy accuracy and clear notes."
+        },
+        "bilingual": {
+          "title": "Bilingual professionals",
+          "body": "Catch translation errors and cultural mismatches that models miss."
+        },
+        "experts": {
+          "title": "Experienced professionals",
+          "body": "Lawyers, analysts, managers, academics: platforms actively seek seasoned domain experts."
+        }
+      }
+    },
+    "inside": {
+      "title": "What's inside the Playbook",
+      "lead": "{pages} pages. No filler, no theory: a field guide written from more than 500 hours of paid AI-training work.",
+      "chapters": {
+        "c1": {
+          "title": "The quick-start blueprint",
+          "body": "A 30-day action plan, day by day, plus the 30-minute daily routine that keeps your pipeline moving."
+        },
+        "c2": {
+          "title": "The opportunity is now",
+          "body": "What AI remote work really is, why your past experience counts, and an honest look at what it can earn."
+        },
+        "c3": {
+          "title": "Find the right opportunities",
+          "body": "The opportunity map, platforms worth investigating, geographic restrictions, and how to spot fake offers."
+        },
+        "c4": {
+          "title": "Become a competitive applicant",
+          "body": "The evidence formula that turns duties into proof: Action + Context + Standard + Result."
+        },
+        "c5": {
+          "title": "Pass Zara and the AI interview",
+          "body": "How micro1's AI recruiter interviews, the \"thinking out loud\" framework, and the mistakes that sink candidates."
+        },
+        "c6": {
+          "title": "Master the assessments",
+          "body": "How assessments work, how to evaluate AI responses professionally, and how to find hallucinations."
+        },
+        "c7": {
+          "title": "Get accepted, get paid, keep going",
+          "body": "Your first tasks, real effective hourly earnings, protecting payouts, and building a portfolio that lasts."
+        },
+        "c8": {
+          "title": "The bonus resource vault",
+          "body": "A ready-to-paste resume prompt, the Resume Evidence Matrix and the Zara Interview Prep cheat sheet."
+        },
+        "c9": {
+          "title": "The simulation lab",
+          "body": "Practice exercises with expert judgments, so you never take a real assessment cold."
+        },
+        "c10": {
+          "title": "Final checklist & glossary",
+          "body": "The global remote worker checklist (location, payments, taxes) and the terms you'll be tested on."
+        },
+        "c11": {
+          "title": "Bonus: the experienced professional's advantage",
+          "body": "How to turn decades of career experience into a domain-expert edge."
+        },
+        "c12": {
+          "title": "Bonus: the technical evaluator's tech stack",
+          "body": "The tools behind the highest-paying coding and quantitative evaluations."
+        },
+        "c13": {
+          "title": "The simulation lab, expanded",
+          "body": "Five more simulations: actionability, unsupported claims, weak rationales, stale sources and the halo effect."
+        },
+        "c14": {
+          "title": "Your next action starts today",
+          "body": "Three steps to your first application, today."
+        }
+      }
+    },
+    "sample": {
+      "title": "Try a free sample from the Simulation Lab",
+      "lead": "Every simulation asks you to judge first, then compare with the expert judgment. Here's the first one.",
+      "label": "Simulation 1 · Instruction following",
+      "promptLabel": "The prompt",
+      "prompt": "“Give two reasons to keep a project tracker.”",
+      "aLabel": "Response A",
+      "a": "“It records application status and reminds you of follow-up actions.”",
+      "bLabel": "Response B",
+      "b": "“It improves organization, boosts confidence, helps networking, makes resumes better, and guarantees you never miss an opportunity.”",
+      "question": "Which response is better, and why?",
+      "reveal": "Show the expert judgment",
+      "judgment": "A follows the request for exactly two reasons and avoids an unsupported guarantee. B gives more than was asked for and makes an absolute claim that can't be justified.",
+      "close": "The Playbook has ten of these, covering the skills assessments test most: rubric adherence, hallucinations, ambiguity and contradictions."
+    },
+    "bonuses": {
+      "title": "Included with your copy",
+      "items": {
+        "vault": {
+          "title": "The Bonus Resource Vault",
+          "body": "The AI Resume Adapter prompt, the Resume Evidence Matrix and the Zara Interview Prep framework, ready to use."
+        },
+        "lab": {
+          "title": "10 practice simulations",
+          "body": "Real-style evaluation exercises with expert judgments, to train the skills assessments test."
+        },
+        "chapters": {
+          "title": "Two bonus chapters",
+          "body": "The experienced professional's advantage, and the technical evaluator's tech stack."
+        },
+        "dashboard": {
+          "title": "Free: AI Remote Work Dashboard",
+          "body": "Every open role from Mercor and micro1 in one feed, an AI resume tailor and an application tracker. Free, forever."
+        }
+      }
+    },
+    "audience": {
+      "forTitle": "This playbook is for you if…",
+      "for": {
+        "switcher": "You want flexible, remote, paid work and you're open to something new.",
+        "expert": "You have professional or academic experience and want to put it to work training AI.",
+        "bilingual": "You speak more than one language, or work in a field like law, medicine, finance or education.",
+        "stuck": "You've applied before and got stuck at an assessment or AI interview."
+      },
+      "notTitle": "It's not for you if…",
+      "not": {
+        "rich": "You want guaranteed income or a get-rich-quick scheme. The book is honest: work can be meaningful, and it can also be irregular.",
+        "shortcuts": "You want to fake qualifications or bypass country restrictions. The Playbook teaches the opposite: truthful, specific applications win."
+      }
+    },
+    "author": {
+      "title": "About the author",
+      "name": "Cris Lopez, PhD",
+      "body": "“I did not write this book based on theory. I wrote it based on over 500 hours of paid, hands-on work evaluating and training AI models.”",
+      "more": "Combining decades of academic rigor and executive leadership, Cris built a systematic approach to the new AI workforce: landing roles, passing rigorous assessments, and receiving regular inquiries and offers from platforms like Mercor, micro1, Ethos and Alignerr, after going through the onboarding of dozens more.",
+      "creator": "Cris also built the free AI Remote Work Dashboard that the Playbook's 30-day plan starts with."
+    },
+    "offer": {
+      "title": "Get the Playbook today",
+      "lead": "One payment. Instant download. Yours to keep.",
+      "price": "{price}",
+      "priceNote": "One-time payment · USD",
+      "includes": {
+        "book": "The AI Remote Work Playbook ({pages}-page PDF)",
+        "plan": "The 30-day quick-start action plan",
+        "zara": "Zara and AI-interview preparation framework",
+        "lab": "10 practice simulations with expert judgments",
+        "vault": "The Bonus Resource Vault",
+        "bonus": "Two bonus chapters",
+        "dashboard": "Free access to AI Remote Work Dashboard"
+      }
+    },
+    "guarantee": {
+      "title": "{days}-day money-back guarantee",
+      "body": "Read it, use it, and try the plan. If the Playbook doesn't help you, email us within {days} days of your purchase and we'll refund every cent. No questions, no hassle."
+    },
+    "faq": {
+      "title": "Questions",
+      "items": {
+        "format": {
+          "q": "What do I get, and how?",
+          "a": "A {pages}-page PDF. After checkout you go straight to your download page, and we email you the link too. It works on any phone, tablet or computer."
+        },
+        "experience": {
+          "q": "Do I need AI or tech experience?",
+          "a": "No. Many roles center on evaluation, writing, language and subject knowledge. The book shows how to translate the experience you already have, truthfully."
+        },
+        "guarantee": {
+          "q": "Does it guarantee I'll get hired?",
+          "a": "No, and be wary of anyone who promises that. Platforms choose who they accept, and work can be irregular. The Playbook gives you the process, the practice and the preparation that make you a much stronger applicant."
+        },
+        "platforms": {
+          "q": "Which platforms does it cover?",
+          "a": "It focuses on Mercor and micro1 (including micro1's AI recruiter, Zara), and covers others to research such as Alignerr, Ethos, DataAnnotation, Outlier, TELUS Digital AI and RWS TrainAI. The book isn't affiliated with or endorsed by any of them."
+        },
+        "countries": {
+          "q": "Can I use it outside the United States?",
+          "a": "Yes. Many roles are open internationally, and the book has a checklist for location, payments and taxes so you can confirm eligibility before you apply."
+        },
+        "dashboard": {
+          "q": "Is the dashboard really free?",
+          "a": "Yes. AI Remote Work Dashboard is free to use, with or without the book. Some platforms pay us a referral fee when you're hired through our links; you never pay anything."
+        },
+        "refund": {
+          "q": "What if it isn't for me?",
+          "a": "Email {email} within {days} days of your purchase for a full refund."
+        },
+        "payment": {
+          "q": "Is payment secure?",
+          "a": "Checkout runs on Stripe, which handles cards for millions of businesses. We never see or store your card details."
+        }
+      }
+    },
+    "final": {
+      "title": "The opportunity is an invitation. Start today.",
+      "lead": "You don't need to understand the whole AI economy before you begin. You need a realistic target, a truthful application and a plan. This is the plan."
+    },
+    "disclaimer": "The AI Remote Work Playbook is an independent guide by Cris Lopez, PhD, published by El Barrial Devs. It isn't affiliated with, sponsored or endorsed by any platform it mentions; names are trademarks of their owners. Earnings vary; no income is guaranteed.",
+    "thanks": {
+      "metaTitle": "Thank you",
+      "title": "Thank you! Your Playbook is ready.",
+      "body": "Download your PDF below. We've also emailed the link to {email}. The link works for {days} days after your purchase.",
+      "bodyNoEmail": "Download your PDF below. The link works for {days} days after your purchase.",
+      "download": "Download the Playbook (PDF)",
+      "nextTitle": "Your first step (Chapter 1, Day 1)",
+      "nextBody": "Create your free AI Remote Work Dashboard account: every open AI-training role in one feed, an AI resume tailor that writes a version of your resume for each job, and a tracker that reminds you to follow up.",
+      "nextCta": "Create my free account",
+      "support": "Questions, or not happy with it? Email {email} within {days} days for a full refund.",
+      "unpaidTitle": "We couldn't confirm this purchase",
+      "unpaidBody": "If you just paid, wait a minute and refresh this page. If it still doesn't work, email {email} with the address you used at checkout and we'll send your copy.",
+      "refundedTitle": "This purchase was refunded",
+      "refundedBody": "Its download link no longer works. If you think that's a mistake, email {email}.",
+      "expiredTitle": "This download link has expired",
+      "expiredBody": "Download links work for {days} days. Email {email} with the address you used at checkout and we'll send you a new one.",
+      "back": "Back to the Playbook"
+    }
   }
 }

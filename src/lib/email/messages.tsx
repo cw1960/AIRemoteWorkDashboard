@@ -4,9 +4,11 @@ import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { render } from "react-email";
 
+import { playbookConfig } from "@/config/playbook";
 import { siteConfig } from "@/config/site";
 import { type AlertSearch, JobAlertEmail } from "@/emails/job-alert";
 import { NewsletterDraftsEmail } from "@/emails/newsletter-drafts";
+import { PlaybookEmail } from "@/emails/playbook";
 import { RecapEmail } from "@/emails/recap";
 import { ReminderEmail } from "@/emails/reminder";
 import { WelcomeEmail } from "@/emails/welcome";
@@ -329,6 +331,40 @@ export async function newsletterDraftsEmail(input: {
   return {
     to: input.to,
     subject: t("subject", { kind: input.kind, date }),
+    html: await render(element),
+    text: await render(element, { plainText: true }),
+  };
+}
+
+/** The Playbook's download link, sent after a paid checkout (English). */
+export async function playbookPurchaseEmail(input: {
+  to: string;
+  thanksUrl: string;
+}): Promise<OutgoingEmail> {
+  const locale = routing.defaultLocale;
+  const t = await getTranslations({ locale, namespace: "Emails.playbook" });
+  const element = (
+    <PlaybookEmail
+      lang={locale}
+      brand={playbookConfig.title}
+      preview={t("preview")}
+      heading={t("heading")}
+      body={t("body", { days: playbookConfig.downloadDays })}
+      cta={t("cta")}
+      downloadUrl={input.thanksUrl}
+      nextStep={t("nextStep", { name: siteConfig.name })}
+      nextCta={t("nextCta")}
+      dashboardUrl={appUrl("/sign-in", locale)}
+      guarantee={t("guarantee", {
+        days: playbookConfig.refundDays,
+        email: siteConfig.supportEmail,
+      })}
+      footer={{ reason: t("reason") }}
+    />
+  );
+  return {
+    to: input.to,
+    subject: t("subject", { title: playbookConfig.title }),
     html: await render(element),
     text: await render(element, { plainText: true }),
   };

@@ -15,6 +15,10 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // The Playbook PDF is read from disk by its download route only.
+  outputFileTracingIncludes: {
+    "/api/playbook/download": ["./content/playbook/**"],
+  },
   reactStrictMode: true,
   experimental: {
     serverActions: {
