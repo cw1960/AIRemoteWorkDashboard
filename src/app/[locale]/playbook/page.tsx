@@ -35,7 +35,16 @@ export async function generateMetadata(): Promise<Metadata> {
       title: t("metaTitle"),
       description: t("metaDescription"),
       siteName: playbookConfig.title,
+      images: [
+        {
+          url: `${playbookConfig.url}/playbook/cover.webp`,
+          width: 1253,
+          height: 2000,
+          alt: t("hero.coverAlt"),
+        },
+      ],
     },
+    twitter: { card: "summary_large_image" },
   };
 }
 
@@ -200,6 +209,7 @@ export default async function PlaybookPage({
               <PlaybookCover
                 label={t("hero.coverAlt")}
                 className="rotate-[-2deg]"
+                priority
               />
             </div>
           </div>
