@@ -67,12 +67,23 @@ export async function getMasterProfile(): Promise<MasterProfile | null> {
   const user = await getSessionUser();
   if (!user) return null;
   const supabase = await createSupabaseServerClient();
-  const { data, error } = await supabase
+  const withEvidence = await supabase
     .from("master_resumes")
     .select("id, file_name, file_type, created_at, content, evidence")
     .eq("user_id", user.id)
     .eq("is_active", true)
     .maybeSingle();
+  // Undefined column: the site went live before the Master Profile
+  // migration was applied. Show the resume without evidence until it is.
+  const { data, error } =
+    withEvidence.error?.code === "42703"
+      ? await supabase
+          .from("master_resumes")
+          .select("id, file_name, file_type, created_at, content")
+          .eq("user_id", user.id)
+          .eq("is_active", true)
+          .maybeSingle()
+      : withEvidence;
   if (error) throw new Error(error.message);
   if (!data) return null;
   return {
@@ -82,7 +93,7 @@ export async function getMasterProfile(): Promise<MasterProfile | null> {
     updatedAt: data.created_at,
     characters: data.content.length,
     content: data.content,
-    evidence: data.evidence,
+    evidence: "evidence" in data ? String(data.evidence) : "",
   };
 }
 
