@@ -4,7 +4,7 @@ import { join } from "node:path";
 import { NextResponse, type NextRequest } from "next/server";
 
 import { playbookConfig } from "@/config/playbook";
-import { playbookPath } from "@/lib/playbook/paths";
+import { playbookPath, seeOther } from "@/lib/playbook/paths";
 import { checkPurchase } from "@/lib/playbook/stripe";
 
 /**
@@ -14,12 +14,8 @@ import { checkPurchase } from "@/lib/playbook/stripe";
  */
 export async function GET(request: NextRequest) {
   const sessionId = request.nextUrl.searchParams.get("session_id") ?? "";
-  const thanks = NextResponse.redirect(
-    new URL(
-      `${playbookPath(request.headers.get("host"), "/thanks")}?session_id=${encodeURIComponent(sessionId)}`,
-      request.url,
-    ),
-    303,
+  const thanks = seeOther(
+    `${playbookPath(request.headers.get("host"), "/thanks")}?session_id=${encodeURIComponent(sessionId)}`,
   );
 
   const { status } = await checkPurchase(sessionId);
