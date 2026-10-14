@@ -1,7 +1,7 @@
 {
   "Metadata": {
     "title": "{appName} — Track your AI training job applications",
-    "description": "Find remote AI training jobs from Mercor and micro1, and track every application in one free dashboard."
+    "description": "Find remote AI-training jobs from Mercor and micro1, tailor your resume to each job with AI, and track every application in one free dashboard."
   },
   "Layout": {
     "skipToContent": "Skip to main content"
@@ -498,31 +498,64 @@
     "fineprint": "Free. One short email each weekday. Unsubscribe anytime."
   },
   "Intro": {
-    "label": "Welcome",
-    "title": "Find remote AI-training work, and never lose track of an application.",
-    "steps": {
-      "find": {
-        "title": "Find",
-        "body": "Browse paid AI-training jobs from Mercor and micro1. No account needed."
+    "label": "100% free · Built for AI trainers",
+    "title": "Land paid AI-training work faster.",
+    "lead": "Every open role from {platforms} in one feed, an AI resume tailor that rewrites your resume for each job in about a minute, and a tracker that reminds you to follow up. All free.",
+    "signUp": "Create your free account",
+    "browse": "{count, plural, =0 {Browse jobs} one {Browse # open job} other {Browse # open jobs}}",
+    "learnMore": "How it works",
+    "trust": {
+      "free": "Completely free",
+      "noAccount": "Browse without an account",
+      "noCard": "No credit card, ever",
+      "private": "We never sell your data"
+    },
+    "spotlight": {
+      "badge": "New",
+      "title": "AI resume tailoring",
+      "body": "Stand out on every application with a resume written for that exact job.",
+      "steps": {
+        "upload": "Upload your resume once (PDF or Word).",
+        "click": "Open any job and click \"Tailor My Resume for This Job\".",
+        "review": "Review, edit and download it as Word or PDF."
       },
-      "track": {
-        "title": "Track",
-        "body": "Save jobs with Track this and move them across your own board as you hear back."
+      "note": "Your real experience, reworded and reordered for the job. Nothing invented: anything we can't find in your resume is flagged for you to check."
+    },
+    "featuresTitle": "Everything you need to get hired, free",
+    "features": {
+      "resume": {
+        "title": "AI resume tailoring",
+        "body": "A version of your resume for each job in about a minute, keyword-matched to the role, with the job requirements you're missing listed so you can address them."
       },
-      "remind": {
-        "title": "Get reminded",
-        "body": "Set follow-up dates and get job alerts by email. All free."
+      "feed": {
+        "title": "Every job in one feed",
+        "body": "Open roles from {platforms}, refreshed every few hours. Filter by pay, field, language and country."
+      },
+      "matches": {
+        "title": "Matches with reasons",
+        "body": "Tell us your skills, languages and target rate. We rank the jobs that fit you and say why."
+      },
+      "board": {
+        "title": "Application tracker",
+        "body": "Track every application on your own board, from Saved to Offered, with notes, dates and full history."
+      },
+      "reminders": {
+        "title": "Reminders and alerts",
+        "body": "Follow-up reminders, emails when new jobs match your searches, and a weekly recap."
+      },
+      "passport": {
+        "title": "Platform passport",
+        "body": "See at a glance where you've applied, where you're active, and when you can reapply."
       }
     },
-    "signUp": "Create a free account",
-    "learnMore": "How it works",
+    "howFree": "How is it free? When you're hired through our links, some platforms pay us a referral fee. You never pay anything, and it doesn't change which jobs we show.",
     "dismiss": "Hide this introduction"
   },
   "HowItWorks": {
     "metaTitle": "How it works",
     "metaDescription": "How to find remote AI-training jobs and track your applications on {name}, for free.",
     "title": "How {name} works",
-    "intro": "{name} brings remote AI-training jobs into one place and gives you a free board to track every application, so nothing slips through the cracks.",
+    "intro": "{name} brings remote AI-training jobs into one place, tailors your resume to each one, and gives you a free board to track every application, so nothing slips through the cracks.",
     "steps": {
       "browse": {
         "title": "1. Browse jobs",
@@ -536,16 +569,20 @@
         "title": "3. Track jobs you care about",
         "body": "Tap Track this on any job and it lands in the Saved column of your board. You can also add your own cards for applications made elsewhere."
       },
+      "tailor": {
+        "title": "4. Tailor your resume to each job",
+        "body": "Upload your resume once on the Resume page. On any job, choose Tailor My Resume for This Job and paste the job description: in about a minute you get a version written for that job, using only your real experience. Review it, edit anything, then save it and download it as Word or PDF."
+      },
       "board": {
-        "title": "4. Move cards as you progress",
+        "title": "5. Move cards as you progress",
         "body": "Your board has six stages: Saved, Applied, Assessment, Interviewing, Offered and Rejected. Drag cards on a computer, or use the Move menu on any device. Open a card to add notes, the date you applied and a follow-up date."
       },
       "remind": {
-        "title": "5. Get follow-up reminders",
+        "title": "6. Get follow-up reminders",
         "body": "Set a follow-up date on a card and we email you that day, so you remember to check in or chase a reply."
       },
       "alerts": {
-        "title": "6. Get job alerts",
+        "title": "7. Get job alerts",
         "body": "Filter the feed, tap Get alerts and choose daily or weekly. We email you new jobs that match. Change or stop any email in Email settings, or with the unsubscribe link in every email."
       },
       "free": {

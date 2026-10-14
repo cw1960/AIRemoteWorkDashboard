@@ -95,8 +95,19 @@ export async function FeedView({
         id="main"
         className="mx-auto w-full max-w-[1400px] px-4 pt-6 pb-16 sm:px-6 lg:px-8"
       >
-        {showIntro && <IntroBand />}
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-3 first:mt-0">
+        {showIntro && (
+          <IntroBand
+            openJobs={facets.total}
+            platforms={new Intl.ListFormat(locale, {
+              style: "long",
+              type: "conjunction",
+            }).format(facets.platforms.map((p) => p.name))}
+          />
+        )}
+        <div
+          id="feed"
+          className="mt-8 flex scroll-mt-24 flex-wrap items-center justify-between gap-3 first:mt-0"
+        >
           <h1 className="font-display text-2xl font-extrabold sm:text-3xl">
             {basePath === "/jobs" ? t("allTitle") : t("title")}
           </h1>

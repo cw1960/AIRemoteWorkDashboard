@@ -12,6 +12,7 @@ const STEPS = [
   "browse",
   "account",
   "track",
+  "tailor",
   "board",
   "remind",
   "alerts",

@@ -101,7 +101,7 @@ test.describe("introduction", () => {
   }) => {
     await page.goto("/");
     const intro = page.getByRole("region", {
-      name: /Find remote AI-training work/,
+      name: /Land paid AI-training work/,
     });
     await expect(intro).toBeVisible();
     await expect(
@@ -113,7 +113,7 @@ test.describe("introduction", () => {
     await expect(intro).toHaveCount(0);
     await page.reload();
     await expect(
-      page.getByRole("region", { name: /Find remote AI-training work/ }),
+      page.getByRole("region", { name: /Land paid AI-training work/ }),
     ).toHaveCount(0);
   });
 
@@ -127,7 +127,7 @@ test.describe("introduction", () => {
       page.getByRole("heading", { level: 1, name: "Remote AI training jobs" }),
     ).toBeVisible();
     await expect(
-      page.getByRole("region", { name: /Find remote AI-training work/ }),
+      page.getByRole("region", { name: /Land paid AI-training work/ }),
     ).toHaveCount(0);
   });
 
