@@ -4,11 +4,20 @@
  * robots.txt on work.mercor.com disallows /api/, so we read the public
  * Explore page (allowed), which embeds every open listing in its Next.js
  * page data (`__NEXT_DATA__`). One request per run.
+ *
+ * Each listing's full description is returned separately for resume
+ * tailoring; the job itself keeps a short summary.
  */
 import { z } from "zod";
 
 import { toAlpha2 } from "./countries.ts";
-import { collect, type Domain, type ParseResult, type PayUnit } from "./job.ts";
+import {
+  collect,
+  DESCRIPTION_MAX_LENGTH,
+  type Domain,
+  type ParseResult,
+  type PayUnit,
+} from "./job.ts";
 import { detectLanguages } from "./languages.ts";
 import { cleanText, summarize, toIsoUtc } from "./text.ts";
 
@@ -146,6 +155,7 @@ function toJob(listing: Listing) {
 /** Maps the Explore page to jobs. Only active, public listings are kept. */
 export function parseMercorExplorePage(html: string): ParseResult {
   const candidates: unknown[] = [];
+  const texts = new Map<string, string>();
   let skipped = 0;
   for (const raw of extractMercorListings(html)) {
     const listing = listingSchema.safeParse(raw);
@@ -157,7 +167,16 @@ export function parseMercorExplorePage(html: string): ParseResult {
       continue;
     }
     candidates.push(toJob(listing.data));
+    const text = listing.data.description?.trim();
+    if (text) {
+      texts.set(listing.data.listingId, text.slice(0, DESCRIPTION_MAX_LENGTH));
+    }
   }
   const result = collect(candidates);
-  return { jobs: result.jobs, skipped: result.skipped + skipped };
+  const descriptions: Record<string, string> = {};
+  for (const job of result.jobs) {
+    const text = texts.get(job.external_id);
+    if (text) descriptions[job.external_id] = text;
+  }
+  return { jobs: result.jobs, skipped: result.skipped + skipped, descriptions };
 }

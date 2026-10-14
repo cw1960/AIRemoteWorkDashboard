@@ -3,7 +3,8 @@
  *
  * Fetches one platform's listings and stores them through ingest_jobs(),
  * which logs the run and applies the closing rule. A failed run emails
- * ALERT_EMAIL.
+ * ALERT_EMAIL. Full descriptions a source returns (Mercor) are then stored
+ * with store_job_descriptions(), for resume tailoring only.
  *
  * Callers: pg_cron (header `x-ingest-token`, checked against Vault with
  * verify_ingest_token) or an admin with the service role key. Anyone else
@@ -171,7 +172,32 @@ Deno.serve(async (req) => {
     });
   }
 
-  const report = { platform, requests: result?.requests ?? 0, ...summary };
+  // Full descriptions for resume tailoring. Best effort: a failure here is
+  // logged and never fails the run.
+  const descriptions = Object.entries(result?.descriptions ?? {});
+  let descriptionsStored: number | null = null;
+  if (!summary.error && descriptions.length > 0) {
+    try {
+      descriptionsStored = z.number().parse(
+        await rpc("store_job_descriptions", {
+          p_platform: platform,
+          p_descriptions: descriptions.map(([external_id, content]) => ({
+            external_id,
+            content,
+          })),
+        }),
+      );
+    } catch (caught) {
+      console.error("storing descriptions failed", describe(caught));
+    }
+  }
+
+  const report = {
+    platform,
+    requests: result?.requests ?? 0,
+    ...summary,
+    descriptions_stored: descriptionsStored,
+  };
   if (summary.error) {
     console.error("ingest failed", report);
     const apiKey = Deno.env.get("RESEND_API_KEY");

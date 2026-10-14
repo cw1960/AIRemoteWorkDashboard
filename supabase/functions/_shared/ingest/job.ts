@@ -79,7 +79,16 @@ export interface ParseResult {
   jobs: JobInput[];
   /** Listings that could not be mapped or failed validation. */
   skipped: number;
+  /**
+   * Full descriptions by external id, for resume tailoring only (stored
+   * apart from the job and never shown on the site). Only sources whose
+   * feed already carries them fill this in.
+   */
+  descriptions?: Record<string, string>;
 }
+
+/** Longest description kept (job_descriptions.content). */
+export const DESCRIPTION_MAX_LENGTH = 20_000;
 
 /**
  * Validates mapped listings, dropping (and counting) invalid ones and

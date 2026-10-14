@@ -14,9 +14,10 @@ select tables_are(
     'platform_memberships', 'tracker_cards', 'card_events', 'saved_searches',
     'email_prefs', 'inbound_emails', 'outbound_clicks', 'site_events',
     'newsletter_runs', 'job_shortlists', 'social_drafts',
-    'master_resumes', 'tailored_resumes', 'resume_generations'
+    'master_resumes', 'tailored_resumes', 'resume_generations',
+    'job_descriptions'
   ],
-  'public schema has the twelve V1 tables, site_events, the newsletter workflow tables and the resume tables'
+  'public schema has the twelve V1 tables, site_events, the newsletter workflow tables, the resume tables and job descriptions'
 );
 
 select is(

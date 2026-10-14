@@ -173,7 +173,13 @@ this repo:
   read page by page, 3 s apart, capped per run — micro1). Clear User-Agent
   with a contact email. Back off on errors (after 3 failed runs in a row, a
   platform is retried once a day).
-  Store title, pay, tags, dates and a short summary — not full descriptions.
+  Store title, pay, tags, dates and a short summary on the job. Full
+  descriptions (owner's decision, 2026-10-15) live only in
+  `job_descriptions`, for resume tailoring: never shown on the site,
+  readable by signed-in users, written by the service role. Mercor's come
+  with each ingest run (no extra requests); micro1's job page is read only
+  when a signed-in user opens the tailor, at most once per job (an empty or
+  failed read is retried after a day).
 - An adapter returning zero jobs triggers an alert email; it must **not** close
   every job.
 - **Every outbound "Apply" click goes through `/go/<job-id>`** (logs the click,
@@ -236,9 +242,10 @@ Key rules:
 ## Resume tailoring
 
 - Flow: upload a PDF/DOCX on `/resume` (text extracted in memory, file not
-  kept; no OCR) → job page "Tailor My Resume for This Job" → the user pastes
-  the full job description (jobs store only a 500-character summary, by the
-  scraping rules) → the browser calls the `tailor-resume` Edge Function (it
+  kept; no OCR) → job page "Tailor My Resume for This Job" → the user checks
+  the full job description (filled in by the `job-description` Edge
+  Function from `job_descriptions` or the micro1 job page; the user pastes
+  it when there is none) → the browser calls the `tailor-resume` Edge Function (it
   can run longer than a Netlify function) → a draft opens on
   `/resume/<id>` for review, editing, saving and Word/PDF download.
 - The function runs as the user: `start_resume_generation()` checks the job,
