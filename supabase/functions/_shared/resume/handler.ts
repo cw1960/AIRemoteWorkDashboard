@@ -62,6 +62,10 @@ const startSchema = z
       generation_id: z.number().int(),
       master_resume_id: z.guid(),
       master_content: z.string(),
+      master_evidence: z
+        .string()
+        .nullish()
+        .transform((value) => value ?? ""),
       job_title: z.string(),
       company: z.string(),
     }),
@@ -164,6 +168,7 @@ export async function handleTailorRequest(
       company: generation.company,
       jobDescription,
       masterResume: generation.master_content,
+      evidence: generation.master_evidence,
     });
   } catch (error) {
     const code = classifyError(error);

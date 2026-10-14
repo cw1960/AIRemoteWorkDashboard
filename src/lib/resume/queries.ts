@@ -19,9 +19,20 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 export interface MasterResumeSummary {
   id: string;
   fileName: string;
-  fileType: "pdf" | "docx";
+  /** "text" when typed or pasted on the Master Profile page. */
+  fileType: "pdf" | "docx" | "text";
   updatedAt: string;
   characters: number;
+}
+
+/** The master profile: the resume text and the core skills and evidence. */
+export interface MasterProfile extends MasterResumeSummary {
+  content: string;
+  evidence: string;
+}
+
+function toFileType(value: string): MasterResumeSummary["fileType"] {
+  return value === "docx" || value === "text" ? value : "pdf";
 }
 
 /** The active master resume (without its text), or null. */
@@ -41,12 +52,50 @@ export const getMasterResume = cache(
     return {
       id: data.id,
       fileName: data.file_name,
-      fileType: data.file_type === "docx" ? "docx" : "pdf",
+      fileType: toFileType(data.file_type),
       updatedAt: data.created_at,
       characters: data.content.length,
     };
   },
 );
+
+/**
+ * The signed-in user's active master profile, with its text, or null when
+ * they have none (or are signed out).
+ */
+export async function getMasterProfile(): Promise<MasterProfile | null> {
+  const user = await getSessionUser();
+  if (!user) return null;
+  const supabase = await createSupabaseServerClient();
+  const withEvidence = await supabase
+    .from("master_resumes")
+    .select("id, file_name, file_type, created_at, content, evidence")
+    .eq("user_id", user.id)
+    .eq("is_active", true)
+    .maybeSingle();
+  // Undefined column: the site went live before the Master Profile
+  // migration was applied. Show the resume without evidence until it is.
+  const { data, error } =
+    withEvidence.error?.code === "42703"
+      ? await supabase
+          .from("master_resumes")
+          .select("id, file_name, file_type, created_at, content")
+          .eq("user_id", user.id)
+          .eq("is_active", true)
+          .maybeSingle()
+      : withEvidence;
+  if (error) throw new Error(error.message);
+  if (!data) return null;
+  return {
+    id: data.id,
+    fileName: data.file_name,
+    fileType: toFileType(data.file_type),
+    updatedAt: data.created_at,
+    characters: data.content.length,
+    content: data.content,
+    evidence: "evidence" in data ? String(data.evidence) : "",
+  };
+}
 
 /** The text of a master resume version the user owns, for comparison. */
 export async function getMasterResumeText(id: string): Promise<string | null> {

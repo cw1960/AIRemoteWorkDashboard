@@ -14,6 +14,8 @@ export const LIMITS = {
   /** Master resume text, after extraction (matches the database check). */
   masterMin: 200,
   masterMax: 50_000,
+  /** Core skills and evidence on the master profile. */
+  evidenceMax: 20_000,
   /** Job description sent for tailoring. */
   descriptionMin: 300,
   descriptionMax: 20_000,

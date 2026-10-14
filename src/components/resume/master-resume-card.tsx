@@ -22,15 +22,16 @@ import { formatDay } from "@/lib/resume/format";
 
 export interface MasterResumeView {
   fileName: string;
-  fileType: "pdf" | "docx";
+  fileType: "pdf" | "docx" | "text";
   updatedAt: string;
 }
 
 const MAX_MB = 4;
 
 /**
- * Upload, replace or delete the master resume. With `next` (from the job
- * page's Tailor button), a successful upload goes back there.
+ * Upload, replace or delete the master resume. An upload fills in the
+ * Master Profile's resume text (and keeps its evidence). With `next` (from
+ * the job page's Tailor button), a successful upload goes back there.
  */
 export function MasterResumeCard({
   master,
@@ -134,10 +135,14 @@ export function MasterResumeCard({
               {master.fileName}
             </p>
             <p className="text-sm text-muted-foreground">
-              {t("updated", {
-                type: master.fileType.toUpperCase(),
-                date: formatDay(master.updatedAt, locale),
-              })}
+              {master.fileType === "text"
+                ? t("updatedText", {
+                    date: formatDay(master.updatedAt, locale),
+                  })
+                : t("updated", {
+                    type: master.fileType.toUpperCase(),
+                    date: formatDay(master.updatedAt, locale),
+                  })}
             </p>
           </div>
         </div>

@@ -321,6 +321,7 @@ export type Database = {
         Row: {
           content: string;
           created_at: string;
+          evidence: string;
           file_name: string;
           file_size: number;
           file_type: string;
@@ -331,6 +332,7 @@ export type Database = {
         Insert: {
           content: string;
           created_at?: string;
+          evidence?: string;
           file_name: string;
           file_size: number;
           file_type: string;
@@ -341,6 +343,7 @@ export type Database = {
         Update: {
           content?: string;
           created_at?: string;
+          evidence?: string;
           file_name?: string;
           file_size?: number;
           file_type?: string;
@@ -1144,6 +1147,10 @@ export type Database = {
         Args: Record<PropertyKey, never>;
         Returns: { daily_limit: number; used: number }[];
       };
+      save_master_profile: {
+        Args: { p_content: string; p_evidence: string };
+        Returns: string;
+      };
       save_tailored_resume: {
         Args: { p_content: Json; p_final: boolean; p_id: string };
         Returns: undefined;
@@ -1166,6 +1173,7 @@ export type Database = {
           generation_id: number;
           job_title: string;
           master_content: string;
+          master_evidence: string;
           master_resume_id: string;
         }[];
       };
