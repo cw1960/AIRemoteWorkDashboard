@@ -97,6 +97,10 @@ jobs:
         if: ${{ !inputs.dry_run }}
         run: pnpm exec supabase functions deploy tailor-resume --project-ref "$SUPABASE_PROJECT_REF"
 
+      - name: Deploy the job-description function
+        if: ${{ !inputs.dry_run }}
+        run: pnpm exec supabase functions deploy job-description --project-ref "$SUPABASE_PROJECT_REF"
+
       - name: Set function secrets
         if: ${{ !inputs.dry_run }}
         env:

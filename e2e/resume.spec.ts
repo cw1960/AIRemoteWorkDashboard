@@ -14,6 +14,8 @@ import { rpcAsUser, signIn, uniqueEmail } from "./helpers";
 // Function, which is unit-tested with mocked responses and not started in
 // CI: here a generated draft is created the way that function records it
 // (start_resume_generation, then finish_resume_generation, as the user).
+// The job-description function isn't started either; its answers are
+// stubbed in the browser.
 
 // Seeded job ids are md5(external_id)::uuid (supabase/seed.sql).
 const MICRO1_JOB = "fa1e4a0c-cd30-7714-e00f-2b5d9e129da3"; // French Translator
@@ -44,6 +46,15 @@ async function signedInUser(
 ) {
   await signIn(page, request, uniqueEmail(project));
   await skipOnboarding(page);
+}
+
+/** Stubs the job-description function's answer for this page. */
+async function stubDescription(page: Page, description: string | null) {
+  await page.route("**/functions/v1/job-description", (route) =>
+    route.fulfill({
+      json: description ? { description, source: "page" } : { description },
+    }),
+  );
 }
 
 async function uploadMaster(
@@ -85,6 +96,7 @@ test.describe("resume tailoring", () => {
     request,
   }, testInfo) => {
     await signedInUser(page, request, testInfo.project.name);
+    await stubDescription(page, null);
     await page.goto(`/jobs/${MICRO1_JOB}`);
 
     const panel = page.getByRole("region", { name: "Tailored resume" });
@@ -115,6 +127,9 @@ test.describe("resume tailoring", () => {
     const generate = form.getByRole("button", { name: "Tailor my resume" });
     await expect(generate).toBeDisabled();
     await expect(form).toContainText("more characters needed");
+    await expect(form).toContainText(
+      "We couldn't get this job's full description automatically",
+    );
 
     await description.fill(
       "Translate and review French technical content for AI training. ".repeat(
@@ -131,6 +146,35 @@ test.describe("resume tailoring", () => {
     await expect(description).not.toHaveValue("");
     await page.goto("/resume");
     await expect(page.getByText("No tailored resumes yet")).toBeVisible();
+  });
+
+  test("fills in the job description when the site has it", async ({
+    page,
+    request,
+  }, testInfo) => {
+    const text =
+      "Translate and review French technical content for AI training. "
+        .repeat(8)
+        .trim();
+    await signedInUser(page, request, testInfo.project.name);
+    await page.goto("/resume");
+    await uploadMaster(page);
+    await expect(page.getByTestId("master-file-name")).toHaveText("ana.docx");
+
+    await stubDescription(page, text);
+    await page.goto(`/jobs/${MICRO1_JOB}`);
+    await page
+      .getByRole("region", { name: "Tailored resume" })
+      .getByRole("button", { name: "Tailor My Resume for This Job" })
+      .click();
+    const form = page.getByRole("dialog", { name: "Tailor my resume" });
+    await expect(form.getByLabel("Full job description")).toHaveValue(text);
+    await expect(form).toContainText("We filled in the full description");
+    await expect(
+      form.getByRole("button", { name: "Tailor my resume" }),
+    ).toBeEnabled();
+    const scan = await new AxeBuilder({ page }).withTags(A11Y_TAGS).analyze();
+    expect(scan.violations).toEqual([]);
   });
 
   test("explains files it can't read", async ({ page, request }, testInfo) => {

@@ -45,6 +45,20 @@ describe("parseMercorExplorePage", () => {
     });
   });
 
+  it("returns each kept listing's full description apart from the job", () => {
+    const result = parseMercorExplorePage(html);
+    const descriptions = result.descriptions ?? {};
+    expect(Object.keys(descriptions).sort()).toEqual(
+      result.jobs.map((j) => j.external_id).sort(),
+    );
+    const text = descriptions.list_AAABoOppU3x5v3XMbLRHP4rK ?? "";
+    expect(text).toMatch(
+      /^Mercor is recruiting \*\*Economics Research Experts\*\*/,
+    );
+    expect(text).toContain("at least 10 hours per week");
+    expect(descriptions).not.toHaveProperty("list_FIXTURE_PAUSED");
+  });
+
   it("converts eligible and ineligible countries to ISO alpha-2", () => {
     expect(
       byTitle("Local Political Expert — Elections Forecasting & Political Risk")

@@ -314,6 +314,8 @@ These figures come from third-party reviews; confirm them in each platform's das
 - [x] Next.js on Netlify
 - [x] Sender domain for Resend: mail.airemoteworkdashboard.com (verified; SPF, DKIM and DMARC pass)
 
+**Full job descriptions for resume tailoring (2026-10-15, owner's decision).** The tailor fills in the job description instead of asking the user to paste it. Mercor's Explore page, which we already read every 6 hours, carries each listing's full description; it is now kept in `job_descriptions` (no extra requests). micro1's feed has none, so its job page (jobs.micro1.ai, robots.txt allows all) is read when a signed-in user opens the tailor, at most once per job. Descriptions are never shown on the site; jobs keep the short summary and link out. Both platforms' terms restrict scraping, so this goes a step past "summary only"; the owner accepted that while seeking written permission.
+
 ## Newsletter: AI Remote Work Today
 
 Sister project (2026-10-02): a free weekday email newsletter on the market for human work in AI, drafted by AI agents and approved by the owner before every send. Its PRD, decisions, editorial docs, brand assets and full build plan (N0–N8) live in **`cw1960/airemoteworktoday`**. This repo owns the shared database, so the newsletter's dashboard-side tasks are tracked here; CLAUDE.md → "Newsletter" has the rules.
