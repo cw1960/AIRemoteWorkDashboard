@@ -50,6 +50,16 @@ const serverSchema = z.object({
     .string()
     .regex(/^pub_[0-9a-f-]{36}$/)
     .optional(),
+  /**
+   * Stripe secret (or restricted) key and webhook signing secret, for the
+   * Playbook. Unset (previews, local, CI): the buy button explains that
+   * checkout is unavailable.
+   */
+  STRIPE_SECRET_KEY: z
+    .string()
+    .regex(/^(sk|rk)_(test|live)_[A-Za-z0-9]+$/)
+    .optional(),
+  STRIPE_WEBHOOK_SECRET: z.string().startsWith("whsec_").optional(),
 });
 
 export type ServerEnv = z.infer<typeof serverSchema>;
@@ -61,6 +71,8 @@ export function getServerEnv(): ServerEnv {
     INBOUND_EMAIL_ENABLED: unsetIfEmpty(process.env.INBOUND_EMAIL_ENABLED),
     BEEHIIV_API_KEY: unsetIfEmpty(process.env.BEEHIIV_API_KEY),
     BEEHIIV_PUBLICATION_ID: unsetIfEmpty(process.env.BEEHIIV_PUBLICATION_ID),
+    STRIPE_SECRET_KEY: unsetIfEmpty(process.env.STRIPE_SECRET_KEY),
+    STRIPE_WEBHOOK_SECRET: unsetIfEmpty(process.env.STRIPE_WEBHOOK_SECRET),
   });
 }
 
