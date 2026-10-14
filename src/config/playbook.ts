@@ -13,6 +13,12 @@ export const playbookConfig = {
   /** Price in the smallest currency unit (cents). */
   priceCents: 1900,
   currency: "usd",
+  /**
+   * Stripe product tax code: digital books, downloaded, with permanent
+   * rights. Required because the account uses Stripe Managed Payments
+   * (Stripe is the merchant of record and handles sales tax and VAT).
+   */
+  taxCode: "txcd_10302000",
   /** Money-back guarantee, in days from purchase. */
   refundDays: 30,
   /** How long the download link works after purchase, in days. */

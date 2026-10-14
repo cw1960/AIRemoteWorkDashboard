@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-import { playbookPath } from "@/lib/playbook/paths";
+import { playbookPath, seeOther } from "@/lib/playbook/paths";
 import { checkoutEnabled, createCheckoutSession } from "@/lib/playbook/stripe";
 
 /**
@@ -10,12 +10,8 @@ import { checkoutEnabled, createCheckoutSession } from "@/lib/playbook/stripe";
  */
 export async function POST(request: NextRequest) {
   const back = (reason: string) =>
-    NextResponse.redirect(
-      new URL(
-        `${playbookPath(request.headers.get("host"))}?checkout=${reason}#buy`,
-        request.url,
-      ),
-      303,
+    seeOther(
+      `${playbookPath(request.headers.get("host"))}?checkout=${reason}#buy`,
     );
   if (!checkoutEnabled()) return back("unavailable");
   try {

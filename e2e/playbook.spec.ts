@@ -48,9 +48,10 @@ test.describe("playbook sales page", () => {
       .first()
       .click();
     await expect(page).toHaveURL(/\/playbook\?checkout=unavailable/);
-    await expect(page.getByRole("alert")).toContainText(
-      "Checkout isn't open yet",
-    );
+    // Filtered: Next.js adds its own (empty) route-announcer alert.
+    await expect(
+      page.getByRole("alert").filter({ hasText: "Checkout isn't open yet" }),
+    ).toBeVisible();
   });
 
   test("never gives the PDF without a paid purchase", async ({

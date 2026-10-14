@@ -78,6 +78,7 @@ export async function createCheckoutSession(): Promise<string> {
           unit_amount: playbookConfig.priceCents,
           product_data: {
             name: playbookConfig.title,
+            tax_code: playbookConfig.taxCode,
             description: `PDF ebook by ${playbookConfig.author}. ${playbookConfig.subtitle}.`,
           },
         },
@@ -95,9 +96,30 @@ export async function createCheckoutSession(): Promise<string> {
     body,
   });
   if (!response.ok) {
-    throw new Error(`Stripe refused the session: HTTP ${response.status}`);
+    throw new Error(
+      `Stripe refused the session: HTTP ${String(response.status)} ${await stripeError(response)}`,
+    );
   }
   return createdSchema.parse(await response.json()).url;
+}
+
+const errorSchema = z.object({
+  error: z.object({
+    type: z.string().optional(),
+    code: z.string().optional(),
+    param: z.string().optional(),
+    message: z.string().optional(),
+  }),
+});
+
+/** Stripe's error type, code and message, for the logs (no secrets). */
+async function stripeError(response: Response): Promise<string> {
+  const parsed = errorSchema.safeParse(await response.json().catch(() => null));
+  if (!parsed.success) return "(no error details)";
+  const { type, code, param, message } = parsed.data.error;
+  return [type, code, param && `param=${param}`, message]
+    .filter(Boolean)
+    .join(" | ");
 }
 
 /** A Checkout Session with its charge, or null when Stripe doesn't know it. */
