@@ -126,6 +126,16 @@ describe("tailorResume", () => {
     expect(result.review.unverified).toEqual(["PhD in Machine Learning"]);
   });
 
+  it("counts the core skills and evidence as a source", async () => {
+    const output: TailorOutput = structuredClone(TAILOR_OUTPUT);
+    output.resume.certifications.push("TEFL Certificate");
+    const result = await tailorResume(clientReplying(messageResponse(output)), {
+      ...INPUT,
+      evidence: "Certifications: TEFL Certificate (2022).",
+    });
+    expect(result.review.unverified).toEqual([]);
+  });
+
   it("refuses an incomplete resume rather than storing it", async () => {
     const output: TailorOutput = structuredClone(TAILOR_OUTPUT);
     output.resume.experience = [];

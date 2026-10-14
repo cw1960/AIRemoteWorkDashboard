@@ -106,12 +106,14 @@ test.describe("resume tailoring", () => {
       .click();
     const dialog = page.getByRole("dialog", { name: "Tailor my resume" });
     await expect(dialog).toContainText("For French Translator at micro1.");
-    await expect(dialog).toContainText("Tailoring needs your master resume");
-    await dialog.getByRole("link", { name: "Upload my resume" }).click();
+    await expect(dialog).toContainText("Set up your Master Profile first");
+    await dialog
+      .getByRole("link", { name: "Set up my Master Profile" })
+      .click();
 
     await expect(page).toHaveURL(/\/resume\?next=/);
     await expect(
-      page.getByText("Upload your resume to tailor it to jobs"),
+      page.getByText("Set up your Master Profile to tailor resumes"),
     ).toBeVisible();
     await expect(page).toHaveTitle(/\S/);
     const scan = await new AxeBuilder({ page }).withTags(A11Y_TAGS).analyze();
@@ -177,6 +179,57 @@ test.describe("resume tailoring", () => {
     expect(scan.violations).toEqual([]);
   });
 
+  test("keeps a Master Profile with core skills and evidence", async ({
+    page,
+    request,
+  }, testInfo) => {
+    const evidence = "- Raised pass rates 18% at Colegio Sol (2023)";
+    await signedInUser(page, request, testInfo.project.name);
+    await page.goto("/resume");
+    await expect(
+      page.getByRole("heading", { level: 1, name: "Master Profile" }),
+    ).toBeVisible();
+
+    const resume = page.getByLabel("Baseline Master Resume");
+    const skills = page.getByLabel("Core Skills & Evidence");
+    const save = page.getByRole("button", { name: "Save Master Profile" });
+
+    // Too short to tailor from: explained, nothing saved.
+    await resume.fill("Ana López, teacher.");
+    await save.click();
+    await expect(
+      page.getByRole("alert").filter({ hasText: "at least 200 characters" }),
+    ).toBeVisible();
+
+    // Pasted text and evidence are saved together.
+    await resume.fill(MASTER_RESUME);
+    await skills.fill(evidence);
+    await save.click();
+    await expect(
+      page
+        .getByRole("status")
+        .filter({ hasText: "Your Master Profile is saved." }),
+    ).toBeVisible();
+    await expect(page.getByTestId("master-file-name")).toHaveText(
+      "Master Profile",
+    );
+    await page.reload();
+    await expect(skills).toHaveValue(evidence);
+    await expect(resume).toHaveValue(/^Ana López/);
+
+    const scan = await new AxeBuilder({ page }).withTags(A11Y_TAGS).analyze();
+    expect(scan.violations).toEqual([]);
+
+    // Uploading a file replaces the text and keeps the evidence.
+    await uploadMaster(
+      page,
+      MASTER_RESUME.replace("Ana López", "Ana M. López"),
+    );
+    await expect(page.getByTestId("master-file-name")).toHaveText("ana.docx");
+    await expect(resume).toHaveValue(/^Ana M\. López/);
+    await expect(skills).toHaveValue(evidence);
+  });
+
   test("explains files it can't read", async ({ page, request }, testInfo) => {
     await signedInUser(page, request, testInfo.project.name);
     await page.goto("/resume");
@@ -204,7 +257,7 @@ test.describe("resume tailoring", () => {
         .filter({ hasText: "couldn't find any text in that PDF" }),
     ).toBeVisible();
     await expect(
-      page.getByText("Upload your resume to tailor it to jobs"),
+      page.getByText("Set up your Master Profile to tailor resumes"),
     ).toBeVisible();
   });
 
@@ -322,7 +375,7 @@ test.describe("resume tailoring", () => {
     await expect(
       page.getByRole("region", { name: "Tailored resume" }),
     ).toContainText(
-      "Your master resume has changed since this version was made.",
+      "Your Master Profile has changed since this version was made.",
     );
 
     // Cancelling a draft deletes only that draft.
@@ -365,7 +418,7 @@ test.describe("resume tailoring", () => {
     expect(file.status()).toBe(404);
     await other.goto("/resume");
     await expect(
-      other.getByText("Upload your resume to tailor it to jobs"),
+      other.getByText("Set up your Master Profile to tailor resumes"),
     ).toBeVisible();
     await expect(other.getByText("No tailored resumes yet")).toBeVisible();
     await context.close();
@@ -378,14 +431,14 @@ test.describe("resume tailoring", () => {
     await expect(page.getByTestId("master-file-name")).toHaveText("ana.docx");
 
     await page.getByRole("button", { name: "Delete" }).click();
-    await page.getByRole("button", { name: "Delete resume" }).click();
+    await page.getByRole("button", { name: "Delete Master Profile" }).click();
     await expect(
       page
         .getByRole("status")
-        .filter({ hasText: "Your master resume is deleted." }),
+        .filter({ hasText: "Your Master Profile is deleted." }),
     ).toBeVisible();
     await expect(
-      page.getByText("Upload your resume to tailor it to jobs"),
+      page.getByText("Set up your Master Profile to tailor resumes"),
     ).toBeVisible();
   });
 });

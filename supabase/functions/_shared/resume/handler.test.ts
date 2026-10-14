@@ -92,6 +92,8 @@ describe("handleTailorRequest", () => {
       name: "start_resume_generation",
       args: { p_job_id: JOB_ID },
     });
+    // No evidence on the profile: no evidence block.
+    expect(bodies[0]).not.toContain("core_evidence");
     // The job's own title and company, and the description it was given.
     expect(bodies[0]).toContain("Title: Spanish Tutor");
     expect(bodies[0]).toContain("Company: Mercor");
@@ -107,6 +109,25 @@ describe("handleTailorRequest", () => {
       p_input_tokens: 4000,
       p_output_tokens: 1500,
     });
+  });
+
+  it("sends the master profile's core skills and evidence", async () => {
+    const bodies: string[] = [];
+    const [row] = STARTED.ok ? (STARTED.data as Record<string, unknown>[]) : [];
+    const { deps } = setup({
+      client: modelClient(goodReply, bodies),
+      start: {
+        ok: true,
+        data: [{ ...row, master_evidence: "Raised pass rates 18% in 2023." }],
+      },
+    });
+    await handleTailorRequest(
+      { jobId: JOB_ID, jobDescription: DESCRIPTION },
+      deps,
+    );
+    expect(bodies[0]).toContain(
+      "<core_evidence>\\nRaised pass rates 18% in 2023.\\n</core_evidence>",
+    );
   });
 
   it("logs usage and cost without any resume or job text", async () => {

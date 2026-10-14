@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { AccountNav } from "@/components/account-nav";
+import { MasterProfileForm } from "@/components/resume/master-profile-form";
 import { MasterResumeCard } from "@/components/resume/master-resume-card";
 import { SiteHeader } from "@/components/site-header";
 import { StateBlock } from "@/components/state-block";
@@ -12,7 +13,7 @@ import { getSessionUser } from "@/lib/auth/session";
 import { safeNextPath } from "@/lib/auth/next-path";
 import { formatDay } from "@/lib/resume/format";
 import {
-  getMasterResume,
+  getMasterProfile,
   getTailoringUsage,
   listTailoredResumes,
 } from "@/lib/resume/queries";
@@ -22,7 +23,10 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t("metaTitle"), robots: { index: false } };
 }
 
-/** The master resume, and every tailored resume made from it. */
+/**
+ * The Master Profile (the resume text, from an upload or pasted, and the
+ * core skills and evidence), and every tailored resume made from it.
+ */
 export default async function ResumePage({
   searchParams,
 }: PageProps<"/[locale]/resume">) {
@@ -46,7 +50,7 @@ export default async function ResumePage({
 
   const [t, master, tailored, usage] = await Promise.all([
     getTranslations("Resume"),
-    getMasterResume(),
+    getMasterProfile(),
     listTailoredResumes(),
     getTailoringUsage(),
   ]);
@@ -56,7 +60,7 @@ export default async function ResumePage({
       <SiteHeader>
         <AccountNav />
       </SiteHeader>
-      <main id="main" className="mx-auto w-full max-w-2xl flex-1 px-4 py-12">
+      <main id="main" className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
         <h1 className="font-display text-3xl font-extrabold">{t("title")}</h1>
         <p className="mt-2 text-muted-foreground">{t("subtitle")}</p>
         {next && (
@@ -72,6 +76,9 @@ export default async function ResumePage({
           <h2 id="master-heading" className="text-xl font-extrabold">
             {t("masterHeading")}
           </h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {t("masterIntro")}
+          </p>
           <div className="mt-3">
             <MasterResumeCard
               master={
@@ -83,6 +90,21 @@ export default async function ResumePage({
                     }
                   : null
               }
+              next={next}
+            />
+          </div>
+        </section>
+
+        <section aria-labelledby="profile-heading" className="mt-10">
+          <h2 id="profile-heading" className="text-xl font-extrabold">
+            {t("profileHeading")}
+          </h2>
+          <div className="mt-3">
+            {/* Keyed by version, so an upload resets the text shown. */}
+            <MasterProfileForm
+              key={master?.id ?? "none"}
+              content={master?.content ?? ""}
+              evidence={master?.evidence ?? ""}
               next={next}
             />
           </div>

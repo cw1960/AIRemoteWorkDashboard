@@ -160,7 +160,7 @@
     "signIn": "Sign in",
     "signOut": "Sign out",
     "account": "Account",
-    "profile": "Profile",
+    "profile": "Preferences",
     "dashboard": "Dashboard",
     "benefitsTitle": "A free account lets you:",
     "benefits": {
@@ -171,7 +171,7 @@
     "consent": "By continuing you agree to our <terms>Terms of Use</terms> and <privacy>Privacy Notice</privacy>.",
     "allJobs": "All jobs",
     "admin": "Admin",
-    "resume": "Resume"
+    "resume": "Master Profile"
   },
   "Onboarding": {
     "metaTitle": "Set up your profile",
@@ -515,7 +515,7 @@
       "title": "AI resume tailoring",
       "body": "Stand out on every application with a resume written for that exact job.",
       "steps": {
-        "upload": "Upload your resume once (PDF or Word).",
+        "upload": "Set up your Master Profile once: your resume plus your best results and skills.",
         "click": "Open any job and click \"Tailor My Resume for This Job\".",
         "review": "Review, edit and download it as Word or PDF."
       },
@@ -656,7 +656,7 @@
         "sections": {
           "collect": {
             "heading": "1. What we collect",
-            "body": "If you only browse, we don't ask for any personal data.\n\nIf you create an account, we keep: your email address; the profile answers you choose to give (field of work, skills, languages, country, availability and target pay); your tracker cards, notes, dates and stage history; your platform statuses; your saved searches; and your email preferences.\n\nIf you forward emails to your private tracking address, our email provider (Resend) receives them and we read them once to update your board. We keep only the sender's domain and the subject line, never the email itself.\n\nIf you use resume tailoring, we keep the text of the master resume you upload (never the file itself), the tailored resumes you create, and a record of each tailoring request (when, for which job, and how much it cost to run, never its content).\n\nWhen you click Apply, we record which job was clicked and when (and your account, if you're signed in), so we can measure referrals. Our hosting providers also keep standard technical logs, such as IP addresses, for security.\n\nIf you subscribe to {newsletter}, we keep your email address, when you subscribed, and where you signed up (for example, the page or link you came from). When you subscribe through a form on this site, the form sends your email address straight to our newsletter provider; we also count the signup, recording only which form it was and the campaign tags in the page address, never who you are. Our newsletter provider records whether each issue is delivered and whether you open it or click its links, so we can see which parts readers find useful."
+            "body": "If you only browse, we don't ask for any personal data.\n\nIf you create an account, we keep: your email address; the profile answers you choose to give (field of work, skills, languages, country, availability and target pay); your tracker cards, notes, dates and stage history; your platform statuses; your saved searches; and your email preferences.\n\nIf you forward emails to your private tracking address, our email provider (Resend) receives them and we read them once to update your board. We keep only the sender's domain and the subject line, never the email itself.\n\nIf you use resume tailoring, we keep your Master Profile (the text of the resume you upload or paste, never the file itself, and the core skills and evidence you add), the tailored resumes you create, and a record of each tailoring request (when, for which job, and how much it cost to run, never its content).\n\nWhen you click Apply, we record which job was clicked and when (and your account, if you're signed in), so we can measure referrals. Our hosting providers also keep standard technical logs, such as IP addresses, for security.\n\nIf you subscribe to {newsletter}, we keep your email address, when you subscribed, and where you signed up (for example, the page or link you came from). When you subscribe through a form on this site, the form sends your email address straight to our newsletter provider; we also count the signup, recording only which form it was and the campaign tags in the page address, never who you are. Our newsletter provider records whether each issue is delivered and whether you open it or click its links, so we can see which parts readers find useful."
           },
           "use": {
             "heading": "2. Why we use it",
@@ -664,11 +664,11 @@
           },
           "share": {
             "heading": "3. Who we share it with",
-            "body": "We use a small number of service providers who process data on our behalf: Supabase (database and sign-in), Netlify (website hosting), Resend (email delivery) and Beehiiv (newsletter delivery and the newsletter website at {newsletterDomain}). They may process data in the United States or other countries, under contracts and safeguards that protect it.\n\nWhen you apply through our links, the platform (for example Mercor or micro1) receives our referral code. It doesn't receive your data from us. Anything you give a platform is covered by its own privacy policy.\n\nWe use an AI provider, Anthropic. It helps research and draft the newsletter from public information, such as job listings and news, and for that it never receives your personal data. When you ask us to tailor your resume, we send Anthropic your master resume and the job description you provide, so it can write the tailored version. Anthropic processes them on our behalf, keeps them only for a limited time under its own data policies, and doesn't use them to train its models."
+            "body": "We use a small number of service providers who process data on our behalf: Supabase (database and sign-in), Netlify (website hosting), Resend (email delivery) and Beehiiv (newsletter delivery and the newsletter website at {newsletterDomain}). They may process data in the United States or other countries, under contracts and safeguards that protect it.\n\nWhen you apply through our links, the platform (for example Mercor or micro1) receives our referral code. It doesn't receive your data from us. Anything you give a platform is covered by its own privacy policy.\n\nWe use an AI provider, Anthropic. It helps research and draft the newsletter from public information, such as job listings and news, and for that it never receives your personal data. When you ask us to tailor your resume, we send Anthropic your master resume, the core skills and evidence on your Master Profile, and the job description, so it can write the tailored version. Anthropic processes them on our behalf, keeps them only for a limited time under its own data policies, and doesn't use them to train its models."
           },
           "keep": {
             "heading": "4. How long we keep it",
-            "body": "We keep your account data for as long as your account exists. If you ask us to delete your account, we delete your personal data within 30 days, apart from anything we must keep by law. Click records not linked to an account may be kept for statistics.\n\nYou can delete your master resume, and any tailored resume, at any time from the Resume page; they are deleted with your account too.\n\nWe keep your newsletter subscription until you unsubscribe. After that we stop emailing you, but we may keep your email address on a do-not-send list so we never email you again by mistake."
+            "body": "We keep your account data for as long as your account exists. If you ask us to delete your account, we delete your personal data within 30 days, apart from anything we must keep by law. Click records not linked to an account may be kept for statistics.\n\nYou can delete your Master Profile, and any tailored resume, at any time from the Master Profile page; they are deleted with your account too.\n\nWe keep your newsletter subscription until you unsubscribe. After that we stop emailing you, but we may keep your email address on a do-not-send list so we never email you again by mistake."
           },
           "rights": {
             "heading": "5. Your rights",
@@ -1001,18 +1001,18 @@
   "Tailor": {
     "heading": "Tailored resume",
     "button": "Tailor My Resume for This Job",
-    "signedOut": "Sign in, upload your resume once, and get a version tailored to this job in about a minute.",
+    "signedOut": "Sign in, set up your Master Profile once, and get a version of your resume tailored to this job in about a minute.",
     "statusNone": "Resume not yet tailored for this job.",
     "continueDraft": "Continue your draft",
     "statusSaved": "Tailored resume saved (version {version}, {date}).",
     "view": "View",
     "downloadWord": "Download (Word)",
-    "updateAvailable": "Your master resume has changed since this version was made. Tailor again for an updated version; your saved one stays as it is.",
+    "updateAvailable": "Your Master Profile has changed since this version was made. Tailor again for an updated version; your saved one stays as it is.",
     "explainer": "Your master resume is never changed. You review and edit every tailored version before saving it.",
     "dialogTitle": "Tailor my resume",
     "forJob": "For {title} at {company}.",
-    "needsMaster": "Tailoring needs your master resume: the one resume with all your experience. Upload it once (PDF or Word) and you can tailor it to any job in one click. You'll come straight back here.",
-    "uploadFirst": "Upload my resume",
+    "needsMaster": "Set up your Master Profile first. It's your complete resume plus any extra skills and evidence, and every tailored resume is built from it. Upload or paste your resume once and you can tailor it to any job in one click. You'll come straight back here.",
+    "uploadFirst": "Set up my Master Profile",
     "descriptionLabel": "Full job description",
     "descriptionHelp": "We couldn't get this job's full description automatically, so paste it from the <listing>job's listing</listing> (opens in a new tab). The tailored resume is based on what you paste here.",
     "descriptionLoading": "Getting the full job description…",
@@ -1020,7 +1020,7 @@
     "tooShort": "{count, plural, one {# more character needed} other {# more characters needed}}: paste the whole description, not just the title.",
     "length": "{count, plural, one {# character} other {# characters}}",
     "remaining": "{count, plural, =0 {You've used today's tailored resumes; try again tomorrow.} one {# tailored resume left today.} other {# tailored resumes left today.}}",
-    "privacy": "Your resume and this description are sent to our AI provider, Anthropic, to write the draft.",
+    "privacy": "Your Master Profile and this description are sent to our AI provider, Anthropic, to write the draft.",
     "cancel": "Cancel",
     "generate": "Tailor my resume",
     "generating": "Tailoring your resume for {title} at {company}…",
@@ -1029,7 +1029,7 @@
       "description_too_short": "That description is too short to tailor a resume to. Paste the full job description.",
       "description_too_long": "That description is too long. Paste only the job description itself.",
       "not_authenticated": "Your session has expired. Sign in again, then try once more.",
-      "no_master_resume": "Upload your master resume first.",
+      "no_master_resume": "Set up your Master Profile first.",
       "job_not_found": "This job is no longer open, so it can't be tailored for.",
       "generation_in_progress": "A tailored resume is already being written. Wait for it to finish, then try again.",
       "daily_limit": "You've reached today's limit of tailored resumes. Try again tomorrow.",
@@ -1046,27 +1046,47 @@
     }
   },
   "Resume": {
-    "metaTitle": "Your resume",
-    "title": "Your resume",
-    "subtitle": "Upload one master resume, then tailor it to any job with one click.",
-    "returnNotice": "Upload your resume and we'll take you back to the job to tailor it.",
-    "masterHeading": "Master resume",
-    "activeLabel": "Active master resume",
+    "metaTitle": "Master Profile",
+    "title": "Master Profile",
+    "subtitle": "Everything the resume tailor knows about you. Set it up once: every tailored resume is built from it, and nothing outside it is ever added.",
+    "returnNotice": "Set up your Master Profile and we'll take you back to the job to tailor it.",
+    "masterHeading": "Upload your resume",
+    "masterIntro": "The quickest start: upload your resume and we'll fill in its text below. Uploading again replaces the text and keeps your core skills and evidence.",
+    "activeLabel": "Current Master Profile",
     "updated": "{type} · updated {date}",
-    "emptyTitle": "Upload your resume to tailor it to jobs",
-    "emptyBody": "Your master resume is the source of truth for your experience, education and skills. Once it's here, every job page gets a \"Tailor My Resume for This Job\" button that writes a version for that job, which you review before saving.",
+    "updatedText": "Typed or pasted · updated {date}",
+    "profileHeading": "Your Master Profile",
+    "resumeLabel": "Baseline Master Resume",
+    "resumeHelp": "Your complete resume as text: every position with its dates, your education and your skills. Paste it here, or upload a file above and check the text we read from it.",
+    "evidenceLabel": "Core Skills & Evidence",
+    "evidenceHelp": "Proof your resume leaves out, for the tailor to use where a job calls for it: results with numbers, tools and languages, projects, certifications, publications, AI-training or rating work. One plain fact per line, with the role it belongs to. It's treated as true, so only include what you can back up.",
+    "evidencePlaceholder": "- Cut claim review time 40% as Billing Lead at Acme Health (2023)\n- Python, SQL, Label Studio, Excel (advanced)\n- 1,200+ hours rating and writing prompts for AI models (2024–2025)\n- Certified Professional Coder (AAPC, 2021)",
+    "count": "{count, plural, one {# character} other {# characters}} of {max}",
+    "save": "Save Master Profile",
+    "saving": "Saving…",
+    "saved": "Your Master Profile is saved. New tailored resumes will use it.",
+    "unchanged": "No changes to save.",
+    "profileErrors": {
+      "too_short": "Your resume text needs at least {min} characters. Paste your whole resume, not just a summary.",
+      "too_long": "Your resume text is longer than {max} characters. Paste just your resume.",
+      "evidence_too_long": "Core Skills & Evidence can be up to {max} characters. Keep the facts that matter most.",
+      "auth": "Your session has expired. Sign in again, then try once more.",
+      "failed": "Something went wrong, so nothing was saved. Please try again."
+    },
+    "emptyTitle": "Set up your Master Profile to tailor resumes",
+    "emptyBody": "Upload your resume here, or paste it below. Once it's saved, every job page gets a \"Tailor My Resume for This Job\" button that writes a version for that job, which you review before saving.",
     "fileHelp": "PDF or Word (.docx), up to {mb} MB. Scanned PDFs can't be read (there's no text recognition): use a text-based PDF or a Word file.",
     "upload": "Upload resume",
     "replace": "Replace resume",
     "uploading": "Reading your resume…",
-    "uploaded": "Your master resume is updated. Tailored resumes you already made are unchanged.",
+    "uploaded": "Your resume is uploaded and its text is below. Check it, add your core skills and evidence, and save any changes. Tailored resumes you already made are unchanged.",
     "delete": "Delete",
-    "deleteTitle": "Delete your master resume?",
-    "deleteBody": "We'll delete its text, and any earlier versions we kept. Tailored resumes you made stay, as separate documents.",
+    "deleteTitle": "Delete your Master Profile?",
+    "deleteBody": "We'll delete your resume text and your core skills and evidence, and any earlier versions we kept. Tailored resumes you made stay, as separate documents.",
     "keep": "Keep it",
-    "confirmDelete": "Delete resume",
-    "deleted": "Your master resume is deleted.",
-    "privacy": "We keep the text of your resume, never the file. It's sent to our AI provider, Anthropic, only when you tailor it to a job. You can delete it at any time.",
+    "confirmDelete": "Delete Master Profile",
+    "deleted": "Your Master Profile is deleted.",
+    "privacy": "We keep the text of your Master Profile, never the file you upload. It's sent to our AI provider, Anthropic, only when you tailor a resume to a job. You can delete it at any time.",
     "tailoredHeading": "Tailored resumes",
     "usage": "{used} of {limit} tailored resumes used in the last 24 hours.",
     "noneTitle": "No tailored resumes yet",

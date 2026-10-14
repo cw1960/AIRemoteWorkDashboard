@@ -241,22 +241,29 @@ Key rules:
 
 ## Resume tailoring
 
-- Flow: upload a PDF/DOCX on `/resume` (text extracted in memory, file not
-  kept; no OCR) → job page "Tailor My Resume for This Job" → the user checks
+- Master Profile (`/resume`): the resume text (upload a PDF/DOCX, text
+  extracted in memory, file not kept, no OCR; or paste/edit it) plus "Core
+  Skills & Evidence". Both are one `master_resumes` version
+  (`replace_master_resume()` for uploads, which keeps the evidence;
+  `save_master_profile()` for the form), so tailored resumes stay tied to
+  what they were made from. No separate profile table.
+- Flow: Master Profile → job page "Tailor My Resume for This Job" → the user checks
   the full job description (filled in by the `job-description` Edge
   Function from `job_descriptions` or the micro1 job page; the user pastes
   it when there is none) → the browser calls the `tailor-resume` Edge Function (it
   can run longer than a Netlify function) → a draft opens on
   `/resume/<id>` for review, editing, saving and Word/PDF download.
 - The function runs as the user: `start_resume_generation()` checks the job,
-  the master resume, one-at-a-time and the daily limit;
+  the master resume, one-at-a-time and the daily limit, and returns the
+  resume text and evidence;
   `finish_resume_generation()` stores the draft as the job's next version.
   Re-tailoring adds a version; replacing the master keeps old versions while
   tailored resumes use them.
 - Model: `claude-opus-5-5`, structured output (`_shared/resume/schema.ts`),
   server-side refusal fallback. Documents are untrusted data in tags they
-  can't close (`prompt.ts`); `facts.ts` lists anything not in the master
-  resume for the user to verify. Never log resume or job text.
+  can't close (`prompt.ts`); the evidence is sent as `<core_evidence>` and
+  counts as fact; `facts.ts` lists anything not in the resume or evidence
+  for the user to verify. Never log resume or job text.
 - Tests never call the API: the SDK runs against a fake `fetch`.
 
 ## Codebase map

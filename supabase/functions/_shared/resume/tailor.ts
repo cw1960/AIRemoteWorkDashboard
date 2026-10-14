@@ -55,6 +55,8 @@ export interface TailorInput {
   company: string;
   jobDescription: string;
   masterResume: string;
+  /** Core skills and evidence from the master profile ("" when none). */
+  evidence?: string;
 }
 
 export interface TailorResult {
@@ -141,7 +143,11 @@ export async function tailorResume(
     emphasized: output.review.emphasized,
     gaps: output.review.gaps,
     flags: output.review.flags,
-    unverified: unsupportedFacts(resume, input.masterResume),
+    // The evidence is part of the master profile, so it counts as a source.
+    unverified: unsupportedFacts(
+      resume,
+      `${input.masterResume}\n${input.evidence ?? ""}`,
+    ),
   });
   if (!stored.success || !review.success) {
     throw new TailorError("invalid_output", usage);
