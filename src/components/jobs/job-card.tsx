@@ -101,7 +101,9 @@ export function JobCard({
         />
         <ApplyButton jobId={job.id} platform={job.platform.name} />
       </div>
-      <ReferralDisclosure className="mt-2 sm:text-right" />
+      {job.platform.has_referral && (
+        <ReferralDisclosure className="mt-2 sm:text-right" />
+      )}
     </article>
   );
 }

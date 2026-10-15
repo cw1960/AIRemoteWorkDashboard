@@ -25,6 +25,7 @@ const job: JobDetail = {
     site_url: "https://www.mercor.com",
     onboarding_notes: null,
     countries_blocked: [],
+    has_referral: true,
   },
 };
 

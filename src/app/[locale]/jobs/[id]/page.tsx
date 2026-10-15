@@ -257,7 +257,7 @@ export default async function JobPage({
                     />
                     {track}
                   </div>
-                  <ReferralDisclosure />
+                  {job.platform.has_referral && <ReferralDisclosure />}
                 </div>
               </>
             )}
@@ -337,7 +337,9 @@ export default async function JobPage({
             {track}
             <ApplyButton jobId={job.id} platform={job.platform.name} />
           </div>
-          <ReferralDisclosure className="text-center" />
+          {job.platform.has_referral && (
+            <ReferralDisclosure className="text-center" />
+          )}
         </div>
       )}
     </>
