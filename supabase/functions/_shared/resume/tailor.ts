@@ -40,10 +40,32 @@ export interface TailorUsage {
   outputTokens: number;
 }
 
+/**
+ * What the API said when it refused a request, for the logs: the HTTP
+ * status, the error type (such as "authentication_error") and the request
+ * id to look up in the Claude Console. Never the message text.
+ */
+export interface ApiErrorDetail {
+  status: number | null;
+  type: string | null;
+  requestId: string | null;
+}
+
+/** The loggable detail of an API error, or null for other errors. */
+export function apiErrorDetail(error: unknown): ApiErrorDetail | null {
+  if (!(error instanceof Anthropic.APIError)) return null;
+  return {
+    status: typeof error.status === "number" ? error.status : null,
+    type: error.type ?? null,
+    requestId: error.requestID ?? null,
+  };
+}
+
 export class TailorError extends Error {
   constructor(
     readonly code: TailorErrorCode,
     readonly usage: TailorUsage | null = null,
+    readonly detail: ApiErrorDetail | null = null,
   ) {
     super(code);
     this.name = "TailorError";
@@ -117,7 +139,7 @@ export async function tailorResume(
       messages: [{ role: "user", content: buildUserMessage(input) }],
     });
   } catch (error) {
-    throw new TailorError(classifyError(error));
+    throw new TailorError(classifyError(error), null, apiErrorDetail(error));
   }
 
   const usage: TailorUsage = {

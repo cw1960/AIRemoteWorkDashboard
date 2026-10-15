@@ -212,6 +212,36 @@ describe("handleTailorRequest", () => {
     });
   });
 
+  it("logs why the API refused the key, without its message", async () => {
+    const { deps, logs } = setup({
+      client: modelClient(() =>
+        Response.json(
+          {
+            type: "error",
+            error: {
+              type: "authentication_error",
+              message: "invalid x-api-key",
+            },
+          },
+          { status: 401, headers: { "request-id": "req_test123" } },
+        ),
+      ),
+    });
+    expect(
+      await handleTailorRequest(
+        { jobId: JOB_ID, jobDescription: DESCRIPTION },
+        deps,
+      ),
+    ).toEqual({ status: 502, body: { error: "not_configured" } });
+    expect(logs[0]).toMatchObject({
+      error: "not_configured",
+      api_status: 401,
+      api_error_type: "authentication_error",
+      api_request_id: "req_test123",
+    });
+    expect(JSON.stringify(logs)).not.toContain("invalid x-api-key");
+  });
+
   it("records a provider failure and stores no resume", async () => {
     const { deps, calls } = setup({
       client: modelClient(() =>
