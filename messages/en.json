@@ -1,7 +1,7 @@
 {
   "Metadata": {
     "title": "{appName} — Track your AI training job applications",
-    "description": "Find remote AI-training jobs from Mercor and micro1, tailor your resume to each job with AI, and track every application in one free dashboard."
+    "description": "Find remote AI-training jobs from Mercor, micro1, Invisible, Welo Data and more, tailor your resume to each job with AI, and track every application in one free dashboard."
   },
   "Layout": {
     "skipToContent": "Skip to main content"
@@ -571,7 +571,7 @@
     "steps": {
       "browse": {
         "title": "1. Browse jobs",
-        "body": "The job feed lists open roles from Mercor and micro1, refreshed every few hours. Search by title and filter by platform, field, language, country and minimum pay. You don't need an account to browse."
+        "body": "The job feed lists open roles from Mercor, micro1, Invisible, Welo Data, xAI and RemoExperts, refreshed every few hours. Search by title and filter by platform, field, language, country and minimum pay. You don't need an account to browse."
       },
       "account": {
         "title": "2. Create a free account",
@@ -726,7 +726,7 @@
         "sections": {
           "how": {
             "heading": "How it works",
-            "body": "When you click Apply, you go to the platform through our link, which may add our referral code. Today that applies to Mercor and micro1. If you join or are hired through the link, the platform may pay us a referral fee under its own referral program."
+            "body": "When you click Apply, you go to the platform through our link, which may add our referral code. Today that applies to Mercor and micro1; links to other platforms, such as Invisible or Welo Data, are plain links with no referral code. If you join or are hired through the link, the platform may pay us a referral fee under its own referral program."
           },
           "you": {
             "heading": "What it means for you",
@@ -1349,7 +1349,7 @@
         },
         "dashboard": {
           "title": "Free: AI Remote Work Dashboard",
-          "body": "Every open role from Mercor and micro1 in one feed, an AI resume tailor and an application tracker. Free, forever."
+          "body": "Every open role from Mercor, micro1 and other AI-training platforms in one feed, an AI resume tailor and an application tracker. Free, forever."
         }
       }
     },

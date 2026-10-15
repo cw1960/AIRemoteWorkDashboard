@@ -314,6 +314,8 @@ These figures come from third-party reviews; confirm them in each platform's das
 - [x] Next.js on Netlify
 - [x] Sender domain for Resend: mail.airemoteworkdashboard.com (verified; SPF, DKIM and DMARC pass)
 
+**More platforms on the site (2026-10-15, owner's decision).** The site now lists every vetted source, not only referral platforms: Invisible, Welo Data, xAI and RemoExperts (vetted 2026-10-02, see Newsletter-only source vetting) join Mercor and micro1, with plain links and no affiliate notice. Checked the same day and not added: Scale AI, Snorkel, Toloka, Turing, Handshake, Labelbox and Prolific post only staff roles on their Greenhouse boards. Candidate: Appen's Lever board (`api.lever.co/v0/postings/appen`, about 60 independent-contractor projects; Lever's robots.txt allows `/`); appen.com's terms were unreachable from the build environment, so the owner checks them before an adapter is built.
+
 **Full job descriptions for resume tailoring (2026-10-15, owner's decision).** The tailor fills in the job description instead of asking the user to paste it. Mercor's Explore page, which we already read every 6 hours, carries each listing's full description; it is now kept in `job_descriptions` (no extra requests). micro1's feed has none, so its job page (jobs.micro1.ai, robots.txt allows all) is read when a signed-in user opens the tailor, at most once per job. Descriptions are never shown on the site; jobs keep the short summary and link out. Both platforms' terms restrict scraping, so this goes a step past "summary only"; the owner accepted that while seeking written permission.
 
 ## Newsletter: AI Remote Work Today

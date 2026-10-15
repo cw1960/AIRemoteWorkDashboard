@@ -11,13 +11,17 @@ export interface ListedPlatform {
   name: string;
 }
 
-/** Platforms people can track: those with a referral program (CLAUDE.md). */
+/**
+ * Platforms people can track: the listed ones (CLAUDE.md), referral
+ * platforms first.
+ */
 export async function getListedPlatforms(): Promise<ListedPlatform[]> {
   const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase
     .from("platforms")
     .select("id, slug, name")
-    .not("referral_url_template", "is", null)
+    .eq("listed", true)
+    .order("has_referral", { ascending: false })
     .order("name");
   if (error) throw new Error(error.message);
   return data;

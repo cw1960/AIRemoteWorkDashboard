@@ -191,7 +191,7 @@ export async function trackPlatform(input: unknown): Promise<ActionResult> {
     .from("platforms")
     .select("id, name")
     .eq("slug", parsed.data.slug)
-    .not("referral_url_template", "is", null)
+    .eq("listed", true)
     .maybeSingle();
   if (platformError) return { ok: false, error: "failed" };
   if (!platform) return { ok: false, error: "invalid" };

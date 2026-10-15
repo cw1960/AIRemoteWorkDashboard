@@ -17,10 +17,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const supabase = createSupabaseAnonClient();
 
   const [platforms, jobs] = await Promise.all([
-    supabase
-      .from("platforms")
-      .select("slug, updated_at")
-      .not("referral_url_template", "is", null),
+    supabase.from("platforms").select("slug, updated_at").eq("listed", true),
     supabase
       .from("jobs")
       .select("id, last_seen_at")

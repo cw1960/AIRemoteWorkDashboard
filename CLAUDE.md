@@ -91,8 +91,8 @@ this repo:
    migrations. Its scheduled workflow reaches the database only through
    token-gated SQL functions (the `private.invoke_reminders()` pattern,
    token in Vault), never the service role key.
-2. **Newsletter-only job sources.** The site keeps its rules (referral
-   platforms only, Mercor and micro1 promoted). The newsletter may also use
+2. **Newsletter-only job sources.** The site keeps its rules (listed,
+   vetted platforms only). The newsletter may also use
    sources stored with the other jobs but **never shown on the site** (feed,
    job pages, sitemap, matching). They are fetched only from official
    public job-board APIs (Greenhouse, Lever, Ashby) or sources whose
@@ -101,9 +101,10 @@ this repo:
    applies unchanged. A platform's `newsletter_only` flag (copied onto
    its jobs) keeps its jobs off the site: RLS hides them from site reads,
    and every security-definer function that reads jobs filters them
-   explicitly. Mercor and micro1 jobs are site jobs and also feed the
-   newsletter. Built and vetted (2026-10-02): Invisible, Welo Data, xAI,
-   RemoExperts.
+   explicitly. Site jobs also feed the newsletter. Built and vetted
+   (2026-10-02) as newsletter-only: Invisible, Welo Data, xAI, RemoExperts;
+   all four moved to the site on 2026-10-15. Today only the editor's
+   hand-picked listings are newsletter-only.
    Platforms whose terms forbid scraping are never fetched; the editor adds
    their public listings by hand. Competitor boards and OpenTrain AI stay
    off-limits as job sources.
@@ -146,17 +147,18 @@ this repo:
 - **Resume tailoring is in (owner's decision, 2026-10-14)**, free, limited to
   5 generations per user per rolling 24 hours (`private.resume_daily_limit()`).
   It must never invent facts: see Resume tailoring below.
-- **Only platforms with a referral program get a fetcher** (owner's decision,
-  2026-10-01: referrals are how the app earns). Build an adapter only after
-  the platform's referral link format is confirmed and recorded in PLAN.md →
-  Monetization. Exception: newsletter-only sources, which never appear on
-  the site (see Newsletter → Newsletter-only job sources). Greenhouse/Lever
-  adapters for Invisible, Welo Data and xAI (PR #13, reverted) are back as
-  newsletter-only sources; if one adds a referral program, clear its
-  `newsletter_only` flag to list it on the site. Platform
-  pages follow the same rule: `/platforms/<slug>` is a 404 until the
-  platform has a `referral_url_template`.
-- **V1 promotes only Mercor and micro1** (owner's decision, 2026-10-01).
+- **Only vetted platforms are listed** (owner's decision, 2026-10-15,
+  replacing "referral platforms only" from 2026-10-01). A platform's
+  `listed` flag decides what the site names: `/platforms/<slug>` (a 404
+  otherwise), the sitemap, the Platform Passport, onboarding and platform
+  cards. Listed: Mercor and micro1 (referral links) and Invisible, Welo
+  Data, xAI and RemoExperts (plain links, no referral). A listed platform
+  can't be `newsletter_only`. The affiliate notice next to Apply shows only
+  where `has_referral` (generated from `referral_url_template`) is true.
+  Jobs are sorted the same way whatever the platform; platform lists put
+  referral platforms first. A new platform needs robots.txt **and** terms
+  checked and recorded in PLAN.md before its adapter is built.
+- **Referral platforms: Mercor and micro1** (owner's decision, 2026-10-01).
   Vetted and excluded: Handshake AI, Outlier, Terac, Alignerr (terms forbid
   scraping), Turing (blocks bots), Mindrift (no listings or referral
   program). DataAnnotation and SME Careers are unchecked. Mercor's and
@@ -206,7 +208,7 @@ token in Vault), which read public job data only.
 
 | Table                | Key columns                                                                                                                                            |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| platforms            | slug, name, site_url, email_domains, referral_url_template, countries_blocked, onboarding_notes                                                        |
+| platforms            | slug, name, site_url, email_domains, referral_url_template, has_referral, listed, newsletter_only, countries_blocked, onboarding_notes                 |
 | playbooks            | platform_id, stage, next_step, checklist (json)                                                                                                        |
 | jobs                 | platform_id, external_id (unique with platform), title, domain, pay_min, pay_max, pay_unit, languages, countries, url, posted_at, last_seen_at, status |
 | ingest_runs          | platform_id, started_at, found, inserted, updated, closed, error                                                                                       |

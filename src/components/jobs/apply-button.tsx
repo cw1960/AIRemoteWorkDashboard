@@ -39,7 +39,7 @@ export function ApplyButton({
   );
 }
 
-/** The affiliate disclosure shown with every Apply button. */
+/** The affiliate disclosure, shown with Apply on referral platforms. */
 export function ReferralDisclosure({ className }: { className?: string }) {
   const t = useTranslations("Job");
   return (

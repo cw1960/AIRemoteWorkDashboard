@@ -30,10 +30,10 @@ export type JobCardRow = Pick<
   | "languages"
   | "countries"
   | "posted_at"
-> & { platform: { slug: string; name: string } };
+> & { platform: { slug: string; name: string; has_referral: boolean } };
 
 export const JOB_CARD_COLUMNS =
-  "id, title, summary, domain, tags, pay_min, pay_max, pay_unit, languages, countries, posted_at, platform:platforms!inner(slug, name)";
+  "id, title, summary, domain, tags, pay_min, pay_max, pay_unit, languages, countries, posted_at, platform:platforms!inner(slug, name, has_referral)";
 
 /** `%` and `_` are wildcards in ILIKE; match them literally. */
 function escapeLike(value: string): string {
@@ -114,11 +114,16 @@ export async function getFeedFacets(): Promise<FeedFacets> {
 /** A platform as shown on its page and on job pages. */
 export type PlatformInfo = Pick<
   PlatformRow,
-  "slug" | "name" | "site_url" | "onboarding_notes" | "countries_blocked"
+  | "slug"
+  | "name"
+  | "site_url"
+  | "onboarding_notes"
+  | "countries_blocked"
+  | "has_referral"
 >;
 
 const PLATFORM_COLUMNS =
-  "slug, name, site_url, onboarding_notes, countries_blocked";
+  "slug, name, site_url, onboarding_notes, countries_blocked, has_referral";
 
 /** One job page: the card plus what the page and structured data need. */
 export type JobDetail = Omit<JobCardRow, "platform"> &
@@ -166,8 +171,7 @@ export async function getSimilarJobs(job: JobDetail): Promise<JobCardRow[]> {
 
 /**
  * One listed platform by slug; null when the slug is malformed or unknown,
- * or the platform has no referral program (no confirmed referral link):
- * only platforms that pay referrals are listed (CLAUDE.md).
+ * or the platform isn't listed (only vetted platforms are, CLAUDE.md).
  */
 export const getPlatform = cache(
   async (slug: string): Promise<PlatformInfo | null> => {
@@ -178,7 +182,7 @@ export const getPlatform = cache(
       .from("platforms")
       .select(PLATFORM_COLUMNS)
       .eq("slug", slug)
-      .not("referral_url_template", "is", null)
+      .eq("listed", true)
       .maybeSingle();
     if (error) throw new Error(error.message);
     return data;

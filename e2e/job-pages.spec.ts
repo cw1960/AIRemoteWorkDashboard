@@ -109,8 +109,18 @@ test.describe("platform page", () => {
     await expect(page.locator("#results-heading")).toHaveText("13 open jobs");
   });
 
-  test("hides platforms without a referral program", async ({ page }) => {
-    // Outlier has no confirmed referral link yet, so it isn't listed.
+  test("lists vetted platforms without a referral program", async ({
+    page,
+  }) => {
+    const response = await page.goto("/platforms/invisible");
+    expect(response?.status()).toBe(200);
+    await expect(
+      page.getByRole("heading", { level: 1, name: /Invisible/ }),
+    ).toBeVisible();
+  });
+
+  test("hides platforms we don't list", async ({ page }) => {
+    // Outlier's terms forbid scraping, so we never fetch or list it.
     const response = await page.goto("/platforms/outlier");
     expect(response?.status()).toBe(404);
   });

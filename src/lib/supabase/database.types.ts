@@ -434,7 +434,9 @@ export type Database = {
           countries_blocked: string[];
           created_at: string;
           email_domains: string[];
+          has_referral: boolean;
           id: string;
+          listed: boolean;
           name: string;
           newsletter_only: boolean;
           onboarding_notes: string | null;
@@ -447,7 +449,9 @@ export type Database = {
           countries_blocked?: string[];
           created_at?: string;
           email_domains?: string[];
+          has_referral?: never;
           id?: string;
+          listed?: boolean;
           name: string;
           newsletter_only?: boolean;
           onboarding_notes?: string | null;
@@ -460,7 +464,9 @@ export type Database = {
           countries_blocked?: string[];
           created_at?: string;
           email_domains?: string[];
+          has_referral?: never;
           id?: string;
+          listed?: boolean;
           name?: string;
           newsletter_only?: boolean;
           onboarding_notes?: string | null;
