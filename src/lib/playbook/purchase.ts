@@ -10,6 +10,8 @@ export type PurchaseStatus = "paid" | "unpaid" | "refunded" | "expired";
 export interface SessionFacts {
   /** Unix seconds. */
   created: number;
+  /** The Checkout Session's own state ("open", "complete", "expired"). */
+  status?: string | null | undefined;
   payment_status: string;
   metadata?: Record<string, string> | null | undefined;
   payment_intent?:
@@ -23,6 +25,19 @@ export interface SessionFacts {
     | undefined;
 }
 
+/**
+ * Whether a session's payment is settled: paid, or a completed order that
+ * needed no payment (a 100%-off promotion code, such as the newsletter's
+ * referral reward).
+ */
+export function isSettled(
+  paymentStatus: string | undefined,
+  status: string | null | undefined,
+): boolean {
+  if (paymentStatus === "paid") return true;
+  return paymentStatus === "no_payment_required" && status === "complete";
+}
+
 /** Whether a Checkout Session grants the download right now. */
 export function purchaseStatus(
   session: SessionFacts,
@@ -30,7 +45,7 @@ export function purchaseStatus(
   downloadDays: number,
 ): PurchaseStatus {
   if (session.metadata?.product !== "playbook") return "unpaid";
-  if (session.payment_status !== "paid") return "unpaid";
+  if (!isSettled(session.payment_status, session.status)) return "unpaid";
   const charge = session.payment_intent?.latest_charge;
   if (charge?.refunded || charge?.disputed) return "refunded";
   const ageDays = (now - session.created * 1000) / 86_400_000;

@@ -2,7 +2,7 @@ import { createHmac } from "node:crypto";
 
 import { describe, expect, it } from "vitest";
 
-import { purchaseStatus, verifyStripeSignature } from "./purchase";
+import { isSettled, purchaseStatus, verifyStripeSignature } from "./purchase";
 
 const NOW = Date.parse("2026-10-15T12:00:00Z");
 const created = (daysAgo: number) =>
@@ -28,6 +28,24 @@ describe("purchaseStatus", () => {
       purchaseStatus({ ...paid, metadata: { product: "other" } }, NOW, 90),
     ).toBe("unpaid");
     expect(purchaseStatus({ ...paid, metadata: null }, NOW, 90)).toBe("unpaid");
+  });
+
+  it("grants a completed order that needed no payment (100%-off code)", () => {
+    const free = {
+      created: created(1),
+      status: "complete",
+      payment_status: "no_payment_required",
+      metadata: { product: "playbook" },
+      payment_intent: null,
+    };
+    expect(purchaseStatus(free, NOW, 90)).toBe("paid");
+    expect(purchaseStatus({ ...free, status: "open" }, NOW, 90)).toBe("unpaid");
+    expect(purchaseStatus({ ...free, status: undefined }, NOW, 90)).toBe(
+      "unpaid",
+    );
+    expect(purchaseStatus({ ...free, created: created(91) }, NOW, 90)).toBe(
+      "expired",
+    );
   });
 
   it("stops refunded or disputed purchases", () => {
@@ -91,5 +109,15 @@ describe("verifyStripeSignature", () => {
     expect(verifyStripeSignature(body, header, secret, t + 301)).toBe(false);
     expect(verifyStripeSignature(body, null, secret, t)).toBe(false);
     expect(verifyStripeSignature(body, "v1=abc", secret, t)).toBe(false);
+  });
+});
+
+describe("isSettled", () => {
+  it("accepts paid sessions and completed no-payment sessions only", () => {
+    expect(isSettled("paid", null)).toBe(true);
+    expect(isSettled("no_payment_required", "complete")).toBe(true);
+    expect(isSettled("no_payment_required", "open")).toBe(false);
+    expect(isSettled("unpaid", "complete")).toBe(false);
+    expect(isSettled(undefined, "complete")).toBe(false);
   });
 });
