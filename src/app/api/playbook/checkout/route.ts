@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 import { playbookPath, seeOther } from "@/lib/playbook/paths";
+import { parsePlaybookRef } from "@/lib/playbook/promo";
 import { checkoutEnabled, createCheckoutSession } from "@/lib/playbook/stripe";
 
 /**
@@ -14,8 +15,10 @@ export async function POST(request: NextRequest) {
       `${playbookPath(request.headers.get("host"))}?checkout=${reason}#buy`,
     );
   if (!checkoutEnabled()) return back("unavailable");
+  const form = await request.formData().catch(() => null);
+  const ref = parsePlaybookRef(form?.get("ref"));
   try {
-    return NextResponse.redirect(await createCheckoutSession(), 303);
+    return NextResponse.redirect(await createCheckoutSession(ref), 303);
   } catch (error) {
     console.error("playbook checkout failed", error);
     return back("error");

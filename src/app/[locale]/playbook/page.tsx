@@ -22,6 +22,7 @@ import { PlaybookCover } from "@/components/playbook/cover";
 import { playbookConfig } from "@/config/playbook";
 import { siteConfig } from "@/config/site";
 import { formatPlaybookPrice } from "@/lib/playbook/price";
+import { parsePlaybookRef } from "@/lib/playbook/promo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Playbook");
@@ -120,6 +121,7 @@ export default async function PlaybookPage({
   ]);
   const price = formatPlaybookPrice(locale);
   const notice = CHECKOUT_NOTICES.find((key) => key === query.checkout);
+  const ref = parsePlaybookRef(query.ref);
   const days = playbookConfig.refundDays;
 
   const trust = (
@@ -146,7 +148,12 @@ export default async function PlaybookPage({
           <span className="font-display text-sm font-extrabold sm:text-base">
             {t("brand")}
           </span>
-          <BuyButton price={price} short className="hidden sm:block" />
+          <BuyButton
+            price={price}
+            refTag={ref}
+            short
+            className="hidden sm:block"
+          />
         </div>
       </header>
 
@@ -201,7 +208,7 @@ export default async function PlaybookPage({
                 ))}
               </ul>
               <div className="mt-8 grid gap-4">
-                <BuyButton price={price} />
+                <BuyButton price={price} refTag={ref} />
                 {trust}
               </div>
             </div>
@@ -505,7 +512,11 @@ export default async function PlaybookPage({
                 ))}
               </ul>
               <div className="mt-8 grid justify-items-center gap-4">
-                <BuyButton price={price} className="w-full sm:w-auto" />
+                <BuyButton
+                  price={price}
+                  refTag={ref}
+                  className="w-full sm:w-auto"
+                />
                 <div className="flex justify-center">{trust}</div>
               </div>
             </div>
@@ -589,7 +600,11 @@ export default async function PlaybookPage({
             {t("final.lead")}
           </p>
           <div className="mt-8 grid justify-items-center gap-4">
-            <BuyButton price={price} className="w-full sm:w-auto" />
+            <BuyButton
+              price={price}
+              refTag={ref}
+              className="w-full sm:w-auto"
+            />
             {trust}
           </div>
           <p className="mt-10 text-xs text-muted-foreground">
@@ -600,7 +615,7 @@ export default async function PlaybookPage({
 
       {/* Phones: the buy button stays in reach. */}
       <div className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/90 p-3 backdrop-blur sm:hidden">
-        <BuyButton price={price} short />
+        <BuyButton price={price} refTag={ref} short />
       </div>
     </>
   );

@@ -78,4 +78,24 @@ test.describe("playbook sales page", () => {
     });
     expect([400, 503]).toContain(response.status());
   });
+
+  test("is linked from the home page and the footer, tagged by placement", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    const card = page.getByRole("complementary", {
+      name: "The AI Remote Work Playbook",
+    });
+    await expect(
+      card.getByRole("link", { name: /Get the Playbook/ }),
+    ).toHaveAttribute(
+      "href",
+      "https://playbook.airemoteworkdashboard.com/?ref=home",
+    );
+    await expect(
+      page
+        .getByRole("contentinfo")
+        .getByRole("link", { name: "The AI Remote Work Playbook" }),
+    ).toHaveAttribute("href", /\?ref=footer$/);
+  });
 });

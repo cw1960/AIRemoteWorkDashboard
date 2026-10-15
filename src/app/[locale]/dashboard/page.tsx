@@ -1,10 +1,12 @@
 import { Mail, UserRound } from "lucide-react";
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import { z } from "zod";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { AccountNav } from "@/components/account-nav";
 import { NewsletterSignup } from "@/components/newsletter-signup";
+import { PlaybookCard } from "@/components/playbook/promo";
 import { SiteHeader } from "@/components/site-header";
 import { Button } from "@/components/ui/button";
 import { Link, redirect } from "@/i18n/navigation";
@@ -17,6 +19,7 @@ import {
 } from "@/lib/matching/queries";
 import { getEmailsToReview } from "@/lib/inbound/queries";
 import { getPassport, type PassportEntry } from "@/lib/passport/queries";
+import { PLAYBOOK_CARD_COOKIE } from "@/lib/playbook/promo";
 import { needsOnboarding } from "@/lib/profile/queries";
 import { buildTodayItems, type TodayItem } from "@/lib/today/items";
 import { recordDashboardVisit } from "@/lib/today/queries";
@@ -100,6 +103,9 @@ export default async function DashboardPage({
     timeZone: "UTC",
   }).format(new Date());
 
+  // Hidden for good once dismissed (a cookie, listed in the Cookie Notice).
+  const showPlaybook = !(await cookies()).has(PLAYBOOK_CARD_COOKIE);
+
   return (
     <>
       <SiteHeader>
@@ -163,6 +169,10 @@ export default async function DashboardPage({
           openCardId={openCard.success ? openCard.data : null}
           stats={views.length > 0 ? <PipelineStats stats={stats} /> : undefined}
         />
+
+        {showPlaybook && (
+          <PlaybookCard refTag="dashboard" dismissible className="mt-8" />
+        )}
 
         <NewsletterSignup
           source="dashboard"

@@ -16,6 +16,7 @@ import {
   useTransition,
 } from "react";
 
+import { PlaybookTip } from "@/components/playbook/promo";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -300,6 +301,7 @@ function Column({
   showHeading: boolean;
 }) {
   const t = useTranslations("Dashboard");
+  const tPromo = useTranslations("PlaybookPromo");
   const [over, setOver] = useState(false);
   const headingId = `column-${stage}${showHeading ? "" : "-mobile"}`;
 
@@ -362,6 +364,14 @@ function Column({
           ))}
         </ul>
       )}
+      {cards.length > 0 &&
+        (stage === "assessment" || stage === "interviewing") && (
+          <PlaybookTip
+            message={tPromo(stage)}
+            refTag={`tracker-${stage}`}
+            className="px-2 pt-3 pb-1"
+          />
+        )}
     </section>
   );
 }

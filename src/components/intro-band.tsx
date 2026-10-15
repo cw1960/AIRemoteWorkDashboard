@@ -15,6 +15,7 @@ import {
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
+import { PlaybookCard } from "@/components/playbook/promo";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { INTRO_COOKIE } from "@/lib/intro";
@@ -187,6 +188,7 @@ export function IntroBand({
           </li>
         ))}
       </ul>
+      <PlaybookCard refTag="home" className="relative mt-8 max-w-2xl" />
       <p className="relative mt-8 max-w-3xl text-sm text-muted-foreground">
         {t("howFree")}
       </p>

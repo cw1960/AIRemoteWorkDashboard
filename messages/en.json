@@ -483,7 +483,8 @@
     "cookies": "Cookies",
     "affiliates": "Affiliate disclosure",
     "contact": "Contact",
-    "copyright": "© {year} {operator}. Job listings belong to the platforms that post them."
+    "copyright": "© {year} {operator}. Job listings belong to the platforms that post them.",
+    "playbook": "The AI Remote Work Playbook"
   },
   "Newsletter": {
     "footer": {
@@ -706,7 +707,7 @@
         "sections": {
           "which": {
             "heading": "1. The cookies we use",
-            "body": "Sign-in cookies (names starting with \"sb-\"): keep you signed in. They are set when you sign in and removed when you sign out.\n\nLanguage cookie (NEXT_LOCALE): remembers the site language.\n\nIntroduction cookie (intro_dismissed): remembers that you hid the welcome introduction, for up to a year."
+            "body": "Sign-in cookies (names starting with \"sb-\"): keep you signed in. They are set when you sign in and removed when you sign out.\n\nLanguage cookie (NEXT_LOCALE): remembers the site language.\n\nIntroduction cookie (intro_dismissed): remembers that you hid the welcome introduction, for up to a year.\n\nPlaybook card cookie (playbook_card_dismissed): remembers that you hid the Playbook card on your dashboard, for up to a year."
           },
           "third": {
             "heading": "2. Third-party cookies",
@@ -1452,5 +1453,17 @@
       "expiredBody": "Download links work for {days} days. Email {email} with the address you used at checkout and we'll send you a new one.",
       "back": "Back to the Playbook"
     }
+  },
+  "PlaybookPromo": {
+    "eyebrow": "From the creator",
+    "title": "The AI Remote Work Playbook",
+    "body": "Zara interview prep, 10 practice simulations and a 30-day plan to land AI-training work.",
+    "cta": "Get the Playbook: {price}",
+    "dismiss": "Hide the Playbook card",
+    "seeIt": "See the Playbook",
+    "assessment": "Preparing for an assessment? The Playbook has 10 practice simulations with expert judgments.",
+    "interviewing": "Interviewing? The Playbook shows how to prepare for AI interviews like micro1's Zara.",
+    "micro1": "micro1 interviews candidates with Zara, its AI recruiter. Chapter 5 of the Playbook shows how to prepare.",
+    "evidence": "Not sure what counts as evidence? The Playbook's Resume Evidence Matrix walks you through it."
   }
 }
