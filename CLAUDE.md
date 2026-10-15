@@ -279,7 +279,9 @@ Key rules:
 - Stripe over plain `fetch` (no SDK, `src/lib/playbook/stripe.ts`): the buy
   buttons post to `/api/playbook/checkout` (Checkout Session, price inline).
   `/thanks` and `/api/playbook/download` re-check the session with Stripe
-  on every request (paid, not refunded or disputed, within 90 days); the
+  on every request (paid, or a completed order that needed no payment, as
+  with the newsletter's 100%-off referral code; not refunded or disputed;
+  within 90 days); the
   session id is the buyer's key. `/api/playbook/webhook` verifies Stripe's
   signature and emails the link once (Resend idempotency key = session id).
 - The PDF is `content/playbook/` (never `public/`), bundled with the
