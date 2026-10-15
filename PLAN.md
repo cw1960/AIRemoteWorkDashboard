@@ -245,6 +245,7 @@ Gate: beta users are active on the dashboard.
 
 - [x] Pipeline stats: applications, response rate, days per stage, hourly value in play
 - [x] Playbooks written for each launch platform (drafted from the platforms' public help pages; owner reviews the text)
+- [x] Playbooks for Invisible, Welo Data, xAI and RemoExperts (2026-10-15; drafted from their own job postings, read through their official job-board feeds, since their websites were unreachable from the build environment; owner reviews the text)
 - [x] Email auto-capture: token addresses, webhook, sender and keyword rules, Needs review list (live once the Resend receiving domain and webhook are set up)
 - [x] Weekly recap email
 - [x] Polish: celebration on Offered, dark mode, empty states (dark mode: the app has a single dark theme)
