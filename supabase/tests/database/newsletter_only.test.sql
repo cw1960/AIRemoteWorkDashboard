@@ -3,7 +3,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 
-select plan(16);
+select plan(17);
 
 -- Fixtures (as postgres) ---------------------------------------------------
 
@@ -14,12 +14,19 @@ update public.profiles set domains = '{law}'
 where user_id = '00000000-0000-0000-0000-0000000000a1';
 
 select results_eq(
-  $$ select slug, newsletter_only from public.platforms
+  $$ select slug, newsletter_only, listed from public.platforms
      where slug in ('invisible', 'mercor', 'micro1', 'remoexperts', 'welo-data', 'xai') order by slug $$,
-  $$ values ('invisible'::text, true), ('mercor', false), ('micro1', false),
-            ('remoexperts', true), ('welo-data', true), ('xai', true) $$,
-  'only the vetted newsletter sources are newsletter-only'
+  $$ values ('invisible'::text, false, true), ('mercor', false, true), ('micro1', false, true),
+            ('remoexperts', false, true), ('welo-data', false, true), ('xai', false, true) $$,
+  'the vetted sources are listed and on the site'
 );
+select throws_ok(
+  $$ update public.platforms set newsletter_only = true where slug = 'xai' $$,
+  '23514', null, 'a listed platform cannot be newsletter-only'
+);
+
+-- xAI stands in for a newsletter-only source from here on.
+update public.platforms set listed = false, newsletter_only = true where slug = 'xai';
 
 select public.ingest_jobs('xai', now() - interval '1 minute',
   '[{"external_id": "x-1", "title": "Zebrafish AI Tutor", "domain": "law", "url": "https://example.com/x-1"}]');
