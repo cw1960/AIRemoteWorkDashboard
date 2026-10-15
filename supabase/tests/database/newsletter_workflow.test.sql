@@ -10,6 +10,9 @@ select plan(29);
 
 create temporary table ids (ext text, id uuid) on commit drop;
 
+-- xAI stands in for a newsletter-only source.
+update public.platforms set listed = false, newsletter_only = true where slug = 'xai';
+
 -- Both sources have been running since December, so every January job is
 -- new and both weeks compare like with like.
 insert into public.ingest_runs (platform_id, started_at, finished_at, found)
