@@ -13,6 +13,7 @@ import { z } from "zod";
 
 import { LIMITS } from "./schema.ts";
 import {
+  type ApiErrorDetail,
   classifyError,
   estimateCostUsd,
   MODEL,
@@ -128,6 +129,7 @@ export async function handleTailorRequest(
           ok: false;
           error: TailorErrorCode | "not_configured";
           usage: TailorUsage | null;
+          detail?: ApiErrorDetail | null;
         },
   ) => {
     const usage = outcome.usage;
@@ -143,6 +145,14 @@ export async function handleTailorRequest(
         ? Number(estimateCostUsd(usage).toFixed(4))
         : null,
       duration_ms: deps.now() - startedAt,
+      // Why the API refused (status, type, request id), never its message.
+      ...(!outcome.ok && outcome.detail
+        ? {
+            api_status: outcome.detail.status,
+            api_error_type: outcome.detail.type,
+            api_request_id: outcome.detail.requestId,
+          }
+        : {}),
     });
     return deps.rpc("finish_resume_generation", {
       p_generation_id: generation.generation_id,
@@ -173,7 +183,8 @@ export async function handleTailorRequest(
   } catch (error) {
     const code = classifyError(error);
     const usage = error instanceof TailorError ? error.usage : null;
-    await finish({ ok: false, error: code, usage });
+    const detail = error instanceof TailorError ? error.detail : null;
+    await finish({ ok: false, error: code, usage, detail });
     return fail(RETRYABLE.includes(code) ? 503 : 502, code);
   }
 
