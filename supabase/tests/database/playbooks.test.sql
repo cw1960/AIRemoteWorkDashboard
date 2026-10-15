@@ -8,7 +8,7 @@ select is_empty(
   $$ select p.slug, s.stage
      from public.platforms p
      cross join unnest(enum_range(null::public.card_stage)) as s(stage)
-     where p.referral_url_template is not null
+     where p.listed
        and not exists (
          select 1 from public.playbooks b
          where b.platform_id = p.id and b.stage = s.stage
@@ -27,7 +27,7 @@ select is_empty(
 
 set local role anon;
 select ok(
-  (select count(*) from public.playbooks) >= 12,
+  (select count(*) from public.playbooks) >= 36,
   'signed-out visitors can read playbooks'
 );
 
