@@ -4,6 +4,7 @@ import { Loader2, Save } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { type SubmitEvent, useRef, useState, useTransition } from "react";
 
+import { PlaybookTip } from "@/components/playbook/promo";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useRouter } from "@/i18n/navigation";
@@ -27,6 +28,7 @@ export function MasterProfileForm({
   next: string | null;
 }) {
   const t = useTranslations("Resume");
+  const tPromo = useTranslations("PlaybookPromo");
   const router = useRouter();
   const [resumeText, setResumeText] = useState(content);
   const [evidenceText, setEvidenceText] = useState(evidence);
@@ -117,6 +119,7 @@ export function MasterProfileForm({
         <p id="master-evidence-help" className="text-sm text-muted-foreground">
           {t("evidenceHelp")}
         </p>
+        <PlaybookTip message={tPromo("evidence")} refTag="master-profile" />
         <Textarea
           id="master-evidence-text"
           value={evidenceText}

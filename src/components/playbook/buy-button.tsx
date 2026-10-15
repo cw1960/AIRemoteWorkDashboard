@@ -13,10 +13,13 @@ import { cn } from "@/lib/utils";
  */
 export function BuyButton({
   price,
+  refTag = null,
   short = false,
   className,
 }: {
   price: string;
+  /** Where the visitor came from (?ref=), passed on to Stripe. */
+  refTag?: string | null;
   short?: boolean;
   className?: string;
 }) {
@@ -31,6 +34,7 @@ export function BuyButton({
       }}
       className={className}
     >
+      {refTag && <input type="hidden" name="ref" value={refTag} />}
       <Button
         type="submit"
         variant="editorial"

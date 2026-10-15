@@ -61,8 +61,14 @@ export function checkoutEnabled(): boolean {
   return Boolean(getServerEnv().STRIPE_SECRET_KEY);
 }
 
-/** A Checkout Session for one copy of the Playbook; returns its URL. */
-export async function createCheckoutSession(): Promise<string> {
+/**
+ * A Checkout Session for one copy of the Playbook; returns its URL. `ref`
+ * (where the buyer came from) is kept in the metadata for reporting.
+ */
+export async function createCheckoutSession(
+  ref: string | null = null,
+): Promise<string> {
+  const metadata = ref ? { product: "playbook", ref } : { product: "playbook" };
   const base = playbookConfig.url;
   const body = stripeForm({
     mode: "payment",
@@ -84,8 +90,8 @@ export async function createCheckoutSession(): Promise<string> {
         },
       },
     ],
-    metadata: { product: "playbook" },
-    payment_intent_data: { metadata: { product: "playbook" } },
+    metadata,
+    payment_intent_data: { metadata },
   });
   const response = await fetch(`${API}/checkout/sessions`, {
     method: "POST",

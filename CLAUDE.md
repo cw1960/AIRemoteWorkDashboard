@@ -286,6 +286,13 @@ Key rules:
   Without them the buy button explains checkout is unavailable.
 - Copy must come from the book: no invented testimonials, sales numbers or
   fake urgency.
+- Promotion in the app is subtle and contextual (`components/playbook/promo.tsx`):
+  one card on the signed-out home page, a footer link, a tip on the tracker's
+  Assessment and Interviewing columns, on micro1 job pages and by the Master
+  Profile's evidence field, and a dashboard card hidden for good by
+  `playbook_card_dismissed`. At most one mention per page. Every link carries
+  `?ref=<placement>` (`lib/playbook/promo.ts`), which the sales page passes to
+  Stripe as session metadata, so Stripe shows which placement sells.
 
 ## Codebase map
 

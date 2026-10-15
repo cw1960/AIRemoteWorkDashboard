@@ -23,6 +23,7 @@ import {
 } from "@/components/jobs/job-card";
 import { AccountNav } from "@/components/account-nav";
 import { NewsletterSignup } from "@/components/newsletter-signup";
+import { PlaybookTip } from "@/components/playbook/promo";
 import { TailorSection } from "@/components/resume/tailor-section";
 import { SiteHeader } from "@/components/site-header";
 import { TrackButton } from "@/components/track-button";
@@ -87,10 +88,11 @@ export default async function JobPage({
   const job = await getJob(id);
   if (!job) notFound();
 
-  const [t, tJob, tDomains, locale] = await Promise.all([
+  const [t, tJob, tDomains, tPromo, locale] = await Promise.all([
     getTranslations("JobPage"),
     getTranslations("Job"),
     getTranslations("Domains"),
+    getTranslations("PlaybookPromo"),
     getLocale(),
   ]);
   const closed = job.status !== "open";
@@ -287,6 +289,13 @@ export default async function JobPage({
               {t("platformGuide", { platform: job.platform.name })}
               <ChevronRight className="size-4" aria-hidden="true" />
             </Link>
+            {job.platform.slug === "micro1" && (
+              <PlaybookTip
+                message={tPromo("micro1")}
+                refTag="micro1-job"
+                className="mt-2"
+              />
+            )}
           </section>
 
           <NewsletterSignup

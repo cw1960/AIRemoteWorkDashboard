@@ -131,4 +131,24 @@ test.describe("dashboard", () => {
       .analyze();
     expect(results.violations).toEqual([]);
   });
+
+  test("shows the Playbook card until it is hidden", async ({
+    page,
+    request,
+  }, testInfo) => {
+    await newUserOnDashboard(page, request, testInfo.project.name);
+    const card = page.getByRole("complementary", {
+      name: "The AI Remote Work Playbook",
+    });
+    await expect(
+      card.getByRole("link", { name: /Get the Playbook/ }),
+    ).toHaveAttribute("href", /\?ref=dashboard$/);
+    await card.getByRole("button", { name: "Hide the Playbook card" }).click();
+    await expect(card).toHaveCount(0);
+    await page.reload();
+    await expect(
+      page.getByRole("heading", { level: 1, name: "Your dashboard" }),
+    ).toBeVisible();
+    await expect(card).toHaveCount(0);
+  });
 });

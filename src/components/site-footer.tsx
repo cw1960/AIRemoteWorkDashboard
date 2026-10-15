@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { NewsletterSignup } from "@/components/newsletter-signup";
 import { siteConfig } from "@/config/site";
 import { Link } from "@/i18n/navigation";
+import { playbookUrl } from "@/lib/playbook/promo";
 
 const LINKS = [
   ["howItWorks", "/how-it-works"],
@@ -34,6 +35,14 @@ export async function SiteFooter() {
                 </Link>
               </li>
             ))}
+            <li>
+              <a
+                href={playbookUrl("footer")}
+                className="inline-flex min-h-11 items-center rounded text-muted-foreground hover:text-foreground hover:underline"
+              >
+                {t("playbook")}
+              </a>
+            </li>
             <li>
               <a
                 href={`mailto:${siteConfig.supportEmail}`}
