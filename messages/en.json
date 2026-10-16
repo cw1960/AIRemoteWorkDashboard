@@ -397,11 +397,12 @@
     },
     "reasonNewsletterDrafts": "You're getting this because you post {newsletter}'s social drafts. Only admins receive them.",
     "newsletterDrafts": {
-      "subject": "{kind, select, weekly {Weekly data post} other {Social drafts}} for {date}",
+      "subject": "{kind, select, weekly {Weekly data post} social {Today's social posts} other {Social drafts}} for {date}",
       "preview": "{count, plural, one {# draft} other {# drafts}} ready to check and post.",
-      "heading": "{kind, select, weekly {This week's data post} other {Social drafts}}",
-      "intro": "Drafts for {date}. Check each one, edit it as you like and post it by hand: nothing is posted automatically.",
-      "cta": "Open in the admin area"
+      "heading": "{kind, select, weekly {This week's data post} social {Today's social posts} other {Social drafts}}",
+      "intro": "{kind, select, social {Posts for {date}, written from the issue you sent. Posts with a time go out automatically then (Monterrey time) while SOCIAL_AUTOPOST is on in the newsletter repo; switch it off to stop them. The rest are drafts to post by hand.} other {Drafts for {date}. Check each one, edit it as you like and post it by hand: nothing is posted automatically.}}",
+      "cta": "Open in the admin area",
+      "postsAt": "{channel} · posts at {time}"
     },
     "playbook": {
       "subject": "Your copy of {title}",
@@ -960,7 +961,7 @@
     "newsletter": {
       "metaTitle": "Newsletter",
       "title": "Newsletter",
-      "intro": "What the {newsletter} workflow produced: job picks, social drafts to copy and post by hand, and what each run cost.",
+      "intro": "What the {newsletter} workflow produced: job picks, social posts (posted automatically or drafts to copy by hand), and what each run cost.",
       "cost": {
         "heading": "Model spend",
         "last7": "Last 7 days",
@@ -980,7 +981,8 @@
         "viewLabel": "View the run for {date}",
         "kinds": {
           "daily": "Daily",
-          "weekly": "Weekly"
+          "weekly": "Weekly",
+          "social": "Social"
         },
         "statuses": {
           "running": "Running",
@@ -993,20 +995,33 @@
         "shortlist": "Job picks",
         "shortlistEmpty": "This run picked no jobs.",
         "caveats": "Caveats:",
-        "drafts": "Social drafts",
+        "drafts": "Social posts and drafts",
         "draftsEmpty": "This run wrote no drafts.",
         "emailed": "Emailed {date}",
         "notEmailed": "Not emailed",
         "copy": "Copy",
         "copyLabel": "Copy the {channel} draft",
         "copied": "Copied.",
-        "copyFailed": "Couldn't copy. Select the text and copy it instead."
+        "copyFailed": "Couldn't copy. Select the text and copy it instead.",
+        "postsAt": "Posts at {time}",
+        "statuses": {
+          "draft": "Draft to post by hand",
+          "scheduled": "Scheduled",
+          "posting": "Posting (check it by hand)",
+          "posted": "Posted",
+          "failed": "Failed",
+          "skipped": "Skipped"
+        },
+        "viewPost": "View the post"
       }
     }
   },
   "NewsletterChannels": {
     "linkedin": "LinkedIn",
     "x": "X",
+    "bluesky": "Bluesky",
+    "threads": "Threads",
+    "facebook": "Facebook",
     "reddit": "Reddit",
     "video": "Video script"
   },

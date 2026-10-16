@@ -204,7 +204,12 @@ N2): anonymous signup counts by source and campaign, insert via
 (N4): `newsletter_runs` (usage and cost per run), `job_shortlists`,
 `social_drafts`; admin only, written and read by the newsletter repo's
 workflow only through token-gated `newsletter_*()` functions (newsletter
-token in Vault), which read public job data only.
+token in Vault), which read public job data only. Since 2026-10-16
+`social_drafts` also holds the daily social posts: Bluesky and X posts are
+scheduled and published by the workflow (`newsletter_claim_due_posts()`
+marks due posts `posting` so none posts twice and skips any more than 3 h
+late; `newsletter_finish_post()` records the result); Reddit and the other
+channels stay drafts to post by hand.
 
 | Table                | Key columns                                                                                                                                            |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |

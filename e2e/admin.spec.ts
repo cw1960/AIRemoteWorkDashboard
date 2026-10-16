@@ -105,7 +105,12 @@ test.describe("admin area", () => {
     await expect(
       page.getByRole("heading", { level: 1, name: "Newsletter" }),
     ).toBeVisible();
-    for (const name of ["Model spend", "Runs", "Job picks", "Social drafts"]) {
+    for (const name of [
+      "Model spend",
+      "Runs",
+      "Job picks",
+      "Social posts and drafts",
+    ]) {
       await expect(
         page.getByRole("heading", { name, exact: true }),
       ).toBeVisible();

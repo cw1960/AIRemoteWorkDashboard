@@ -25,6 +25,8 @@ export const siteConfig = {
   newsletter: {
     name: "AI Remote Work Today",
     domain: "airemoteworktoday.com",
+    /** Issues and social posts are scheduled in this time zone. */
+    timeZone: "America/Monterrey",
     /**
      * Who gets the social drafts by email (newsletter repo's
      * docs/distribution.md): LinkedIn drafts go to Amir, who posts them;

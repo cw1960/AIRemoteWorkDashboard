@@ -32,6 +32,19 @@ const searchSchema = z.object({ run: z.uuid().optional().catch(undefined) });
 const cellClass =
   "border-b border-border px-3 py-2 text-left align-top wrap-anywhere";
 
+const POST_STATUSES = [
+  "draft",
+  "scheduled",
+  "posting",
+  "posted",
+  "failed",
+  "skipped",
+] as const;
+
+function isPostStatus(value: string): value is (typeof POST_STATUSES)[number] {
+  return (POST_STATUSES as readonly string[]).includes(value);
+}
+
 function isChannel(value: string): value is Channel {
   return (CHANNELS as readonly string[]).includes(value);
 }
@@ -62,6 +75,10 @@ export default async function AdminNewsletterPage({
   const date = new Intl.DateTimeFormat(locale, {
     dateStyle: "medium",
     timeZone: "UTC",
+  });
+  const postTime = new Intl.DateTimeFormat(locale, {
+    timeStyle: "short",
+    timeZone: siteConfig.newsletter.timeZone,
   });
   const dateTime = new Intl.DateTimeFormat(locale, {
     dateStyle: "medium",
@@ -150,7 +167,9 @@ export default async function AdminNewsletterPage({
                         {issueDate(run.issue_date)}
                       </th>
                       <td className={cellClass}>
-                        {run.kind === "daily" || run.kind === "weekly"
+                        {run.kind === "daily" ||
+                        run.kind === "weekly" ||
+                        run.kind === "social"
                           ? t(`runs.kinds.${run.kind}`)
                           : run.kind}
                       </td>
@@ -259,6 +278,16 @@ export default async function AdminNewsletterPage({
                       <div className="flex flex-wrap items-baseline justify-between gap-2">
                         <h4 className="font-bold">{channel}</h4>
                         <span className="text-xs text-muted-foreground">
+                          {isPostStatus(draft.status)
+                            ? t(`run.statuses.${draft.status}`)
+                            : draft.status}
+                          {draft.scheduled_for &&
+                            ` · ${t("run.postsAt", {
+                              time: postTime.format(
+                                new Date(draft.scheduled_for),
+                              ),
+                            })}`}
+                          {" · "}
                           {draft.emailed_at
                             ? t("run.emailed", {
                                 date: `${dateTime.format(new Date(draft.emailed_at))} UTC`,
@@ -266,6 +295,24 @@ export default async function AdminNewsletterPage({
                             : t("run.notEmailed")}
                         </span>
                       </div>
+                      {draft.post_url && (
+                        <a
+                          href={draft.post_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm font-semibold underline underline-offset-4"
+                        >
+                          {t("run.viewPost")}
+                        </a>
+                      )}
+                      {draft.post_error && (
+                        <p className="text-sm text-destructive">
+                          {draft.post_error}
+                        </p>
+                      )}
+                      {draft.title && (
+                        <p className="font-semibold">{draft.title}</p>
+                      )}
                       <p
                         id={textId}
                         className="text-sm wrap-anywhere whitespace-pre-wrap"

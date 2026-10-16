@@ -913,6 +913,12 @@ export type Database = {
           channel: string;
           emailed_at: string | null;
           id: string;
+          post_error: string | null;
+          post_url: string | null;
+          posted_at: string | null;
+          scheduled_for: string | null;
+          status: string;
+          title: string | null;
         }[];
       };
       admin_newsletter_runs: {
@@ -1109,6 +1115,8 @@ export type Database = {
           id: string;
           issue_date: string;
           kind: string;
+          scheduled_for: string | null;
+          title: string | null;
         }[];
       };
       match_jobs: {
