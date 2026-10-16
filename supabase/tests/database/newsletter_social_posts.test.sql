@@ -2,7 +2,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 
-select plan(14);
+select plan(15);
 
 -- Fixtures (as postgres) ---------------------------------------------------
 
@@ -34,6 +34,11 @@ select ok(not has_function_privilege('authenticated',
 -- The workflow (anon, with the token) ------------------------------------------
 
 set local role anon;
+
+select throws_ok(
+  $$ select public.newsletter_start_run((select token from t), 'social', '2026-10-16') $$,
+  '23505', null, 'a second social run for the same day is refused'
+);
 
 select throws_ok(
   $$ select public.newsletter_save_drafts((select token from t), (select id from ids where name = 'run'),

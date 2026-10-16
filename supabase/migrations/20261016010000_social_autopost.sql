@@ -18,6 +18,13 @@ alter table public.newsletter_runs
   add constraint newsletter_runs_kind_check
     check (kind in ('daily', 'weekly', 'social'));
 
+-- One social run per issue day, so the day's posts can't be scheduled twice.
+-- A failed run doesn't count: the workflow saves posts as its last step, so
+-- a failed run scheduled nothing and may be retried.
+create unique index newsletter_runs_one_social_per_day
+  on public.newsletter_runs (issue_date)
+  where kind = 'social' and status <> 'failed';
+
 alter table public.social_drafts
   drop constraint social_drafts_channel_check,
   add constraint social_drafts_channel_check
