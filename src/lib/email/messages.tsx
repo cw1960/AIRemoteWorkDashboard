@@ -292,10 +292,15 @@ export async function recapEmail(input: {
 
 export async function newsletterDraftsEmail(input: {
   to: string;
-  kind: "daily" | "weekly";
+  kind: "daily" | "weekly" | "social";
   /** The issue date the drafts belong to (YYYY-MM-DD). */
   issueDate: string;
-  drafts: { channel: Channel; body: string }[];
+  drafts: {
+    channel: Channel;
+    body: string;
+    title: string | null;
+    scheduled_for: string | null;
+  }[];
 }): Promise<OutgoingEmail> {
   const locale = routing.defaultLocale;
   const [t, tEmails, tChannels] = await Promise.all([
@@ -307,6 +312,10 @@ export async function newsletterDraftsEmail(input: {
     dateStyle: "full",
     timeZone: "UTC",
   }).format(new Date(`${input.issueDate}T00:00:00Z`));
+  const time = new Intl.DateTimeFormat(locale, {
+    timeStyle: "short",
+    timeZone: siteConfig.newsletter.timeZone,
+  });
   const count = input.drafts.length;
   const element = (
     <NewsletterDraftsEmail
@@ -314,9 +323,16 @@ export async function newsletterDraftsEmail(input: {
       brand={siteConfig.newsletter.name}
       preview={t("preview", { count })}
       heading={t("heading", { kind: input.kind })}
-      intro={t("intro", { date })}
+      intro={t("intro", { kind: input.kind, date })}
       drafts={input.drafts.map((draft) => ({
-        label: tChannels(draft.channel),
+        label:
+          draft.scheduled_for === null
+            ? tChannels(draft.channel)
+            : t("postsAt", {
+                channel: tChannels(draft.channel),
+                time: time.format(new Date(draft.scheduled_for)),
+              }),
+        ...(draft.title === null ? {} : { title: draft.title }),
         body: draft.body,
       }))}
       cta={t("cta")}

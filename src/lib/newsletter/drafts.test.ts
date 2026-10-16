@@ -4,11 +4,17 @@ import { siteConfig } from "@/config/site";
 
 import { groupDraftsByRecipient, type UnsentDraft } from "./drafts";
 
-function draft(channel: UnsentDraft["channel"], body: string): UnsentDraft {
+function draft(
+  channel: UnsentDraft["channel"],
+  body: string,
+  scheduledFor: string | null = null,
+): UnsentDraft {
   return {
     id: crypto.randomUUID(),
     channel,
     body,
+    title: null,
+    scheduled_for: scheduledFor,
     kind: "weekly",
     issue_date: "2026-10-05",
   };
@@ -36,6 +42,19 @@ describe("groupDraftsByRecipient", () => {
     const groups = groupDraftsByRecipient([draft("x", "Short")]);
     expect(groups.map((g) => g.to)).toEqual([
       siteConfig.newsletter.draftsTo.other,
+    ]);
+  });
+
+  it("lists scheduled posts by time before drafts to post by hand", () => {
+    const groups = groupDraftsByRecipient([
+      draft("reddit", "Thread"),
+      draft("x", "Later", "2026-10-16T22:00:00Z"),
+      draft("bluesky", "Sooner", "2026-10-16T16:00:00Z"),
+    ]);
+    expect(groups[0]?.drafts.map((d) => d.body)).toEqual([
+      "Sooner",
+      "Later",
+      "Thread",
     ]);
   });
 });

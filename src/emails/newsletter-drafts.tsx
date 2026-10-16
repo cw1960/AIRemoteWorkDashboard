@@ -11,8 +11,10 @@ import {
 import { emailTheme as theme } from "./theme";
 
 export interface DraftItem {
-  /** e.g. "LinkedIn" */
+  /** e.g. "LinkedIn", or "Bluesky · posts at 11:30 AM" */
   label: string;
+  /** Reddit drafts: the post's title. */
+  title?: string;
   body: string;
 }
 
@@ -52,6 +54,12 @@ export function NewsletterDraftsEmail(props: NewsletterDraftsEmailProps) {
           }}
         >
           <strong>{draft.label}</strong>
+          {draft.title && (
+            <>
+              <br />
+              <strong>{draft.title}</strong>
+            </>
+          )}
           {draft.body.split("\n").map((line, lineIndex) => (
             <Fragment key={lineIndex}>
               <br />

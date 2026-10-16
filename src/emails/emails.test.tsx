@@ -38,6 +38,24 @@ describe("email templates", () => {
     expect(text).toContain("LinkedIn\nFirst line\nSecond <line>");
   });
 
+  it("shows a Reddit draft's title above its body", async () => {
+    const text = await render(
+      <NewsletterDraftsEmail
+        lang="en"
+        brand="Newsletter"
+        preview="Preview"
+        heading="Today's social posts"
+        intro="Intro"
+        drafts={[{ label: "Reddit", title: "Today's roles", body: "Roles" }]}
+        cta="Open in the admin area"
+        adminUrl="https://example.com/admin/newsletter"
+        footer={{ reason: "Only admins receive these" }}
+      />,
+      { plainText: true },
+    );
+    expect(text).toContain("Reddit\nToday's roles\nRoles");
+  });
+
   it("renders the welcome email with its links", async () => {
     const html = await render(
       <WelcomeEmail
