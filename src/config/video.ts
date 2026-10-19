@@ -8,7 +8,11 @@ export const videoConfig = {
   hero: {
     /** Bunny Stream → the library → API → "Video Library ID". */
     libraryId: "770115",
-    videoId: "6a0da391-a079-4c22-af3e-fdfbb1c9ead4",
+    /**
+     * Bunny Stream → the library → the video → its ID. Empty until the
+     * owner supplies it: the hero then shows a "coming soon" placeholder.
+     */
+    videoId: "",
   },
 } as const;
 

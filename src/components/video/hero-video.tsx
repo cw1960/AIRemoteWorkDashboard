@@ -9,7 +9,8 @@ import { cn } from "@/lib/utils";
 
 /**
  * A Bunny Stream video behind a click-to-play poster: the player (and any
- * request to Bunny) loads only after the visitor presses play.
+ * request to Bunny) loads only after the visitor presses play. Without a
+ * video yet, a static "coming soon" placeholder holds its place.
  */
 export function HeroVideo({
   libraryId,
@@ -30,7 +31,18 @@ export function HeroVideo({
         className,
       )}
     >
-      {playing ? (
+      {!videoId ? (
+        <div className="absolute inset-0 grid place-items-center bg-linear-to-br from-primary/30 via-card to-background">
+          <span className="flex flex-col items-center gap-3">
+            <span className="grid size-18 place-items-center rounded-full bg-primary/25 text-primary">
+              <Play className="ml-1 size-8 fill-current" aria-hidden="true" />
+            </span>
+            <span className="rounded-full bg-background/70 px-3 py-1 text-sm font-semibold backdrop-blur">
+              {t("soon")}
+            </span>
+          </span>
+        </div>
+      ) : playing ? (
         <iframe
           src={bunnyEmbedUrl(libraryId, videoId)}
           title={t("title")}
