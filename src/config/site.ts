@@ -45,7 +45,7 @@ export const siteConfig = {
     country: "Mexico",
   },
   /** Date the Terms, Privacy and Cookie notices last changed (ISO). */
-  legalUpdated: "2026-10-15",
+  legalUpdated: "2026-10-19",
   /** Contact address for users, and for the ingestion User-Agent. */
   supportEmail: "1960bcv@gmail.com",
 } as const;

@@ -17,6 +17,8 @@ import { useState } from "react";
 
 import { PlaybookCard } from "@/components/playbook/promo";
 import { Button } from "@/components/ui/button";
+import { HeroVideo } from "@/components/video/hero-video";
+import { videoConfig } from "@/config/video";
 import { Link } from "@/i18n/navigation";
 import { INTRO_COOKIE } from "@/lib/intro";
 
@@ -49,6 +51,7 @@ export function IntroBand({
 }) {
   const t = useTranslations("Intro");
   const [hidden, setHidden] = useState(false);
+  const hero = videoConfig.hero;
   if (hidden) return null;
 
   return (
@@ -131,33 +134,35 @@ export function IntroBand({
           </ul>
         </div>
 
-        <div className="rounded-2xl border border-primary/30 bg-card/70 p-6 glass-panel">
-          <p className="inline-flex rounded-full bg-foreground px-2.5 py-0.5 text-xs font-bold text-background uppercase">
-            {t("spotlight.badge")}
-          </p>
-          <h3 className="mt-3 flex items-center gap-2 font-display text-2xl font-extrabold">
-            <Sparkles className="size-5 text-primary" aria-hidden="true" />
-            {t("spotlight.title")}
-          </h3>
-          <p className="mt-2 text-muted-foreground">{t("spotlight.body")}</p>
-          <ol className="mt-5 grid gap-3">
-            {TAILOR_STEPS.map((key, index) => (
-              <li key={key} className="flex gap-3">
-                <span className="grid size-8 shrink-0 place-items-center rounded-full bg-primary/15 font-bold text-primary">
-                  {index + 1}
-                </span>
-                <span className="pt-1">{t(`spotlight.steps.${key}`)}</span>
-              </li>
-            ))}
-          </ol>
-          <p className="mt-5 flex gap-2 rounded-xl border border-border bg-background/40 p-3 text-sm text-muted-foreground">
-            <BadgeCheck
-              className="mt-0.5 size-4 shrink-0 text-success"
-              aria-hidden="true"
-            />
-            {t("spotlight.note")}
-          </p>
-        </div>
+        <HeroVideo libraryId={hero.libraryId} videoId={hero.videoId} />
+      </div>
+
+      <div className="relative mt-10 rounded-2xl border border-primary/30 bg-card/70 p-6 glass-panel">
+        <p className="inline-flex rounded-full bg-foreground px-2.5 py-0.5 text-xs font-bold text-background uppercase">
+          {t("spotlight.badge")}
+        </p>
+        <h3 className="mt-3 flex items-center gap-2 font-display text-2xl font-extrabold">
+          <Sparkles className="size-5 text-primary" aria-hidden="true" />
+          {t("spotlight.title")}
+        </h3>
+        <p className="mt-2 text-muted-foreground">{t("spotlight.body")}</p>
+        <ol className="mt-5 grid gap-3 md:grid-cols-3">
+          {TAILOR_STEPS.map((key, index) => (
+            <li key={key} className="flex gap-3">
+              <span className="grid size-8 shrink-0 place-items-center rounded-full bg-primary/15 font-bold text-primary">
+                {index + 1}
+              </span>
+              <span className="pt-1">{t(`spotlight.steps.${key}`)}</span>
+            </li>
+          ))}
+        </ol>
+        <p className="mt-5 flex gap-2 rounded-xl border border-border bg-background/40 p-3 text-sm text-muted-foreground">
+          <BadgeCheck
+            className="mt-0.5 size-4 shrink-0 text-success"
+            aria-hidden="true"
+          />
+          {t("spotlight.note")}
+        </p>
       </div>
 
       <h3 className="relative mt-14 font-display text-2xl font-extrabold sm:text-3xl">

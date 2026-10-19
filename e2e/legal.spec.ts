@@ -117,6 +117,31 @@ test.describe("introduction", () => {
     ).toHaveCount(0);
   });
 
+  test("loads the video player only when asked", async ({ page }) => {
+    const bunny: string[] = [];
+    await page.route("https://iframe.mediadelivery.net/**", (route) => {
+      bunny.push(route.request().url());
+      return route.fulfill({ body: "<!doctype html><title>player</title>" });
+    });
+    await page.goto("/");
+    const intro = page.getByRole("region", {
+      name: /Land paid AI-training work/,
+    });
+    await expect(intro.locator("iframe")).toHaveCount(0);
+    expect(bunny).toEqual([]);
+
+    await intro.getByRole("button", { name: "Watch the quick tour" }).click();
+    const player = intro.locator("iframe");
+    await expect(player).toHaveAttribute(
+      "src",
+      /^https:\/\/iframe\.mediadelivery\.net\/embed\/\d+\/6a0da391-a079-4c22-af3e-fdfbb1c9ead4\?autoplay=true/,
+    );
+    await expect(player).toHaveAttribute(
+      "title",
+      "AI Remote Work Dashboard: a quick tour",
+    );
+  });
+
   test("is not shown to signed-in users", async ({
     page,
     request,
