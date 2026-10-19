@@ -396,6 +396,15 @@
       "cta": "Open my dashboard"
     },
     "reasonNewsletterDrafts": "You're getting this because you post {newsletter}'s social drafts. Only admins receive them.",
+    "reasonNewsletterIssue": "You're getting this because you edit {newsletter}. Only the editor receives it.",
+    "newsletterIssue": {
+      "subject": "Issue for {date} is ready in Beehiiv: {subject}",
+      "preview": "{count, plural, =0 {Ready to review and schedule.} one {# thing to check before you schedule it.} other {# things to check before you schedule it.}}",
+      "heading": "The next issue is ready to review",
+      "intro": "\"{subject}\", the issue for {date}, is in Beehiiv as a draft. Nothing is sent until you schedule it. {count, plural, =0 {The checks found nothing to flag.} one {Clear this check first; it is also marked [CHECK] at the top of the draft:} other {Clear these checks first; they are also marked [CHECK] at the top of the draft:}}",
+      "check": "Check",
+      "cta": "Open the draft in Beehiiv"
+    },
     "newsletterDrafts": {
       "subject": "{kind, select, weekly {Weekly data post} social {Today's social posts} other {Social drafts}} for {date}",
       "preview": "{count, plural, one {# draft} other {# drafts}} ready to check and post.",
