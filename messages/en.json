@@ -523,6 +523,11 @@
       "noCard": "No credit card, ever",
       "private": "We never sell your data"
     },
+    "video": {
+      "title": "AI Remote Work Dashboard: a quick tour",
+      "play": "Watch the quick tour",
+      "soon": "Tour video coming soon"
+    },
     "spotlight": {
       "badge": "New",
       "title": "AI resume tailoring",
@@ -677,7 +682,7 @@
           },
           "share": {
             "heading": "3. Who we share it with",
-            "body": "We use a small number of service providers who process data on our behalf: Supabase (database and sign-in), Netlify (website hosting), Resend (email delivery), Beehiiv (newsletter delivery and the newsletter website at {newsletterDomain}) and Stripe (payments for The AI Remote Work Playbook). When you buy the Playbook, Stripe collects your payment details on its own checkout page; we never see your card. We receive your name, email address and country from Stripe, and use your email only to send your download link and answer refund requests. They may process data in the United States or other countries, under contracts and safeguards that protect it.\n\nWhen you apply through our links, the platform (for example Mercor or micro1) receives our referral code. It doesn't receive your data from us. Anything you give a platform is covered by its own privacy policy.\n\nWe use an AI provider, Anthropic. It helps research and draft the newsletter from public information, such as job listings and news, and for that it never receives your personal data. When you ask us to tailor your resume, we send Anthropic your master resume, the core skills and evidence on your Master Profile, and the job description, so it can write the tailored version. Anthropic processes them on our behalf, keeps them only for a limited time under its own data policies, and doesn't use them to train its models."
+            "body": "We use a small number of service providers who process data on our behalf: Supabase (database and sign-in), Netlify (website hosting), Resend (email delivery), Beehiiv (newsletter delivery and the newsletter website at {newsletterDomain}), Stripe (payments for The AI Remote Work Playbook) and Bunny.net (video hosting: our videos load from Bunny only when you press play, and Bunny then receives your IP address and browser details). When you buy the Playbook, Stripe collects your payment details on its own checkout page; we never see your card. We receive your name, email address and country from Stripe, and use your email only to send your download link and answer refund requests. They may process data in the United States or other countries, under contracts and safeguards that protect it.\n\nWhen you apply through our links, the platform (for example Mercor or micro1) receives our referral code. It doesn't receive your data from us. Anything you give a platform is covered by its own privacy policy.\n\nWe use an AI provider, Anthropic. It helps research and draft the newsletter from public information, such as job listings and news, and for that it never receives your personal data. When you ask us to tailor your resume, we send Anthropic your master resume, the core skills and evidence on your Master Profile, and the job description, so it can write the tailored version. Anthropic processes them on our behalf, keeps them only for a limited time under its own data policies, and doesn't use them to train its models."
           },
           "keep": {
             "heading": "4. How long we keep it",
@@ -712,7 +717,7 @@
           },
           "third": {
             "heading": "2. Third-party cookies",
-            "body": "We don't place third-party cookies. When you follow a link to a job platform, that platform's own cookie policy applies on its site.\n\nOur newsletter's website, {newsletterDomain}, is hosted by Beehiiv, which may set its own cookies there. Beehiiv's cookie policy applies on that site."
+            "body": "We don't place third-party cookies. When you follow a link to a job platform, that platform's own cookie policy applies on its site.\n\nOur newsletter's website, {newsletterDomain}, is hosted by Beehiiv, which may set its own cookies there. Beehiiv's cookie policy applies on that site.\n\nOur videos are hosted by Bunny.net. Nothing loads from Bunny until you press play; after that, Bunny's video player may use its own cookies or storage to play the video. Bunny's privacy policy applies to the player."
           },
           "control": {
             "heading": "3. Your choices",

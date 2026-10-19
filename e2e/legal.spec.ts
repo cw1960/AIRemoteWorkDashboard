@@ -117,6 +117,16 @@ test.describe("introduction", () => {
     ).toHaveCount(0);
   });
 
+  test("holds a place for the tour video", async ({ page }) => {
+    // No video is set yet (src/config/video.ts): a placeholder, no player.
+    await page.goto("/");
+    const intro = page.getByRole("region", {
+      name: /Land paid AI-training work/,
+    });
+    await expect(intro.getByText("Tour video coming soon")).toBeVisible();
+    await expect(intro.locator("iframe")).toHaveCount(0);
+  });
+
   test("is not shown to signed-in users", async ({
     page,
     request,
