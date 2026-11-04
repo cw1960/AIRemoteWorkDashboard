@@ -41,7 +41,8 @@ select is_empty(
       and c.relkind in ('r', 'p')
       and c.relname not in ('ingest_runs', 'outbound_clicks', 'site_events',
                             'newsletter_runs', 'job_shortlists', 'social_drafts',
-                            'resume_generations')
+                            'resume_generations', 'listen_runs',
+                            'listen_threads', 'listen_comments')
       and not exists (select 1 from pg_policy p where p.polrelid = c.oid)
   $$,
   'every non-admin public table has at least one policy'
