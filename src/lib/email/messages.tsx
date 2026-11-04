@@ -290,6 +290,53 @@ export async function recapEmail(input: {
   };
 }
 
+/**
+ * Tells the editor the next issue is waiting in Beehiiv as a draft, with
+ * the editor link and the checks to clear before scheduling it.
+ */
+export async function newsletterIssueEmail(input: {
+  to: string;
+  /** The issue's date (YYYY-MM-DD). */
+  issueDate: string;
+  subject: string;
+  editorUrl: string;
+  flags: string[];
+}): Promise<OutgoingEmail> {
+  const locale = routing.defaultLocale;
+  const [t, tEmails] = await Promise.all([
+    getTranslations({ locale, namespace: "Emails.newsletterIssue" }),
+    getTranslations({ locale, namespace: "Emails" }),
+  ]);
+  const date = new Intl.DateTimeFormat(locale, {
+    dateStyle: "full",
+    timeZone: "UTC",
+  }).format(new Date(`${input.issueDate}T00:00:00Z`));
+  const count = input.flags.length;
+  const element = (
+    <NewsletterDraftsEmail
+      lang={locale}
+      brand={siteConfig.newsletter.name}
+      preview={t("preview", { count })}
+      heading={t("heading")}
+      intro={t("intro", { date, subject: input.subject, count })}
+      drafts={input.flags.map((flag) => ({ label: t("check"), body: flag }))}
+      cta={t("cta")}
+      adminUrl={input.editorUrl}
+      footer={{
+        reason: tEmails("reasonNewsletterIssue", {
+          newsletter: siteConfig.newsletter.name,
+        }),
+      }}
+    />
+  );
+  return {
+    to: input.to,
+    subject: t("subject", { date, subject: input.subject }),
+    html: await render(element),
+    text: await render(element, { plainText: true }),
+  };
+}
+
 export async function newsletterDraftsEmail(input: {
   to: string;
   kind: "daily" | "weekly" | "social";
