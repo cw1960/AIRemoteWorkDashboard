@@ -15,9 +15,11 @@ select tables_are(
     'email_prefs', 'inbound_emails', 'outbound_clicks', 'site_events',
     'newsletter_runs', 'job_shortlists', 'social_drafts',
     'master_resumes', 'tailored_resumes', 'resume_generations',
-    'job_descriptions', 'listen_runs', 'listen_threads', 'listen_comments'
+    'job_descriptions', 'listen_runs', 'listen_threads', 'listen_comments',
+    'listen_stories', 'listen_story_threads', 'story_facts', 'story_sources',
+    'story_quotes'
   ],
-  'public schema has the twelve V1 tables, site_events, the newsletter workflow and listen tables, the resume tables and job descriptions'
+  'public schema has the twelve V1 tables, site_events, the newsletter workflow, listen and story tables, the resume tables and job descriptions'
 );
 
 select is(
