@@ -23,7 +23,7 @@
     "db:reset": "supabase db reset",
     "db:test": "supabase test db",
     "db:types": "supabase gen types typescript --local > src/lib/supabase/database.types.ts && prettier --write src/lib/supabase/database.types.ts",
-    "functions:check": "deno check --config supabase/functions/ingest/deno.json supabase/functions/ingest/index.ts && deno check --config supabase/functions/inbound-email/deno.json supabase/functions/inbound-email/index.ts && deno check --config supabase/functions/tailor-resume/deno.json supabase/functions/tailor-resume/index.ts && deno check --config supabase/functions/job-description/deno.json supabase/functions/job-description/index.ts && deno lint --no-config supabase/functions",
+    "functions:check": "deno check --config supabase/functions/ingest/deno.json supabase/functions/ingest/index.ts && deno check --config supabase/functions/inbound-email/deno.json supabase/functions/inbound-email/index.ts && deno check --config supabase/functions/tailor-resume/deno.json supabase/functions/tailor-resume/index.ts && deno check --config supabase/functions/job-description/deno.json supabase/functions/job-description/index.ts && deno check --config supabase/functions/newsletter-image/deno.json supabase/functions/newsletter-image/index.ts && deno lint --no-config supabase/functions",
     "check": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm test"
   },
   "dependencies": {

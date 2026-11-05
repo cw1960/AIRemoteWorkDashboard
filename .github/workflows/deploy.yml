@@ -101,6 +101,10 @@ jobs:
         if: ${{ !inputs.dry_run }}
         run: pnpm exec supabase functions deploy job-description --project-ref "$SUPABASE_PROJECT_REF"
 
+      - name: Deploy the newsletter-image function
+        if: ${{ !inputs.dry_run }}
+        run: pnpm exec supabase functions deploy newsletter-image --project-ref "$SUPABASE_PROJECT_REF"
+
       - name: Set function secrets
         if: ${{ !inputs.dry_run }}
         env:

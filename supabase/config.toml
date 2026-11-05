@@ -408,6 +408,11 @@ verify_jwt = false
 # rejects calls without a valid user JWT, and the database checks ownership.
 verify_jwt = true
 
+[functions.newsletter-image]
+# Called by the newsletter workflow, which has no Supabase JWT; the function
+# checks the newsletter token itself.
+verify_jwt = false
+
 [functions.job-description]
 # Called from the browser with the signed-in user's session: the gateway
 # rejects calls without a valid user JWT; RLS limits reads to signed-in users.

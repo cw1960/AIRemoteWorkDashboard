@@ -362,6 +362,12 @@ Key rules:
   Resend, LinkedIn drafts to Amir and the rest to the owner
   (`siteConfig.newsletter.draftsTo`; grouping in
   `src/lib/newsletter/drafts.ts`).
+- Newsletter images (Post-Human P5): `supabase/functions/newsletter-image/`
+  stores the issue's AI illustrations in the public `newsletter-images`
+  Storage bucket for Beehiiv's image blocks; the newsletter workflow calls
+  it with its token (`x-newsletter-token`, checked by
+  `verify_newsletter_token()`), and the function writes with the service
+  role.
 - Newsletter signup (N2): `src/components/newsletter-signup.tsx` in the
   footer, on job pages and on the dashboard; `src/lib/newsletter/` holds the
   Zod schema, the Beehiiv API call and the server action, which also counts
