@@ -38,7 +38,7 @@ test.describe("legal pages", () => {
   test("cover the newsletter and its providers", async ({ page }) => {
     await page.goto("/legal/privacy");
     await expect(
-      page.getByText(/our daily newsletter, AI Remote Work Today/),
+      page.getByText(/our daily newsletter, The Post-Human Countdown/),
     ).toBeVisible();
     await expect(
       page.getByText(/Beehiiv \(newsletter delivery and the newsletter/),

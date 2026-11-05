@@ -35,7 +35,7 @@ test.describe("newsletter signup", () => {
 
     // Next.js has its own alert (the route announcer): stay inside the region.
     const region = page.getByRole("region", {
-      name: "Get AI Remote Work Today",
+      name: "Get The Post-Human Countdown",
     });
     const signup = region.getByRole("form");
     await signup

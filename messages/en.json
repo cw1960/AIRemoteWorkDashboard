@@ -503,11 +503,11 @@
     },
     "job": {
       "title": "Want the best of these in your inbox?",
-      "body": "{newsletter} picks a few AI-work opportunities worth applying for, every weekday. Free."
+      "body": "{newsletter}: a daily dispatch on what AI is doing to people, from work to power to what it means to be human. Every fact checked. Free, every day."
     },
     "dashboard": {
       "title": "The daily briefing on AI work",
-      "body": "Opportunities, pay trends and practical advice from {newsletter}, free every weekday."
+      "body": "Get {newsletter}: the daily argument about what AI is doing to work, power and being human, checked against the sources. Free, every day."
     },
     "email": "Your email for the newsletter",
     "emailPlaceholder": "you@example.com",

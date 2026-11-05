@@ -11,9 +11,10 @@ a personalized dashboard. **The tracker is the product; the job feed is the
 hook.** Browsing works without an account; an account is needed to track and
 get alerts.
 
-**Sister project (2026-10-02): "AI Remote Work Today"**, a free weekday
-email newsletter about the market for human work in AI, drafted by AI agents
-and approved by the owner before every send. The newsletter is the primary
+**Sister project (2026-10-02): "The Post-Human Countdown"** (named "AI
+Remote Work Today" until 2026-11-05), a free daily email newsletter on what
+AI and superintelligence are doing to people, drafted by AI agents and
+approved by the owner before every send. The newsletter is the primary
 product; the dashboard supports it. Its code, docs, decisions and build plan
 live in **`cw1960/airemoteworktoday`**; this repo keeps the shared database
 and the dashboard-side tasks (see "Newsletter" below).
@@ -37,7 +38,7 @@ and the dashboard-side tasks (see "Newsletter" below).
   `mail.airemoteworkdashboard.com` (also the inbound domain for auto-capture),
   contact email, and the operator named in the legal pages (El Barrial Devs,
   Santiago, Nuevo León, Mexico) with the legal pages' last-updated date.
-  The newsletter's name ("AI Remote Work Today") and domain live there too
+  The newsletter's name ("The Post-Human Countdown") and domain live there too
   (`siteConfig.newsletter`). Locales live in `src/i18n/routing.ts`.
   Never hard-code these elsewhere.
 - **Small, reviewable commits** with clear messages. Never rewrite pushed
@@ -77,7 +78,7 @@ and the dashboard-side tasks (see "Newsletter" below).
   Build clean, token-based components (colors, type, spacing, radii as CSS
   variables wired into the Tailwind theme) so Lovable designs drop in later.
 
-## Newsletter: AI Remote Work Today (decided 2026-10-02)
+## Newsletter: The Post-Human Countdown (decided 2026-10-02, renamed 2026-11-05)
 
 The newsletter's rules, decisions and build plan are in
 `cw1960/airemoteworktoday` (`CLAUDE.md`, `PLAN.md`, `docs/`). What matters in
@@ -117,7 +118,7 @@ this repo:
    open/click tracking, the AI provider). Keep them in step with what the
    newsletter and the signup form collect. No user personal data is ever
    sent to the AI provider.
-5. **Brand.** The newsletter's name and domain (`airemoteworktoday.com`)
+5. **Brand.** The newsletter's name and domain (`posthumancountdown.com`; `airemoteworktoday.com` until 2026-11-05)
    live in `src/config/site.ts` → `newsletter`, like the dashboard's own.
 
 ## Quality bar
