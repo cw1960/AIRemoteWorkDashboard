@@ -368,6 +368,13 @@ Key rules:
   it with its token (`x-newsletter-token`, checked by
   `verify_newsletter_token()`), and the function writes with the service
   role.
+- Newsletter schedule (Post-Human P6): pg_cron job `newsletter-issue`
+  (10:02 UTC, 04:02 Monterrey) calls `private.invoke_newsletter_issue()`,
+  which starts the newsletter repo's `listen.yml` through GitHub's workflow
+  dispatch API with the owner's fine-grained token in Vault
+  (`github_dispatch_token`; Actions read and write on that repo only), so
+  the issue is in the owner's inbox before 07:00. GitHub's own schedule
+  ran 2–5 hours late.
 - Newsletter signup (N2): `src/components/newsletter-signup.tsx` in the
   footer, on job pages and on the dashboard; `src/lib/newsletter/` holds the
   Zod schema, the Beehiiv API call and the server action, which also counts
