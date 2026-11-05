@@ -376,6 +376,14 @@ Key rules:
   (`github_dispatch_token`; Actions read and write on that repo only), so
   the issue is in the owner's inbox before 07:00. GitHub's own schedule
   ran 2–5 hours late.
+- Newsletter social (Post-Human P8): `social_drafts` posts carry an
+  image with alt text, a `reply_to` post (threads: a reply is claimed only
+  once its post is up, and skipped if that post failed), X poll options and
+  a `kind`; `post_ref` keeps the platform's ids for replies. pg_cron starts
+  the newsletter repo's `social-posts.yml` through workflow dispatch
+  (`private.invoke_social_posts()`, same Vault token as the issue): drafting
+  at 08:30 Monterrey with retries until 12:30, publishing hourly
+  09:05–21:05.
 - Newsletter signup (N2): `src/components/newsletter-signup.tsx` in the
   footer, on job pages and on the dashboard; `src/lib/newsletter/` holds the
   Zod schema, the Beehiiv API call and the server action, which also counts
