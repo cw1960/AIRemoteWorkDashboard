@@ -3,7 +3,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 
-select plan(13);
+select plan(17);
 
 create temporary table t (token text) on commit drop;
 insert into t select decrypted_secret from vault.decrypted_secrets where name = 'newsletter_token';
@@ -85,6 +85,28 @@ reset role;
 
 select is((select count(*)::int from public.listen_stories where listen_run_id = (select id from r)), 2,
   'a refused save leaves the earlier stories in place');
+
+set local role anon;
+
+select throws_ok(
+  $$ select public.newsletter_save_stories((select token from t), (select id from r),
+       '[{"claim": "x", "status": "partly_true", "threads": ["t1"], "facts": []}]') $$,
+  '22023', null, 'a partly true story needs a sourced fact');
+select throws_ok(
+  $$ select public.newsletter_save_stories((select token from t), (select id from r),
+       '[{"claim": "x", "status": "partly_true", "threads": ["t1"],
+          "facts": [{"statement": "s", "sources": [{"url": "https://example.com/a", "cited_text": "s"}]}]}]') $$,
+  '22023', null, 'a partly true story needs a correction');
+select is(public.newsletter_save_stories((select token from t), (select id from r),
+  '[{"claim": "Project Meridian is under investigation", "status": "partly_true",
+     "correction": "A lawsuit was filed; no investigation is confirmed.",
+     "threads": ["t1"],
+     "facts": [{"statement": "A lawsuit was filed.",
+                "sources": [{"url": "https://example.com/a", "cited_text": "filed a lawsuit"}]}]}]'),
+  1, 'a partly true story with a fact and a correction is saved');
+select is(
+  public.newsletter_stories((select token from t), (select id from r)) -> 0 ->> 'status',
+  'partly_true', 'a partly true story keeps its status');
 
 select * from finish();
 rollback;
