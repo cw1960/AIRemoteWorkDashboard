@@ -21,10 +21,14 @@ export const siteConfig = {
    * is ignored by the inbound-email function.
    */
   inboundDomain: "mail.airemoteworkdashboard.com",
-  /** The daily newsletter, sent by Beehiiv from its own domain. */
+  /**
+   * The daily newsletter, sent by Beehiiv from its own domain. Renamed from
+   * "AI Remote Work Today" on 2026-11-05 (the Post-Human pivot, newsletter
+   * repo PLAN.md → P7).
+   */
   newsletter: {
-    name: "AI Remote Work Today",
-    domain: "airemoteworktoday.com",
+    name: "The Post-Human Countdown",
+    domain: "posthumancountdown.com",
     /** Issues and social posts are scheduled in this time zone. */
     timeZone: "America/Monterrey",
     /**
@@ -45,7 +49,7 @@ export const siteConfig = {
     country: "Mexico",
   },
   /** Date the Terms, Privacy and Cookie notices last changed (ISO). */
-  legalUpdated: "2026-10-15",
+  legalUpdated: "2026-11-05",
   /** Contact address for users, and for the ingestion User-Agent. */
   supportEmail: "1960bcv@gmail.com",
 } as const;
