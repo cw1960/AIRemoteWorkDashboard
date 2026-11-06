@@ -384,6 +384,12 @@ Key rules:
   (`private.invoke_social_posts()`, same Vault token as the issue): drafting
   at 08:30 Monterrey with retries until 12:30, publishing hourly
   09:05–21:05.
+- Newsletter Prophets & Heretics (Post-Human P9): `prophet_uses` records
+  which quote from the newsletter repo's curated library each issue used
+  (one row per issue day), read and written through
+  `newsletter_prophet_uses()` and `newsletter_record_prophet()` (newsletter
+  token), so no quote repeats within 60 days. The quotes themselves live in
+  the newsletter repo, approved by the owner through PRs.
 - Newsletter signup (N2): `src/components/newsletter-signup.tsx` in the
   footer, on job pages and on the dashboard; `src/lib/newsletter/` holds the
   Zod schema, the Beehiiv API call and the server action, which also counts

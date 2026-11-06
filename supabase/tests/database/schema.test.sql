@@ -17,7 +17,7 @@ select tables_are(
     'master_resumes', 'tailored_resumes', 'resume_generations',
     'job_descriptions', 'listen_runs', 'listen_threads', 'listen_comments',
     'listen_stories', 'listen_story_threads', 'story_facts', 'story_sources',
-    'story_quotes'
+    'story_quotes', 'prophet_uses'
   ],
   'public schema has the twelve V1 tables, site_events, the newsletter workflow, listen and story tables, the resume tables and job descriptions'
 );
