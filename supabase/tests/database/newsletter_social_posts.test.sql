@@ -28,7 +28,7 @@ select ok(not has_function_privilege('authenticated',
   'public.newsletter_claim_due_posts(text, text[], integer)', 'execute'),
   'signed-in users may not claim posts');
 select ok(not has_function_privilege('authenticated',
-  'public.newsletter_finish_post(text, uuid, boolean, text, text)', 'execute'),
+  'public.newsletter_finish_post(text, uuid, boolean, text, text, jsonb)', 'execute'),
   'signed-in users may not record post results');
 
 -- The workflow (anon, with the token) ------------------------------------------
