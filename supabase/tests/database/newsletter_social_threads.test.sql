@@ -31,9 +31,12 @@ select ok(not has_function_privilege('anon',
   'private.invoke_social_posts(text)', 'execute'),
   'the workflow cannot start itself');
 select ok(
-  (select count(*) = 3 from cron.job
-   where jobname in ('social-draft', 'social-publish-day', 'social-publish-night')),
-  'pg_cron drafts and publishes the social posts');
+  (select count(*) = 1 from cron.job where jobname = 'social-draft')
+  and not exists (
+    select 1 from cron.job
+    where jobname in ('social-publish-day', 'social-publish-night')
+  ),
+  'pg_cron drafts the social posts and no longer publishes them (drafts only)');
 
 -- The workflow (anon, with the token) ------------------------------------------
 
