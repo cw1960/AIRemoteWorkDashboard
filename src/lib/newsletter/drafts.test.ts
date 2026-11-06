@@ -34,6 +34,19 @@ describe("groupDraftsByRecipient", () => {
     ]);
   });
 
+  it("orders a channel's drafts by title, so suggested times run in order", () => {
+    const groups = groupDraftsByRecipient([
+      { ...draft("x", "Evening"), title: "20:00 · unanswerable" },
+      { ...draft("x", "Morning"), title: "09:00 · fuse" },
+      { ...draft("bluesky", "Noon"), title: "12:00 · quote" },
+    ]);
+    expect(groups[0]?.drafts.map((d) => d.body)).toEqual([
+      "Morning",
+      "Evening",
+      "Noon",
+    ]);
+  });
+
   it("sends nothing when there are no drafts", () => {
     expect(groupDraftsByRecipient([])).toEqual([]);
   });

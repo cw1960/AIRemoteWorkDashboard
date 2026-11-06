@@ -40,7 +40,8 @@ export function draftRecipient(channel: Channel): string {
 
 /**
  * One email's worth of drafts per recipient: scheduled posts first, by time,
- * then drafts to post by hand in channel order.
+ * then drafts to post by hand in channel order and, within a channel, by
+ * title (the daily posts' titles start with their suggested time, "09:00").
  */
 export function groupDraftsByRecipient(
   drafts: readonly UnsentDraft[],
@@ -52,7 +53,8 @@ export function groupDraftsByRecipient(
   const sorted = [...drafts].sort(
     (a, b) =>
       time(a) - time(b) ||
-      CHANNELS.indexOf(a.channel) - CHANNELS.indexOf(b.channel),
+      CHANNELS.indexOf(a.channel) - CHANNELS.indexOf(b.channel) ||
+      (a.title ?? "").localeCompare(b.title ?? ""),
   );
   const groups = new Map<string, UnsentDraft[]>();
   for (const draft of sorted) {
