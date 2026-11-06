@@ -44,7 +44,8 @@ select is_empty(
                             'resume_generations', 'listen_runs',
                             'listen_threads', 'listen_comments',
                             'listen_stories', 'listen_story_threads',
-                            'story_facts', 'story_sources', 'story_quotes')
+                            'story_facts', 'story_sources', 'story_quotes',
+                            'prophet_uses')
       and not exists (select 1 from pg_policy p where p.polrelid = c.oid)
   $$,
   'every non-admin public table has at least one policy'
