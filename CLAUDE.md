@@ -382,8 +382,9 @@ Key rules:
   a `kind`; `post_ref` keeps the platform's ids for replies. pg_cron starts
   the newsletter repo's `social-posts.yml` through workflow dispatch
   (`private.invoke_social_posts()`, same Vault token as the issue): drafting
-  at 08:30 Monterrey with retries until 12:30, publishing hourly
-  09:05–21:05.
+  at 08:30 Monterrey with retries until 12:30. Since 2026-11-06 the posts
+  are drafts the owner schedules by hand, so the hourly publishing
+  schedules are gone (`20261107020000`).
 - Newsletter Prophets & Heretics (Post-Human P9): `prophet_uses` records
   which quote from the newsletter repo's curated library each issue used
   (one row per issue day), read and written through
